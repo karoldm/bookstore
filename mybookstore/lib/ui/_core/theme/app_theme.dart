@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+
+abstract class AppTheme {
+  static ThemeData theme = ThemeData.light().copyWith(
+    floatingActionButtonTheme: const FloatingActionButtonThemeData(
+      backgroundColor: AppColors.defaultColor,
+      foregroundColor: AppColors.backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(12)),
+      ),
+    ),
+    iconTheme: const IconThemeData(
+      color: AppColors.headerColor,
+    ),
+    appBarTheme: const AppBarTheme(
+      elevation: 0,
+      titleTextStyle: TextStyle(
+        color: AppColors.headerColor,
+        fontSize: 24,
+        fontWeight: FontWeight.w700,
+      ),
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      hintStyle: const TextStyle(
+        color: AppColors.labelColor,
+      ),
+      fillColor: AppColors.inputColor,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide.none,
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(16),
+        borderSide: BorderSide(color: AppColors.headerColor),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: AppColors.defaultColor,
+        textStyle: const TextStyle(
+          fontSize: 14,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+    ),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: ElevatedButton.styleFrom(
+        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
+        backgroundColor: AppColors.defaultColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        foregroundColor: AppColors.backgroundColor,
+        disabledBackgroundColor: AppColors.labelColor,
+      ),
+    ),
+  );
+}

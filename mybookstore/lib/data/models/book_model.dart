@@ -19,7 +19,7 @@ class BookModel {
     this.cover,
   });
 
-  factory BookModel.fromJson(Map<String, dynamic> json) {
+  factory BookModel.fromMap(Map<String, dynamic> json) {
     return BookModel(
       title: json['title'],
       author: json['author'],

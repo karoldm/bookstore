@@ -1,4 +1,5 @@
 class BookModel {
+  final int id;
   final String? cover;
   final String title;
   final String author;
@@ -8,6 +9,7 @@ class BookModel {
   final int rating;
 
   BookModel({
+    required this.id,
     required this.title,
     required this.author,
     required this.year,
@@ -19,6 +21,7 @@ class BookModel {
 
   factory BookModel.fromMap(Map<String, dynamic> json) {
     return BookModel(
+      id: json['id'],
       title: json['title'],
       author: json['author'],
       cover: json['cover'],
@@ -31,6 +34,6 @@ class BookModel {
 
   @override
   String toString() {
-    return 'BookModel(title: $title, author: $author, cover: $cover, year: $year, synopsis: $synopsis, available: $available, rating: $rating)';
+    return 'BookModel(id: $id, title: $title, author: $author, cover: $cover, year: $year, synopsis: $synopsis, available: $available, rating: $rating)';
   }
 }

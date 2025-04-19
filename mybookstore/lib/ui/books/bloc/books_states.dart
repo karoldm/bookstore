@@ -25,3 +25,13 @@ class BooksLoadingErrorState extends BooksStates {
 
   BooksLoadingErrorState({required this.message});
 }
+
+class BookUpdateErrorState extends BooksStates {
+  final String message;
+
+  BookUpdateErrorState({required this.message});
+}
+
+class BookUpdateSuccessState extends BooksStates {
+  BookUpdateSuccessState();
+}

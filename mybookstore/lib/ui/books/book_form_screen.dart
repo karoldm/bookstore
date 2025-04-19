@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybookstore/data/models/book_model.dart';
 import 'package:mybookstore/data/models/request_book_model.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 import 'package:mybookstore/ui/_core/widgets/app_bar_widget.dart';
@@ -14,7 +15,8 @@ import 'package:mybookstore/ui/books/widgets/select_card_widget.dart';
 
 class BookFormScreen extends StatefulWidget {
   final int storeId;
-  const BookFormScreen({super.key, required this.storeId});
+  final BookModel? initialBook;
+  const BookFormScreen({super.key, required this.storeId, this.initialBook});
 
   @override
   State<BookFormScreen> createState() => _BookFormScreenState();
@@ -33,6 +35,26 @@ class _BookFormScreenState extends State<BookFormScreen> {
   final TextEditingController _ratingController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    if (widget.initialBook != null) {
+      _titleController.text = widget.initialBook!.title;
+      _authorController.text = widget.initialBook!.author;
+      _synopsisController.text = widget.initialBook!.synopsis;
+      _yearController.text = widget.initialBook!.year.toString();
+      _ratingController.text = widget.initialBook!.rating.toString();
+
+      bookModel.title = widget.initialBook!.title;
+      bookModel.author = widget.initialBook!.author;
+      bookModel.synopsis = widget.initialBook!.synopsis;
+      bookModel.year = widget.initialBook!.year;
+      bookModel.rating = widget.initialBook!.rating;
+      bookModel.available = widget.initialBook!.available;
+      bookModel.cover = widget.initialBook!.cover;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocListener<BooksBloc, BooksStates>(
       listener: (context, state) {
@@ -43,6 +65,16 @@ class _BookFormScreenState extends State<BookFormScreen> {
         } else if (state is BookCreateSuccessState) {
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(content: Text("Livro cadastrado com sucesso!")),
+          );
+
+          Navigator.pop(context);
+        } else if (state is BookUpdateErrorState) {
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text("Erro ao atualizar livro")));
+        } else if (state is BookUpdateSuccessState) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Livro atualizado com sucesso!")),
           );
 
           Navigator.pop(context);
@@ -189,9 +221,22 @@ class _BookFormScreenState extends State<BookFormScreen> {
                   child: Text("Salvar"),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
-                      BlocProvider.of<BooksBloc>(context).add(
-                        AddBookEvent(storeId: widget.storeId, book: bookModel),
-                      );
+                      if (widget.initialBook != null) {
+                        BlocProvider.of<BooksBloc>(context).add(
+                          UpdateBookEvent(
+                            storeId: widget.storeId,
+                            bookId: widget.initialBook!.id,
+                            book: bookModel,
+                          ),
+                        );
+                      } else {
+                        BlocProvider.of<BooksBloc>(context).add(
+                          AddBookEvent(
+                            storeId: widget.storeId,
+                            book: bookModel,
+                          ),
+                        );
+                      }
                     }
                   },
                 ),

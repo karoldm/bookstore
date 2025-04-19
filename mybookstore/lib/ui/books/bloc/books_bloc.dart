@@ -26,7 +26,32 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
       }
     });
 
-    on<UpdateBookEvent>((event, emit) async {});
+    on<UpdateBookEvent>((event, emit) async {
+      try {
+        emit(BooksLoadingState());
+
+        BookModel updatedBook = await booksService.updateBook(
+          event.storeId,
+          event.bookId,
+          event.book,
+        );
+
+        int index = books.indexWhere((book) => book.id == event.bookId);
+
+        if (index != -1) {
+          books[index] = updatedBook;
+        } else {
+          emit(BookUpdateErrorState(message: 'Book not found'));
+          return;
+        }
+
+        emit(BookUpdateSuccessState());
+      } catch (e) {
+        emit(BookUpdateErrorState(message: e.toString()));
+      } finally {
+        emit(BooksLoadedState(books: books));
+      }
+    });
 
     on<AddBookEvent>((event, emit) async {
       try {
@@ -41,6 +66,20 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
         emit(BookCreateSuccessState());
       } catch (e) {
         emit(BookCreateErrorState(message: e.toString()));
+      } finally {
+        emit(BooksLoadedState(books: books));
+      }
+    });
+
+    on<DeleteBookEvent>((event, emit) async {
+      try {
+        emit(BooksLoadingState());
+
+        await booksService.deleteBook(event.storeId, event.bookId);
+
+        books.removeWhere((book) => book.id == event.bookId);
+      } catch (e) {
+        emit(BooksLoadingErrorState(message: e.toString()));
       } finally {
         emit(BooksLoadedState(books: books));
       }

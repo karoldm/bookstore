@@ -42,4 +42,31 @@ class BooksRepository implements BooksRepositoryInterface {
       rethrow;
     }
   }
+
+  @override
+  Future<void> deleteBook(int storeId, int bookId) async {
+    try {
+      await apiClient.api.delete('/v1/store/$storeId/book/$bookId');
+    } catch (e) {
+      debugPrint('Failed to delete book on repository: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> updateBook(
+    int storeId,
+    int bookId,
+    RequestBookModel book,
+  ) async {
+    try {
+      await apiClient.api.put(
+        '/v1/store/$storeId/book/$bookId',
+        data: jsonEncode(book.toMap()),
+      );
+    } catch (e) {
+      debugPrint('Failed to update book on repository: $e');
+      rethrow;
+    }
+  }
 }

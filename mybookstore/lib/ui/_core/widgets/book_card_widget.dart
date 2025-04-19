@@ -19,7 +19,7 @@ class BookCardWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BookDetailScreen(books: [book], index: 0),
+              builder: (context) => BookDetailScreen(book: book),
             ),
           );
         },

@@ -3,6 +3,27 @@ import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 
 abstract class AppTheme {
   static ThemeData theme = ThemeData.light().copyWith(
+    cardTheme: const CardTheme(
+      color: AppColors.lineColor,
+      elevation: 0,
+
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+    ),
+    progressIndicatorTheme: const ProgressIndicatorThemeData(
+      color: AppColors.backgroundColor,
+    ),
+    switchTheme: SwitchThemeData(
+      thumbColor: WidgetStateProperty.all(AppColors.backgroundColor),
+      trackColor: WidgetStateProperty.resolveWith<Color?>((states) {
+        if (states.contains(WidgetState.selected)) {
+          return AppColors.defaultColor;
+        }
+        return Colors.grey;
+      }),
+      trackOutlineWidth: WidgetStateProperty.all(0),
+    ),
     floatingActionButtonTheme: const FloatingActionButtonThemeData(
       backgroundColor: AppColors.defaultColor,
       foregroundColor: AppColors.backgroundColor,
@@ -10,9 +31,7 @@ abstract class AppTheme {
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     ),
-    iconTheme: const IconThemeData(
-      color: AppColors.headerColor,
-    ),
+    iconTheme: const IconThemeData(color: AppColors.headerColor),
     appBarTheme: const AppBarTheme(
       elevation: 0,
       titleTextStyle: TextStyle(
@@ -23,9 +42,7 @@ abstract class AppTheme {
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      hintStyle: const TextStyle(
-        color: AppColors.labelColor,
-      ),
+      hintStyle: const TextStyle(color: AppColors.labelColor),
       fillColor: AppColors.inputColor,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(16),
@@ -38,20 +55,16 @@ abstract class AppTheme {
     ),
     textButtonTheme: TextButtonThemeData(
       style: TextButton.styleFrom(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         foregroundColor: AppColors.defaultColor,
-        textStyle: const TextStyle(
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-        ),
+        textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
         backgroundColor: AppColors.defaultColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         foregroundColor: AppColors.backgroundColor,
         disabledBackgroundColor: AppColors.labelColor,
       ),

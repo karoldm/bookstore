@@ -26,6 +26,12 @@ class _BookFormScreenState extends State<BookFormScreen> {
 
   final RequestBookModel bookModel = RequestBookModel.empty();
 
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _authorController = TextEditingController();
+  final TextEditingController _synopsisController = TextEditingController();
+  final TextEditingController _yearController = TextEditingController();
+  final TextEditingController _ratingController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<BooksBloc, BooksStates>(
@@ -85,6 +91,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                         children: [
                           if (_index == 0) ...[
                             TextFieldWidget(
+                              controller: _titleController,
                               hint: "Título",
                               onChanged: (value) {
                                 setState(() {
@@ -93,6 +100,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                               },
                             ),
                             TextFieldWidget(
+                              controller: _authorController,
                               hint: "Autor",
                               onChanged: (value) {
                                 setState(() {
@@ -101,6 +109,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                               },
                             ),
                             TextFieldWidget(
+                              controller: _synopsisController,
                               hint: "Sinópse",
                               maxLines: 3,
                               onChanged: (value) {
@@ -110,6 +119,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                               },
                             ),
                             TextFieldWidget(
+                              controller: _yearController,
                               digitsOnly: true,
                               hint: "Ano de publicação",
                               onChanged: (value) {
@@ -125,6 +135,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                 RatingBarWidget(
                                   rating: bookModel.rating,
                                   onRatingChanged: (value) {
+                                    _ratingController.text = value.toString();
                                     setState(() {
                                       bookModel.rating = value;
                                     });

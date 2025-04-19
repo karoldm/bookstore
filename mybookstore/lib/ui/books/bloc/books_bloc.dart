@@ -19,10 +19,10 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
 
         this.books.clear();
         this.books.addAll(books);
-
-        emit(BooksLoadedState(books: books));
       } catch (e) {
         emit(BooksLoadingErrorState(message: e.toString()));
+      } finally {
+        emit(BooksLoadedState(books: books));
       }
     });
 
@@ -39,9 +39,10 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
 
         books.add(book);
         emit(BookCreateSuccessState());
-        emit(BooksLoadedState(books: books));
       } catch (e) {
         emit(BookCreateErrorState(message: e.toString()));
+      } finally {
+        emit(BooksLoadedState(books: books));
       }
     });
   }

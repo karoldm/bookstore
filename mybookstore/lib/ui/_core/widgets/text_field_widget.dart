@@ -9,6 +9,7 @@ class TextFieldWidget extends StatelessWidget {
   final String? initialValue;
   final bool? digitsOnly;
   final int? maxLines;
+  final TextEditingController? controller;
 
   const TextFieldWidget({
     super.key,
@@ -18,11 +19,13 @@ class TextFieldWidget extends StatelessWidget {
     this.initialValue,
     this.digitsOnly,
     this.maxLines,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       enableSuggestions: true,
       autocorrect: true,
       maxLines: maxLines,

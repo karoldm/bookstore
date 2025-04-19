@@ -28,7 +28,15 @@ class SelectCardWidget extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Text("Dados do livro"),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color:
+                      isSelected ? AppColors.headerColor : AppColors.labelColor,
+                ),
+              ),
               if (isSelected) Icon(Icons.circle, size: 10),
             ],
           ),

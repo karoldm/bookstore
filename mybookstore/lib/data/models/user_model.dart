@@ -1,18 +1,14 @@
-import 'dart:io';
-
 import 'package:mybookstore/enums/role_enum.dart';
 
 class UserModel {
-  final String id;
+  final int id;
   final String name;
-  final String username;
-  final File? photo;
+  final String? photo;
   final Role? role;
 
   UserModel({
     required this.id,
     required this.name,
-    required this.username,
     this.photo,
     this.role = Role.employee,
   });
@@ -21,14 +17,17 @@ class UserModel {
     return UserModel(
       id: json['id'],
       name: json['name'],
-      username: json['username'],
-      photo: json['photo'] != null ? File(json['photo']) : null,
+      photo: json['photo'],
       role: Role.fromString(json['role']),
     );
   }
 
+  factory UserModel.empty() {
+    return UserModel(id: 0, name: '', photo: null, role: Role.employee);
+  }
+
   @override
   String toString() {
-    return 'UserModel(id: $id, name: $name, username: $username, photo: $photo, role: $role)';
+    return 'UserModel(id: $id, name: $name, photo: $photo, role: $role)';
   }
 }

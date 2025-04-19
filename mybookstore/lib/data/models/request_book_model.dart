@@ -1,7 +1,5 @@
-import 'dart:io';
-
 class RequestBookModel {
-  File? cover;
+  String? cover;
   String title;
   String author;
   int year;
@@ -23,12 +21,24 @@ class RequestBookModel {
     return {
       'title': title,
       'author': author,
-      'cover': cover?.path,
+      'cover': cover,
       'year': year,
       'synopsis': synopsis,
       'available': available,
       'rating': rating,
     };
+  }
+
+  factory RequestBookModel.empty() {
+    return RequestBookModel(
+      title: '',
+      author: '',
+      year: 0,
+      synopsis: '',
+      available: false,
+      rating: 0,
+      cover: null,
+    );
   }
 
   @override

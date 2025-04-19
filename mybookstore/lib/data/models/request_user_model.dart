@@ -1,10 +1,8 @@
-import 'dart:io';
-
 class RequestUserModel {
   String username;
   String name;
   String password;
-  File? photo;
+  String? photo;
 
   RequestUserModel({
     required this.username,
@@ -14,12 +12,7 @@ class RequestUserModel {
   });
 
   factory RequestUserModel.empty() {
-    return RequestUserModel(
-      username: "",
-      name: "",
-      password: "",
-      photo: File(""),
-    );
+    return RequestUserModel(username: "", name: "", password: "", photo: null);
   }
 
   Map<String, dynamic> toMap() {
@@ -33,6 +26,6 @@ class RequestUserModel {
 
   @override
   String toString() {
-    return 'RegisterUserModel(name: $name, username: $username, password: $password, photo: $photo)';
+    return 'RegisterUserModel(name: $name, user: $username, password: $password, photo: $photo)';
   }
 }

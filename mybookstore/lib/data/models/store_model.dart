@@ -1,12 +1,14 @@
-import 'dart:io';
+import 'package:mybookstore/data/models/user_model.dart';
 
 class StoreModel {
-  final String name;
-  final String slogan;
-  final File? banner;
-  final String id;
+  String name;
+  String slogan;
+  String? banner;
+  final int id;
+  UserModel user;
 
   StoreModel({
+    required this.user,
     required this.name,
     required this.slogan,
     required this.banner,
@@ -15,15 +17,19 @@ class StoreModel {
 
   factory StoreModel.fromMap(Map<String, dynamic> json) {
     return StoreModel(
-      id: json['id'],
+      user:
+          json['user'] != null
+              ? UserModel.fromMap(json['user'])
+              : UserModel.empty(),
+      id: json['idStore'] ?? json['id'],
       name: json['name'],
       slogan: json['slogan'],
-      banner: File(json['banner']),
+      banner: json['banner'],
     );
   }
 
   @override
   String toString() {
-    return 'StoreModel(id: $id, name: $name, slogan: $slogan, banner: $banner)';
+    return 'StoreModel(id: $id, name: $name, slogan: $slogan, banner: $banner, user: $user)';
   }
 }

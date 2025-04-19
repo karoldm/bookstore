@@ -1,7 +1,5 @@
-import 'dart:io';
-
 class BookModel {
-  final File? cover;
+  final String? cover;
   final String title;
   final String author;
   final int year;
@@ -23,7 +21,7 @@ class BookModel {
     return BookModel(
       title: json['title'],
       author: json['author'],
-      cover: json['cover'] != null ? File(json['cover']) : null,
+      cover: json['cover'],
       year: json['year'],
       synopsis: json['synopsis'],
       available: json['available'],

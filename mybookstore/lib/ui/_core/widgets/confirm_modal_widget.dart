@@ -10,10 +10,12 @@ class ConfirmModalWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      contentPadding: const EdgeInsets.all(32),
       title: Text(
         label,
+        textAlign: TextAlign.center,
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 16,
           fontWeight: FontWeight.bold,
           color: AppColors.headerColor,
         ),
@@ -23,7 +25,14 @@ class ConfirmModalWidget extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text("Cancelar"),
+          child: const Text(
+            "Cancelar",
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColors.defaultColor,
+            ),
+          ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(

@@ -6,6 +6,7 @@ import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 import 'package:mybookstore/ui/books/book_form_screen.dart';
 import 'package:mybookstore/ui/books/books_screen.dart';
+import 'package:mybookstore/ui/employees/employee_form_screen.dart';
 import 'package:mybookstore/ui/employees/employees_screen.dart';
 import 'package:mybookstore/ui/home/home_screen.dart';
 import 'package:mybookstore/ui/profile/profile_screen.dart';
@@ -97,13 +98,15 @@ class _LayoutWidgetState extends State<LayoutWidget> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => EmployeesScreen(),
+                              builder:
+                                  (context) => EmployeeFormScreen(
+                                    storeId: state.store.id,
+                                  ),
                             ),
                           );
                         } else if (_currentIndex == 2) {
                           Navigator.push(
                             context,
-
                             MaterialPageRoute(
                               builder:
                                   (context) =>

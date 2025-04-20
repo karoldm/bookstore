@@ -20,7 +20,7 @@ class CircleAvatarWidget extends StatelessWidget {
     final names = name?.split(" ");
     String content = "";
     if (names != null) {
-      if (names.length > 1) {
+      if (names.length > 1 && names[0].isNotEmpty && names[1].isNotEmpty) {
         content = names[0][0] + names[1][0];
       } else if (names.length == 1) {
         content = names[0].isEmpty ? "" : names[0][0];

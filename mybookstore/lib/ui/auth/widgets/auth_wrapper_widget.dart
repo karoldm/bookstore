@@ -7,6 +7,8 @@ import 'package:mybookstore/ui/auth/bloc/auth_bloc.dart';
 import 'package:mybookstore/ui/auth/bloc/auth_states.dart';
 import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
 import 'package:mybookstore/ui/books/bloc/books_events.dart';
+import 'package:mybookstore/ui/employees/bloc/employees_bloc.dart';
+import 'package:mybookstore/ui/employees/bloc/employees_events.dart';
 
 class AuthWrapperWidget extends StatelessWidget {
   final Widget child;
@@ -27,9 +29,11 @@ class AuthWrapperWidget extends StatelessWidget {
 
           StoreBloc storeBloc = BlocProvider.of<StoreBloc>(context);
           BooksBloc booksBloc = BlocProvider.of<BooksBloc>(context);
+          EmployeesBloc employeesBloc = BlocProvider.of<EmployeesBloc>(context);
 
           storeBloc.add(LoadStoreEvent(store: store));
           booksBloc.add(FetchBooksEvent(storeId: store.id));
+          employeesBloc.add(FetchEmployeesEvent(storeId: store.id));
 
           navigatorKey.currentState?.pushNamedAndRemoveUntil(
             '/home',

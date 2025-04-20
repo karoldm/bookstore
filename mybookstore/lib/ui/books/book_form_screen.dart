@@ -179,13 +179,23 @@ class _BookFormScreenState extends State<BookFormScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Text("Status"),
-                                Switch(
-                                  value: bookModel.available,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      bookModel.available = value;
-                                    });
-                                  },
+                                Row(
+                                  spacing: 8,
+                                  children: [
+                                    Switch(
+                                      value: bookModel.available,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          bookModel.available = value;
+                                        });
+                                      },
+                                    ),
+                                    Text(
+                                      bookModel.available
+                                          ? "Estoque"
+                                          : "Sem estoque",
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

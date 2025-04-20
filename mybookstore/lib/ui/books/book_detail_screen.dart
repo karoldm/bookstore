@@ -40,8 +40,14 @@ class BookDetailScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         book.cover != null
-                            ? Image.memory(base64Decode(book.cover!))
-                            : Image.asset("assets/book_default.png"),
+                            ? Image.memory(
+                              base64Decode(book.cover!),
+                              height: 240,
+                            )
+                            : Image.asset(
+                              "assets/book_default.png",
+                              height: 240,
+                            ),
                         Column(
                           spacing: 24,
                           crossAxisAlignment: CrossAxisAlignment.stretch,

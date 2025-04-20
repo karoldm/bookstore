@@ -23,12 +23,12 @@ import 'package:mybookstore/ui/_core/theme/app_theme.dart';
 import 'package:mybookstore/ui/_core/widgets/layout_widget.dart';
 import 'package:mybookstore/ui/auth/auth_screen.dart';
 import 'package:mybookstore/ui/auth/bloc/auth_bloc.dart';
-import 'package:mybookstore/ui/auth/bloc/auth_events.dart';
 import 'package:mybookstore/ui/auth/register_screen.dart';
 import 'package:mybookstore/ui/auth/widgets/auth_wrapper_widget.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
 import 'package:mybookstore/ui/employees/bloc/employees_bloc.dart';
+import 'package:mybookstore/ui/splash/splash_screen.dart';
 
 final getIt = GetIt.instance;
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => getIt<AuthBloc>()..add(InitSessionEvent())),
+        BlocProvider(create: (_) => getIt<AuthBloc>()),
         BlocProvider(create: (_) => StoreBloc()),
         BlocProvider(create: (_) => BooksBloc()),
         BlocProvider(create: (_) => EmployeesBloc()),
@@ -92,7 +92,7 @@ class MyApp extends StatelessWidget {
           },
           title: 'My Bookstore',
           theme: AppTheme.theme,
-          home: Center(child: CircularProgressIndicator()), //splash on future
+          home: SplashScreen(),
         ),
       ),
     );

@@ -29,9 +29,7 @@ class ListBooksWidget extends StatelessWidget {
         }
 
         if (state is BooksLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.defaultColor),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
         return state.books.isEmpty
             ? Center(
@@ -66,7 +64,6 @@ class ListBooksWidget extends StatelessWidget {
                     child:
                         state is BooksLoadingMoreState
                             ? const CircularProgressIndicator(
-                              color: AppColors.defaultColor,
                               constraints: BoxConstraints(
                                 maxHeight: 16,
                                 maxWidth: 16,

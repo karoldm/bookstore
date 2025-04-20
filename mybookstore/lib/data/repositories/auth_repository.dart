@@ -34,14 +34,15 @@ class AuthRepository implements AuthRepositoryInterface {
     Map<String, dynamic> storeModel,
   ) async {
     try {
-      // storeModel['banner'] =
-      //     "iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAJ0lEQVQoU2NkYGD4z0AEYBxVSFUBCkS0FRCACFoAhRQDQAG5GADAFHfB8s5VChEAAAAASUVORK5CYII=";
       final response = await apiClient.api.post(
         '/v1/store',
         data: jsonEncode(storeModel),
       );
+      final store = StoreModel.fromMap(response.data['store']);
+      store.user = UserModel.fromMap(response.data['user']);
+
       return (
-        StoreModel.fromMap(response.data['store']),
+        store,
         TokensModel(
           accessToken: response.data['token'],
           refreshToken: response.data['refreshToken'],

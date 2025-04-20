@@ -3,6 +3,13 @@ import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 
 abstract class AppTheme {
   static ThemeData theme = ThemeData.light().copyWith(
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      selectedIconTheme: IconThemeData(color: AppColors.headerColor),
+      unselectedIconTheme: IconThemeData(color: AppColors.placeholderColor),
+      selectedLabelStyle: TextStyle(color: AppColors.headerColor),
+      unselectedLabelStyle: TextStyle(color: AppColors.placeholderColor),
+      backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
+    ),
     cardTheme: const CardTheme(
       color: AppColors.lineColor,
       elevation: 0,
@@ -12,7 +19,7 @@ abstract class AppTheme {
       ),
     ),
     progressIndicatorTheme: const ProgressIndicatorThemeData(
-      color: AppColors.backgroundColor,
+      color: AppColors.defaultColor,
     ),
     switchTheme: SwitchThemeData(
       thumbColor: WidgetStateProperty.all(AppColors.backgroundColor),

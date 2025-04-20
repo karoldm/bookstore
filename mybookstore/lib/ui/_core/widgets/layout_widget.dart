@@ -53,13 +53,6 @@ class _LayoutWidgetState extends State<LayoutWidget> {
                       : _employeePages[_currentIndex],
             ),
             bottomNavigationBar: BottomNavigationBar(
-              selectedIconTheme: const IconThemeData(
-                color: AppColors.headerColor,
-              ),
-              unselectedIconTheme: const IconThemeData(
-                color: AppColors.placeholderColor,
-              ),
-              backgroundColor: const Color.fromRGBO(255, 255, 255, 0.9),
               currentIndex: _currentIndex,
               onTap: (index) => setState(() => _currentIndex = index),
               items: [
@@ -123,7 +116,7 @@ class _LayoutWidgetState extends State<LayoutWidget> {
           );
         }
 
-        return const Center(child: CircularProgressIndicator(strokeWidth: 2));
+        return Scaffold(body: const Center(child: CircularProgressIndicator()));
       },
     );
   }

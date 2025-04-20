@@ -20,9 +20,7 @@ class ListSavedBooksWidget extends StatelessWidget {
         }
 
         if (state is SavedBooksLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(color: AppColors.defaultColor),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
 
         final savedBooks = state.books.where((book) => book.isSaved);

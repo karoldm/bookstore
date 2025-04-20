@@ -89,9 +89,7 @@ class HomeScreen extends StatelessWidget {
                 ],
               ),
             )
-            : const Center(
-              child: CircularProgressIndicator(color: AppColors.defaultColor),
-            );
+            : const Center(child: CircularProgressIndicator());
       },
     );
   }

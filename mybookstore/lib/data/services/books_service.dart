@@ -5,14 +5,14 @@ import 'package:mybookstore/interfaces/repositories/books_repository_interface.d
 import 'package:mybookstore/interfaces/services/books_service_interface.dart';
 
 class BooksService implements BooksServiceInterface {
-  final BooksRepositoryInterface booksRepository;
+  final BooksRepositoryInterface _booksRepository;
 
-  BooksService(this.booksRepository);
+  BooksService(this._booksRepository);
 
   @override
   Future<List<BookModel>> fetchBooks(int storeId, {int? limit, int? offset}) {
     try {
-      return booksRepository.fetchBooks(storeId, limit: limit, offset: offset);
+      return _booksRepository.fetchBooks(storeId, limit: limit, offset: offset);
     } catch (e) {
       debugPrint('Failed to fetch books on books service: $e');
       rethrow;
@@ -22,7 +22,7 @@ class BooksService implements BooksServiceInterface {
   @override
   Future<BookModel> createBook(int storeId, RequestBookModel book) {
     try {
-      return booksRepository.createBook(storeId, book);
+      return _booksRepository.createBook(storeId, book);
     } catch (e) {
       debugPrint('Failed to create book on service: $e');
       rethrow;
@@ -32,7 +32,7 @@ class BooksService implements BooksServiceInterface {
   @override
   Future<void> deleteBook(int storeId, int bookId) {
     try {
-      return booksRepository.deleteBook(storeId, bookId);
+      return _booksRepository.deleteBook(storeId, bookId);
     } catch (e) {
       debugPrint('Failed to delete book on service: $e');
       rethrow;
@@ -46,7 +46,7 @@ class BooksService implements BooksServiceInterface {
     RequestBookModel book,
   ) async {
     try {
-      await booksRepository.updateBook(storeId, bookId, book);
+      await _booksRepository.updateBook(storeId, bookId, book);
       Map<String, dynamic> updatedbook = book.toMap();
       updatedbook['id'] = bookId;
       return BookModel.fromMap(updatedbook);

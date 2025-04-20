@@ -12,26 +12,28 @@ import 'package:mybookstore/interfaces/repositories/store_repository_interface.d
 import 'package:mybookstore/interfaces/services/auth_service_interface.dart';
 
 class AuthSerivce implements AuthServiceInterface {
-  final AuthRepositoryInterface authRepository;
-  final StoreRepositoryInterface storeRepository;
+  final AuthRepositoryInterface _authRepository;
+  final StoreRepositoryInterface _storeRepository;
 
-  final LocalRepositoryInterface localRepository;
+  final LocalRepositoryInterface _localRepository;
 
   AuthSerivce({
-    required this.authRepository,
-    required this.storeRepository,
-    required this.localRepository,
-  });
+    required AuthRepositoryInterface authRepository,
+    required StoreRepositoryInterface storeRepository,
+    required LocalRepositoryInterface localRepository,
+  }) : _localRepository = localRepository,
+       _storeRepository = storeRepository,
+       _authRepository = authRepository;
 
   @override
   Future<StoreModel?> initSession() async {
     try {
-      final storedSession = await localRepository.readMap(userSessionKey);
+      final storedSession = await _localRepository.readMap(userSessionKey);
 
       if (storedSession != null && storedSession != {}) {
         final userSession = SessionModel.fromMap(storedSession);
 
-        final store = await storeRepository.getStore(userSession.storeId);
+        final store = await _storeRepository.getStore(userSession.storeId);
 
         final user = UserModel(
           id: userSession.id,
@@ -56,7 +58,7 @@ class AuthSerivce implements AuthServiceInterface {
   @override
   Future<StoreModel> login(RequestAuthModel requestAuthModel) async {
     try {
-      final (store, tokens) = await authRepository.login(
+      final (store, tokens) = await _authRepository.login(
         requestAuthModel.toMap(),
       );
 
@@ -72,7 +74,7 @@ class AuthSerivce implements AuthServiceInterface {
   @override
   Future<void> logout() async {
     try {
-      await localRepository.clear();
+      await _localRepository.clear();
     } catch (e) {
       debugPrint("Error in AuthService: $e");
       rethrow;
@@ -82,7 +84,7 @@ class AuthSerivce implements AuthServiceInterface {
   @override
   Future<StoreModel> register(RequestRegisterModel registerModel) async {
     try {
-      final (store, tokens) = await authRepository.register(
+      final (store, tokens) = await _authRepository.register(
         registerModel.toMap(),
       );
 
@@ -105,7 +107,7 @@ class AuthSerivce implements AuthServiceInterface {
       storeId: store.id,
     );
 
-    await localRepository.writeMap(
+    await _localRepository.writeMap(
       key: userSessionKey,
       value: userSessionModel.toMap(),
     );

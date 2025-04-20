@@ -6,6 +6,7 @@ abstract class AppTheme {
   static ThemeData theme = ThemeData.light().copyWith(
     scaffoldBackgroundColor: AppColors.backgroundColor,
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      type: BottomNavigationBarType.fixed,
       backgroundColor: AppColors.backgroundColor,
       selectedIconTheme: IconThemeData(color: AppColors.headerColor),
       unselectedIconTheme: IconThemeData(color: AppColors.placeholderColor),

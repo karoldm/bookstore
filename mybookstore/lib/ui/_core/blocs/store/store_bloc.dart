@@ -7,29 +7,33 @@ import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
 
 class StoreBloc extends Bloc<StoreEvents, StoreStates> {
   StoreModel? store;
-  StoreServiceInterface storeService = GetIt.I<StoreServiceInterface>();
+  final StoreServiceInterface storeService = GetIt.I<StoreServiceInterface>();
 
   StoreBloc() : super(StoreLoadingState()) {
-    on<LoadStoreEvent>((event, emit) {
-      store = event.store;
-      emit(StoreLoadedState(store: event.store));
-    });
+    on<LoadStoreEvent>(_onLoadStoreEvent);
+    on<UpdateStoreEvent>(_onUpdateStoreEvent);
+  }
 
-    on<UpdateStoreEvent>((event, emit) async {
-      emit(StoreUpdatingState());
-      try {
-        StoreModel storeModel = await storeService.updateStore(
-          event.storeModel,
-        );
-        if (store != null) {
-          storeModel.user = store!.user;
-          emit(StoreUpdateSuccessState(store: storeModel));
-        } else {
-          emit(UpdateStoreErrorState(message: 'Store not found'));
-        }
-      } catch (e) {
-        emit(UpdateStoreErrorState(message: e.toString()));
+  void _onLoadStoreEvent(LoadStoreEvent event, Emitter<StoreStates> emit) {
+    store = event.store;
+    emit(StoreLoadedState(store: event.store));
+  }
+
+  Future<void> _onUpdateStoreEvent(
+    UpdateStoreEvent event,
+    Emitter<StoreStates> emit,
+  ) async {
+    emit(StoreUpdatingState());
+    try {
+      StoreModel storeModel = await storeService.updateStore(event.storeModel);
+      if (store != null) {
+        storeModel.user = store!.user;
+        emit(StoreUpdateSuccessState(store: storeModel));
+      } else {
+        emit(UpdateStoreErrorState(message: 'Store not found'));
       }
-    });
+    } catch (e) {
+      emit(UpdateStoreErrorState(message: e.toString()));
+    }
   }
 }

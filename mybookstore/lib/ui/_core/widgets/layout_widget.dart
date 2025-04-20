@@ -53,7 +53,6 @@ class _LayoutWidgetState extends State<LayoutWidget> {
                       : _employeePages[_currentIndex],
             ),
             bottomNavigationBar: BottomNavigationBar(
-              showSelectedLabels: false,
               selectedIconTheme: const IconThemeData(
                 color: AppColors.headerColor,
               ),

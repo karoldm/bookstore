@@ -5,47 +5,63 @@ import 'package:mybookstore/ui/auth/bloc/auth_events.dart';
 import 'package:mybookstore/ui/auth/bloc/auth_states.dart';
 
 class AuthBloc extends Bloc<AuthEvents, AuthStates> {
-  AuthServiceInterface authService = GetIt.I<AuthServiceInterface>();
+  final AuthServiceInterface authService = GetIt.I<AuthServiceInterface>();
 
   AuthBloc() : super(LoadingState()) {
-    on<RegisterEvent>((event, emit) async {
-      emit(LoadingState());
-      try {
-        final sessionData = await authService.register(event.requestStoreModel);
+    on<RegisterEvent>(_onRegisterEvent);
+    on<InitSessionEvent>(_onInitSessionEvent);
+    on<AuthenticateEvent>(_onAuthenticateEvent);
+    on<LogoutEvent>(_onLogoutEvent);
+  }
 
+  Future<void> _onRegisterEvent(
+    RegisterEvent event,
+    Emitter<AuthStates> emit,
+  ) async {
+    emit(LoadingState());
+    try {
+      final sessionData = await authService.register(event.requestStoreModel);
+      emit(AuthenticatedState(sessionData: sessionData));
+    } catch (e) {
+      emit(RegisterErrorState(message: e.toString()));
+    }
+  }
+
+  Future<void> _onInitSessionEvent(
+    InitSessionEvent event,
+    Emitter<AuthStates> emit,
+  ) async {
+    emit(LoadingState());
+    try {
+      final sessionData = await authService.initSession();
+      if (sessionData != null) {
         emit(AuthenticatedState(sessionData: sessionData));
-      } catch (e) {
-        emit(RegisterErrorState(message: e.toString()));
+      } else {
+        emit(UnauthenticatedState());
       }
-    });
+    } catch (e) {
+      emit(AuthenticateErrorState(message: e.toString()));
+    }
+  }
 
-    on<InitSessionEvent>((event, emit) async {
-      emit(LoadingState());
-      try {
-        final sessionData = await authService.initSession();
-        if (sessionData != null) {
-          emit(AuthenticatedState(sessionData: sessionData));
-        } else {
-          emit(UnauthenticatedState());
-        }
-      } catch (e) {
-        emit(AuthenticateErrorState(message: e.toString()));
-      }
-    });
+  Future<void> _onAuthenticateEvent(
+    AuthenticateEvent event,
+    Emitter<AuthStates> emit,
+  ) async {
+    emit(LoadingState());
+    try {
+      final sessionData = await authService.login(event.authModel);
+      emit(AuthenticatedState(sessionData: sessionData));
+    } catch (e) {
+      emit(AuthenticateErrorState(message: e.toString()));
+    }
+  }
 
-    on<AuthenticateEvent>((event, emit) async {
-      emit(LoadingState());
-      try {
-        final sessionData = await authService.login(event.authModel);
-        emit(AuthenticatedState(sessionData: sessionData));
-      } catch (e) {
-        emit(AuthenticateErrorState(message: e.toString()));
-      }
-    });
-
-    on<LogoutEvent>((event, emit) async {
-      await authService.logout();
-      emit(UnauthenticatedState());
-    });
+  Future<void> _onLogoutEvent(
+    LogoutEvent event,
+    Emitter<AuthStates> emit,
+  ) async {
+    await authService.logout();
+    emit(UnauthenticatedState());
   }
 }

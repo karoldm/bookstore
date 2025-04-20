@@ -68,16 +68,6 @@ class _BookFormScreenState extends State<BookFormScreen> {
           );
 
           Navigator.pop(context);
-        } else if (state is BookUpdateErrorState) {
-          ScaffoldMessenger.of(
-            context,
-          ).showSnackBar(SnackBar(content: Text("Erro ao atualizar livro")));
-        } else if (state is BookUpdateSuccessState) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text("Livro atualizado com sucesso!")),
-          );
-
-          Navigator.pop(context);
         }
       },
       builder: (context, state) {
@@ -160,9 +150,26 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                       controller: _yearController,
                                       digitsOnly: true,
                                       hint: "Ano de publicação",
+                                      validator: (value) {
+                                        if (int.tryParse(value) == null) {
+                                          return "Somente números";
+                                        }
+                                        if (int.parse(value) < 0) {
+                                          return "Ano inválido";
+                                        }
+                                        if (int.parse(value) >
+                                            DateTime.now().year) {
+                                          return "Ano inválido";
+                                        }
+                                        return null;
+                                      },
                                       onChanged: (value) {
                                         setState(() {
-                                          bookModel.year = int.parse(value);
+                                          if (value.isEmpty) {
+                                            bookModel.year = 0;
+                                          } else {
+                                            bookModel.year = int.parse(value);
+                                          }
                                         });
                                       },
                                     ),

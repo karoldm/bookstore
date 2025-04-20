@@ -10,6 +10,7 @@ class TextFieldWidget extends StatelessWidget {
   final bool? digitsOnly;
   final int? maxLines;
   final TextEditingController? controller;
+  final Function(String)? validator;
 
   const TextFieldWidget({
     super.key,
@@ -20,6 +21,7 @@ class TextFieldWidget extends StatelessWidget {
     this.digitsOnly,
     this.maxLines,
     this.controller,
+    this.validator,
   });
 
   @override
@@ -43,6 +45,9 @@ class TextFieldWidget extends StatelessWidget {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return "Campo obrigatório";
+        }
+        if (validator != null) {
+          return validator!(value);
         }
         return null;
       },

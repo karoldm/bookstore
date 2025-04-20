@@ -77,89 +77,105 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       },
       builder:
           (context, state) => Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: appBarWidget(title: "Novo Funcionário", context: context),
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: Form(
-                  key: _formKey,
-                  child: Column(
-                    spacing: 16,
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      CircleAvatarWidget(
-                        image: employee.photo,
-                        name: employee.name,
-                      ),
-                      TextFieldWidget(
-                        initialValue: employee.name,
-                        hint: "Nome do Funcionário",
-                        onChanged: (value) {
-                          setState(() {
-                            employee.name = value;
-                          });
-                        },
-                      ),
-                      TextFieldWidget(
-                        initialValue: employee.username,
-                        hint: "Username do Funcionário",
-                        onChanged: (value) {
-                          employee.username = value;
-                        },
-                      ),
-                      ImageFieldWidget(
-                        hint: "Foto do funcionário",
-                        onChanged: ({required String imageBase64}) {
-                          setState(() {
-                            employee.photo = imageBase64;
-                          });
-                        },
-                      ),
-
-                      PasswordFielWidget(
-                        onChanged: (value) {
-                          employee.password = value;
-                        },
-                      ),
-                      PasswordFielWidget(
-                        hint: "Repetir senha",
-                        validator: (value) {
-                          if (value != employee.password) {
-                            return "As senhas não conferem";
-                          }
-                          return null;
-                        },
-                        onChanged: (value) {},
-                      ),
-
-                      LoadingButtonWidget(
-                        isLoading: state is EmployeesLoadingState,
-                        child: Text("Salvar"),
-                        onPressed: () {
-                          if ((_formKey.currentState as FormState).validate()) {
-                            if (widget.initialEmployee == null) {
-                              BlocProvider.of<EmployeesBloc>(context).add(
-                                AddEmployeeEvent(
-                                  storeId: widget.storeId,
-                                  employee: employee,
+            body: LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      minHeight: constraints.maxHeight,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Column(
+                              spacing: 16,
+                              children: [
+                                CircleAvatarWidget(
+                                  image: employee.photo,
+                                  name: employee.name,
                                 ),
-                              );
-                            } else {
-                              BlocProvider.of<EmployeesBloc>(context).add(
-                                UpdateEmployeeEvent(
-                                  storeId: widget.storeId,
-                                  employeeId: widget.initialEmployee!.id,
-                                  employee: employee,
+                                TextFieldWidget(
+                                  initialValue: employee.name,
+                                  hint: "Nome do Funcionário",
+                                  onChanged: (value) {
+                                    setState(() {
+                                      employee.name = value;
+                                    });
+                                  },
                                 ),
-                              );
-                            }
-                          }
-                        },
+                                TextFieldWidget(
+                                  initialValue: employee.username,
+                                  hint: "Username do Funcionário",
+                                  onChanged: (value) {
+                                    employee.username = value;
+                                  },
+                                ),
+                                ImageFieldWidget(
+                                  hint: "Foto do funcionário",
+                                  onChanged: ({required String imageBase64}) {
+                                    setState(() {
+                                      employee.photo = imageBase64;
+                                    });
+                                  },
+                                ),
+
+                                PasswordFielWidget(
+                                  onChanged: (value) {
+                                    employee.password = value;
+                                  },
+                                ),
+                                PasswordFielWidget(
+                                  hint: "Repetir senha",
+                                  validator: (value) {
+                                    if (value != employee.password) {
+                                      return "As senhas não conferem";
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: (value) {},
+                                ),
+                              ],
+                            ),
+
+                            LoadingButtonWidget(
+                              isLoading: state is EmployeesLoadingState,
+                              child: Text("Salvar"),
+                              onPressed: () {
+                                if ((_formKey.currentState as FormState)
+                                    .validate()) {
+                                  if (widget.initialEmployee == null) {
+                                    BlocProvider.of<EmployeesBloc>(context).add(
+                                      AddEmployeeEvent(
+                                        storeId: widget.storeId,
+                                        employee: employee,
+                                      ),
+                                    );
+                                  } else {
+                                    BlocProvider.of<EmployeesBloc>(context).add(
+                                      UpdateEmployeeEvent(
+                                        storeId: widget.storeId,
+                                        employeeId: widget.initialEmployee!.id,
+                                        employee: employee,
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/data/models/request_store_model.dart';
 import 'package:mybookstore/enums/role_enum.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/list_saved_books_widget.dart';
 import 'package:mybookstore/ui/auth/bloc/auth_bloc.dart';
@@ -33,14 +34,24 @@ class ProfileScreen extends StatelessWidget {
                         Column(
                           spacing: 8,
                           children: [
-                            Text(state.store.user.name),
-                            Text(state.store.name),
-                            Text(state.store.slogan),
+                            Text(
+                              state.store.user.name,
+                              style: AppFonts.subtitleFontBold,
+                            ),
+                            Text(state.store.name, style: AppFonts.bodyFont),
+                            Text(
+                              state.store.slogan,
+                              style: AppFonts.bodySmallFont,
+                            ),
                           ],
                         ),
                         if (state.store.user.role == Role.admin)
                           TextButton.icon(
                             style: TextButton.styleFrom(
+                              padding: EdgeInsets.symmetric(
+                                vertical: 16,
+                                horizontal: 24,
+                              ),
                               backgroundColor: AppColors.backgroundColor,
                               foregroundColor: AppColors.defaultColor,
                               shape: RoundedRectangleBorder(
@@ -78,7 +89,10 @@ class ProfileScreen extends StatelessWidget {
                         if (state.store.user.role == Role.employee)
                           Column(
                             children: [
-                              Text("Livros salvos"),
+                              Text(
+                                "Livros salvos",
+                                style: AppFonts.subtitleFont,
+                              ),
                               ListSavedBooksWidget(),
                             ],
                           ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/rating_bar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/text_field_widget.dart';
 
@@ -16,7 +17,7 @@ class _FilterModalWidgetState extends State<FilterModalWidget> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _authorController = TextEditingController();
   RangeValues _publicationYearRange = RangeValues(
-    0,
+    1,
     DateTime.now().year.toDouble(),
   );
   int? _rating;
@@ -45,6 +46,7 @@ class _FilterModalWidgetState extends State<FilterModalWidget> {
                 ),
                 TextFieldWidget(
                   hint: "Filtrar por autor",
+
                   controller: _authorController,
                 ),
               ],
@@ -53,7 +55,19 @@ class _FilterModalWidgetState extends State<FilterModalWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 24,
               children: [
-                Text("Ano de publicação"),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Ano de publicação",
+                      style: AppFonts.bodySmallMediumFont,
+                    ),
+                    Text(
+                      "${_publicationYearRange.start.toInt()} - ${_publicationYearRange.end.toInt()}",
+                      style: AppFonts.bodySmallMediumFont,
+                    ),
+                  ],
+                ),
                 RangeSlider(
                   onChanged: (value) {
                     setState(() {
@@ -61,14 +75,14 @@ class _FilterModalWidgetState extends State<FilterModalWidget> {
                     });
                   },
                   values: _publicationYearRange,
-                  min: 0,
+                  min: 1,
                   max: DateTime.now().year.toDouble(),
                   activeColor: AppColors.defaultColor,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Avaliação"),
+                    Text("Avaliação", style: AppFonts.bodySmallMediumFont),
                     RatingBarWidget(
                       rating: 0,
                       onRatingChanged: (value) {
@@ -82,7 +96,7 @@ class _FilterModalWidgetState extends State<FilterModalWidget> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("Status"),
+                    Text("Status", style: AppFonts.bodySmallMediumFont),
                     Switch(
                       value: _available ?? false,
                       onChanged: (value) {

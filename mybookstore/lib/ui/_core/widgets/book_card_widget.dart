@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mybookstore/data/models/book_model.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/books/book_detail_screen.dart';
 
 class BookCardWidget extends StatelessWidget {
@@ -43,8 +44,21 @@ class BookCardWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               spacing: 8,
               children: [
-                Text(book.title, overflow: TextOverflow.ellipsis),
-                Text(book.author, overflow: TextOverflow.ellipsis),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      book.title,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppFonts.labelFont,
+                    ),
+                    Text(
+                      book.author,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppFonts.bodySmallMediumFont,
+                    ),
+                  ],
+                ),
                 Row(
                   children: [
                     Icon(Icons.star_outline),

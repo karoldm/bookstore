@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/list_saved_books_widget.dart';
 
 class SavedScreen extends StatelessWidget {
@@ -13,7 +14,7 @@ class SavedScreen extends StatelessWidget {
           spacing: 24,
           children: [
             Image.asset('assets/logo_purple.png', width: 56, height: 42),
-            Text("Livros salvos"),
+            Text("Livros salvos", style: AppFonts.titleFont),
             ListSavedBooksWidget(),
           ],
         ),

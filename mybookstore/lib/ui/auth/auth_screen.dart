@@ -29,62 +29,64 @@ class AuthScreen extends StatelessWidget {
       },
       builder: (context, state) {
         return Scaffold(
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 64,
-                  children: [
-                    Image.asset(
-                      "assets/logo_purple_text.png",
-                      width: 179,
-                      height: 134,
-                    ),
-                    Column(
-                      spacing: 16,
-                      children: [
-                        TextFieldWidget(
-                          hint: "user",
-                          onChanged: (value) {
-                            authModel.user = value;
-                          },
-                        ),
-                        PasswordFielWidget(
-                          onChanged: (value) {
-                            authModel.password = value;
-                          },
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return "Campo obrigatório";
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
-                    LoadingButtonWidget(
-                      isLoading: state is LoadingState,
-                      onPressed: () {
-                        if ((_formKey.currentState as FormState).validate()) {
-                          BlocProvider.of<AuthBloc>(
-                            context,
-                          ).add(AuthenticateEvent(authModel: authModel));
-                        }
-                      },
-                      child: Text("Entrar"),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pushNamed(context, "/register");
-                      },
-                      child: Text("Cadastre sua loja"),
-                    ),
-                  ],
+          body: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 64,
+                    children: [
+                      Image.asset(
+                        "assets/logo_purple_text.png",
+                        width: 179,
+                        height: 134,
+                      ),
+                      Column(
+                        spacing: 16,
+                        children: [
+                          TextFieldWidget(
+                            hint: "user",
+                            onChanged: (value) {
+                              authModel.user = value;
+                            },
+                          ),
+                          PasswordFielWidget(
+                            onChanged: (value) {
+                              authModel.password = value;
+                            },
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return "Campo obrigatório";
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
+                      LoadingButtonWidget(
+                        isLoading: state is LoadingState,
+                        onPressed: () {
+                          if ((_formKey.currentState as FormState).validate()) {
+                            BlocProvider.of<AuthBloc>(
+                              context,
+                            ).add(AuthenticateEvent(authModel: authModel));
+                          }
+                        },
+                        child: Text("Entrar"),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, "/register");
+                        },
+                        child: Text("Cadastre sua loja"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

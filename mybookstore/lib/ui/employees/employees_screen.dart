@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/data/models/employee_model.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/confirm_modal_widget.dart';
 import 'package:mybookstore/ui/employees/bloc/employees_bloc.dart';
@@ -26,7 +27,7 @@ class EmployeesScreen extends StatelessWidget {
                         spacing: 32,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text("Funcionários"),
+                          Text("Funcionários", style: AppFonts.titleFont),
                           ListView.separated(
                             separatorBuilder:
                                 (context, index) => SizedBox(height: 16),

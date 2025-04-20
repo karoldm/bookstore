@@ -4,6 +4,7 @@ import 'package:mybookstore/enums/role_enum.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/list_books_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/list_saved_books_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/text_field_widget.dart';
@@ -28,7 +29,10 @@ class HomeScreen extends StatelessWidget {
                 spacing: 40,
                 children: [
                   Image.asset('assets/logo_purple.png', width: 56, height: 42),
-                  Text('Olá, ${state.store.user.name} 👋'),
+                  Text(
+                    'Olá, ${state.store.user.name} 👋',
+                    style: AppFonts.titleFont,
+                  ),
 
                   Row(
                     children: [
@@ -81,10 +85,10 @@ class HomeScreen extends StatelessWidget {
                     ],
                   ),
                   if (state.store.user.role == Role.employee) ...[
-                    Text("Livros salvos"),
+                    Text("Livros salvos", style: AppFonts.subtitleFont),
                     ListSavedBooksWidget(),
                   ],
-                  Text("Todos livros"),
+                  Text("Todos livros", style: AppFonts.subtitleFont),
                   ListBooksWidget(storeId: state.store.id),
                 ],
               ),

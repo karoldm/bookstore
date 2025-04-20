@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 
 abstract class AppTheme {
   static ThemeData theme = ThemeData.light().copyWith(
+    scaffoldBackgroundColor: AppColors.backgroundColor,
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: AppColors.backgroundColor,
       selectedIconTheme: IconThemeData(color: AppColors.headerColor),
       unselectedIconTheme: IconThemeData(color: AppColors.placeholderColor),
       selectedLabelStyle: TextStyle(color: AppColors.headerColor),
       unselectedLabelStyle: TextStyle(color: AppColors.placeholderColor),
-      backgroundColor: Color.fromRGBO(255, 255, 255, 0.9),
     ),
     cardTheme: const CardTheme(
       color: AppColors.lineColor,
@@ -40,6 +42,8 @@ abstract class AppTheme {
     ),
     iconTheme: const IconThemeData(color: AppColors.headerColor),
     appBarTheme: const AppBarTheme(
+      backgroundColor: AppColors.backgroundColor,
+      surfaceTintColor: AppColors.backgroundColor,
       elevation: 0,
       titleTextStyle: TextStyle(
         color: AppColors.headerColor,
@@ -69,6 +73,7 @@ abstract class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
+        textStyle: AppFonts.labelFont,
         padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
         backgroundColor: AppColors.defaultColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/list_books_widget.dart';
 
 class BooksScreen extends StatelessWidget {
@@ -16,7 +17,7 @@ class BooksScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Text("Livros"),
+                  Text("Livros", style: AppFonts.titleFont),
                   ListBooksWidget(storeId: state.store.id),
                 ],
               ),

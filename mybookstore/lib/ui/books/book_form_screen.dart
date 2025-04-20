@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/data/models/book_model.dart';
 import 'package:mybookstore/data/models/request_book_model.dart';
-import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/app_bar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/image_field_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/loading_button_widget.dart';
@@ -82,180 +82,192 @@ class _BookFormScreenState extends State<BookFormScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: appBarWidget(context: context, title: "Cadastrar Livro"),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                spacing: 32,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: SelectCardWidget(
-                          isSelected: _index == 0,
-                          title: 'Dados do livro',
-                          onTap: () {
-                            setState(() => _index = 0);
-                          },
-                        ),
-                      ),
-                      Expanded(
-                        child: SelectCardWidget(
-                          isSelected: _index == 1,
-                          title: 'Design do livro',
-                          onTap: () {
-                            setState(() => _index = 1);
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  IndexedStack(
-                    index: _index,
-                    children: [
-                      Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          spacing: 16,
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      spacing: 32,
+                      children: [
+                        Row(
                           children: [
-                            if (_index == 0) ...[
-                              TextFieldWidget(
-                                controller: _titleController,
-                                hint: "Título",
-                                onChanged: (value) {
-                                  setState(() {
-                                    bookModel.title = value;
-                                  });
+                            Expanded(
+                              child: SelectCardWidget(
+                                isSelected: _index == 0,
+                                title: 'Dados do livro',
+                                onTap: () {
+                                  setState(() => _index = 0);
                                 },
                               ),
-                              TextFieldWidget(
-                                controller: _authorController,
-                                hint: "Autor",
-                                onChanged: (value) {
-                                  setState(() {
-                                    bookModel.author = value;
-                                  });
+                            ),
+                            Expanded(
+                              child: SelectCardWidget(
+                                isSelected: _index == 1,
+                                title: 'Design do livro',
+                                onTap: () {
+                                  setState(() => _index = 1);
                                 },
                               ),
-                              TextFieldWidget(
-                                controller: _synopsisController,
-                                hint: "Sinópse",
-                                maxLines: 3,
-                                onChanged: (value) {
-                                  setState(() {
-                                    bookModel.synopsis = value;
-                                  });
-                                },
-                              ),
-                              TextFieldWidget(
-                                controller: _yearController,
-                                digitsOnly: true,
-                                hint: "Ano de publicação",
-                                onChanged: (value) {
-                                  setState(() {
-                                    bookModel.year = int.parse(value);
-                                  });
-                                },
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Avaliação"),
-                                  RatingBarWidget(
-                                    rating: bookModel.rating,
-                                    onRatingChanged: (value) {
-                                      _ratingController.text = value.toString();
-                                      setState(() {
-                                        bookModel.rating = value;
-                                      });
-                                    },
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text("Status"),
-                                  Row(
-                                    spacing: 8,
-                                    children: [
-                                      Switch(
-                                        value: bookModel.available,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            bookModel.available = value;
-                                          });
-                                        },
-                                      ),
-                                      Text(
-                                        bookModel.available
-                                            ? "Estoque"
-                                            : "Sem estoque",
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                            ],
+                            ),
                           ],
                         ),
-                      ),
+                        IndexedStack(
+                          index: _index,
+                          children: [
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 16,
+                                children: [
+                                  if (_index == 0) ...[
+                                    TextFieldWidget(
+                                      controller: _titleController,
+                                      hint: "Título",
+                                      onChanged: (value) {
+                                        setState(() {
+                                          bookModel.title = value;
+                                        });
+                                      },
+                                    ),
+                                    TextFieldWidget(
+                                      controller: _authorController,
+                                      hint: "Autor",
+                                      onChanged: (value) {
+                                        setState(() {
+                                          bookModel.author = value;
+                                        });
+                                      },
+                                    ),
+                                    TextFieldWidget(
+                                      controller: _synopsisController,
+                                      hint: "Sinópse",
+                                      maxLines: 3,
+                                      onChanged: (value) {
+                                        setState(() {
+                                          bookModel.synopsis = value;
+                                        });
+                                      },
+                                    ),
+                                    TextFieldWidget(
+                                      controller: _yearController,
+                                      digitsOnly: true,
+                                      hint: "Ano de publicação",
+                                      onChanged: (value) {
+                                        setState(() {
+                                          bookModel.year = int.parse(value);
+                                        });
+                                      },
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Avaliação",
+                                          style: AppFonts.bodySmallMediumFont,
+                                        ),
+                                        RatingBarWidget(
+                                          rating: bookModel.rating,
+                                          onRatingChanged: (value) {
+                                            _ratingController.text =
+                                                value.toString();
+                                            setState(() {
+                                              bookModel.rating = value;
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "Status",
+                                          style: AppFonts.bodySmallMediumFont,
+                                        ),
+                                        Row(
+                                          spacing: 8,
+                                          children: [
+                                            Switch(
+                                              value: bookModel.available,
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  bookModel.available = value;
+                                                });
+                                              },
+                                            ),
+                                            Text(
+                                              bookModel.available
+                                                  ? "Estoque"
+                                                  : "Sem estoque",
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ],
+                              ),
+                            ),
 
-                      Column(
-                        spacing: 6,
-                        children: [
-                          ImageFieldWidget(
-                            hint: "Capa do livro",
-                            onChanged: ({required String imageBase64}) {
-                              setState(() {
-                                bookModel.cover = imageBase64;
-                              });
-                            },
-                          ),
-                          Text(
-                            "Tamanho máximo:  124 X 176. Formato: PNG, JPEG",
-                            style: TextStyle(
-                              fontSize: 12,
-                              color: AppColors.labelColor,
+                            Column(
+                              spacing: 6,
+                              children: [
+                                ImageFieldWidget(
+                                  hint: "Capa do livro",
+                                  onChanged: ({required String imageBase64}) {
+                                    setState(() {
+                                      bookModel.cover = imageBase64;
+                                    });
+                                  },
+                                ),
+                                Text(
+                                  "Tamanho máximo:  124 X 176. Formato: PNG, JPEG",
+                                  style: AppFonts.bodySmallMediumFont,
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                        LoadingButtonWidget(
+                          isLoading: state is BooksLoadingState,
+                          child: Text("Salvar"),
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              if (widget.initialBook != null) {
+                                BlocProvider.of<BooksBloc>(context).add(
+                                  UpdateBookEvent(
+                                    storeId: widget.storeId,
+                                    bookId: widget.initialBook!.id,
+                                    book: bookModel,
+                                  ),
+                                );
+                              } else {
+                                BlocProvider.of<BooksBloc>(context).add(
+                                  AddBookEvent(
+                                    storeId: widget.storeId,
+                                    book: bookModel,
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  LoadingButtonWidget(
-                    isLoading: state is BooksLoadingState,
-                    child: Text("Salvar"),
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (widget.initialBook != null) {
-                          BlocProvider.of<BooksBloc>(context).add(
-                            UpdateBookEvent(
-                              storeId: widget.storeId,
-                              bookId: widget.initialBook!.id,
-                              book: bookModel,
-                            ),
-                          );
-                        } else {
-                          BlocProvider.of<BooksBloc>(context).add(
-                            AddBookEvent(
-                              storeId: widget.storeId,
-                              book: bookModel,
-                            ),
-                          );
-                        }
-                      }
-                    },
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         );
       },

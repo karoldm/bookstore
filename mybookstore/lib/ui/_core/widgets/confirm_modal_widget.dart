@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 
 class ConfirmModalWidget extends StatelessWidget {
   final Function()? onConfirm;
@@ -14,30 +15,21 @@ class ConfirmModalWidget extends StatelessWidget {
       title: Text(
         label,
         textAlign: TextAlign.center,
-        style: TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-          color: AppColors.headerColor,
-        ),
+        style: AppFonts.labelFont.copyWith(fontSize: 18),
       ),
       actions: [
         TextButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text(
+          child: Text(
             "Cancelar",
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: AppColors.defaultColor,
-            ),
+            style: AppFonts.labelFont.copyWith(color: AppColors.defaultColor),
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.errorColor,
-            foregroundColor: AppColors.backgroundColor,
           ),
           onPressed: () {
             if (onConfirm != null) {
@@ -45,7 +37,12 @@ class ConfirmModalWidget extends StatelessWidget {
             }
             Navigator.pop(context);
           },
-          child: const Text("Confirmar"),
+          child: Text(
+            "Confirmar",
+            style: AppFonts.labelFont.copyWith(
+              color: AppColors.backgroundColor,
+            ),
+          ),
         ),
       ],
     );

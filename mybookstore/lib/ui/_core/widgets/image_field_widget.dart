@@ -40,17 +40,9 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
             validator: (value) => null,
             readOnly: true,
             decoration: InputDecoration(
+              fillColor: AppColors.backgroundColor,
               hintStyle: const TextStyle(color: AppColors.defaultColor),
-              prefixIcon: Icon(
-                Icons.upload_outlined,
-                color: AppColors.defaultColor,
-              ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide(color: AppColors.defaultColor),
-              ),
-              hintText: image != null ? image!.name : widget.hint,
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.camera_alt),
+              prefixIcon: IconButton(
                 onPressed: () async {
                   final XFile? pickedImage = await picker.pickImage(
                     source: ImageSource.gallery,
@@ -68,7 +60,15 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
                     widget.onChanged(imageBase64: imageBase64);
                   }
                 },
+                icon: Icon(
+                  Icons.upload_outlined,
+                  color: AppColors.defaultColor,
+                ),
               ),
+              border: border,
+              enabledBorder: border,
+              focusedBorder: border,
+              hintText: image != null ? image!.name : widget.hint,
             ),
           ),
         ),
@@ -76,3 +76,8 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
     );
   }
 }
+
+final OutlineInputBorder border = OutlineInputBorder(
+  borderRadius: BorderRadius.circular(12),
+  borderSide: BorderSide(color: AppColors.defaultColor),
+);

@@ -41,7 +41,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
         limit: limit,
       );
 
-      if (event.isLoadingMore == null || event.isLoadingMore == false) {
+      if (!(event.isLoadingMore == true)) {
         this.books.clear();
       }
       this.books.addAll(books);

@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 
-AppBar appBarWidget({
-  required BuildContext context,
-  String? title,
-}) {
+AppBar appBarWidget({required BuildContext context, String? title}) {
   return AppBar(
-    title: Text(
-      title ?? '',
-    ),
+    title: Text(title ?? '', style: AppFonts.subtitleFontBold),
     leading: IconButton(
+      alignment: Alignment.centerRight,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.defaultColor,
         shape: const CircleBorder(),

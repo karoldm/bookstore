@@ -7,6 +7,7 @@ import 'package:mybookstore/data/models/request_book_model.dart';
 import 'package:mybookstore/enums/role_enum.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/app_bar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/confirm_modal_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/loading_button_widget.dart';
@@ -89,13 +90,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           Text(
                             widget.book.title,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppFonts.subtitleFontBold,
                           ),
                           Text(widget.book.author, textAlign: TextAlign.center),
-                          Text("Sinópse"),
+                          Text("Sinópse", style: AppFonts.labelFont),
                           Text(
                             widget.book.synopsis,
                             textAlign: TextAlign.justify,
@@ -103,7 +101,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Text("Publicado em"),
+                              Text("Publicado em", style: AppFonts.labelFont),
                               Text(widget.book.year.toString()),
                             ],
                           ),
@@ -111,7 +109,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text("Avaliação"),
+                                Text("Avaliação", style: AppFonts.labelFont),
                                 RatingBarWidget(
                                   rating: widget.book.rating,
                                   disabled: true,

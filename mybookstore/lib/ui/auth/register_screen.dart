@@ -32,85 +32,93 @@ class RegisterScreen extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           appBar: appBarWidget(context: context, title: "Cadastrar loja"),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                autovalidateMode: AutovalidateMode.onUserInteraction,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  spacing: 16,
-                  children: [
-                    Image.asset(
-                      "assets/logo_purple_text.png",
-                      width: 179,
-                      height: 134,
-                    ),
-                    TextFieldWidget(
-                      hint: "Nome da loja",
-                      onChanged: (value) {
-                        storeModel.name = value;
-                      },
-                    ),
-                    TextFieldWidget(
-                      hint: "Slogan da loja",
-                      onChanged: (value) {
-                        storeModel.slogan = value;
-                      },
-                    ),
-                    ImageFieldWidget(
-                      hint: "Banner da loja",
-                      onChanged: ({required String imageBase64}) {
-                        storeModel.banner = imageBase64;
-                      },
-                    ),
-                    TextFieldWidget(
-                      hint: "Nome do administrador",
-                      onChanged: (value) {
-                        storeModel.admin.name = value;
-                      },
-                    ),
-                    TextFieldWidget(
-                      hint: "User do administrador",
-                      onChanged: (value) {
-                        storeModel.admin.username = value;
-                      },
-                    ),
-                    ImageFieldWidget(
-                      hint: "Foto do administrador",
-                      onChanged: ({required String imageBase64}) {
-                        storeModel.admin.photo = imageBase64;
-                      },
-                    ),
-                    PasswordFielWidget(
-                      onChanged: (value) {
-                        storeModel.admin.password = value;
-                      },
-                    ),
-                    PasswordFielWidget(
-                      hint: "Repetir senha",
-                      validator: (value) {
-                        if (value != storeModel.admin.password) {
-                          return "As senhas não conferem";
-                        }
-                        return null;
-                      },
-                      onChanged: (value) {},
-                    ),
-                    LoadingButtonWidget(
-                      isLoading: state is LoadingState,
-                      onPressed: () {
-                        if ((_formKey.currentState as FormState).validate()) {
-                          BlocProvider.of<AuthBloc>(
-                            context,
-                          ).add(RegisterEvent(requestStoreModel: storeModel));
-                        }
-                      },
-                      child: Text("Salvar"),
-                    ),
-                  ],
+          body: Center(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Form(
+                  key: _formKey,
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    spacing: 32,
+                    children: [
+                      Image.asset(
+                        "assets/logo_purple_text.png",
+                        width: 179,
+                        height: 134,
+                      ),
+                      Column(
+                        spacing: 16,
+
+                        children: [
+                          TextFieldWidget(
+                            hint: "Nome da loja",
+                            onChanged: (value) {
+                              storeModel.name = value;
+                            },
+                          ),
+                          TextFieldWidget(
+                            hint: "Slogan da loja",
+                            onChanged: (value) {
+                              storeModel.slogan = value;
+                            },
+                          ),
+                          ImageFieldWidget(
+                            hint: "Banner da loja",
+                            onChanged: ({required String imageBase64}) {
+                              storeModel.banner = imageBase64;
+                            },
+                          ),
+                          TextFieldWidget(
+                            hint: "Nome do administrador",
+                            onChanged: (value) {
+                              storeModel.admin.name = value;
+                            },
+                          ),
+                          TextFieldWidget(
+                            hint: "User do administrador",
+                            onChanged: (value) {
+                              storeModel.admin.username = value;
+                            },
+                          ),
+                          ImageFieldWidget(
+                            hint: "Foto do administrador",
+                            onChanged: ({required String imageBase64}) {
+                              storeModel.admin.photo = imageBase64;
+                            },
+                          ),
+                          PasswordFielWidget(
+                            onChanged: (value) {
+                              storeModel.admin.password = value;
+                            },
+                          ),
+                          PasswordFielWidget(
+                            hint: "Repetir senha",
+                            validator: (value) {
+                              if (value != storeModel.admin.password) {
+                                return "As senhas não conferem";
+                              }
+                              return null;
+                            },
+                            onChanged: (value) {},
+                          ),
+                        ],
+                      ),
+                      LoadingButtonWidget(
+                        isLoading: state is LoadingState,
+                        onPressed: () {
+                          if ((_formKey.currentState as FormState).validate()) {
+                            BlocProvider.of<AuthBloc>(
+                              context,
+                            ).add(RegisterEvent(requestStoreModel: storeModel));
+                          }
+                        },
+                        child: Text("Salvar"),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/data/models/request_store_model.dart';
 import 'package:mybookstore/data/models/user_model.dart';
@@ -57,63 +58,74 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
       },
       builder: (context, state) {
         return Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: appBarWidget(context: context, title: "Editar loja "),
-          body: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                mainAxisSize: MainAxisSize.max,
-                spacing: 24,
-                children: [
-                  CircleAvatarWidget(
-                    image: widget.user.photo,
-                    name: widget.user.name,
-                  ),
-                  Form(
-                    key: _formKey,
+          body: LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
                     child: Column(
-                      spacing: 16,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        TextFieldWidget(
-                          hint: "Nome da loja",
-                          initialValue: storeModel.name,
-                          onChanged: (value) {
-                            storeModel.name = value;
-                          },
+                        Column(
+                          spacing: 24,
+                          children: [
+                            CircleAvatarWidget(
+                              image: widget.user.photo,
+                              name: widget.user.name,
+                            ),
+                            Form(
+                              key: _formKey,
+                              child: Column(
+                                spacing: 16,
+                                children: [
+                                  TextFieldWidget(
+                                    hint: "Nome da loja",
+                                    initialValue: storeModel.name,
+                                    onChanged: (value) {
+                                      storeModel.name = value;
+                                    },
+                                  ),
+                                  TextFieldWidget(
+                                    hint: "Slogan",
+                                    initialValue: storeModel.slogan,
+                                    onChanged: (value) {
+                                      storeModel.slogan = value;
+                                    },
+                                  ),
+                                  ImageFieldWidget(
+                                    hint: "Banner",
+                                    initialValue: storeModel.banner,
+                                    onChanged: ({required String imageBase64}) {
+                                      storeModel.banner = imageBase64;
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        TextFieldWidget(
-                          hint: "Slogan",
-                          initialValue: storeModel.slogan,
-                          onChanged: (value) {
-                            storeModel.slogan = value;
+                        LoadingButtonWidget(
+                          isLoading: state is StoreUpdatingState,
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              context.read<StoreBloc>().add(
+                                UpdateStoreEvent(storeModel: storeModel),
+                              );
+                            }
                           },
-                        ),
-                        ImageFieldWidget(
-                          hint: "Banner",
-                          initialValue: storeModel.banner,
-                          onChanged: ({required String imageBase64}) {
-                            storeModel.banner = imageBase64;
-                          },
+                          child: Text("Salvar"),
                         ),
                       ],
                     ),
                   ),
-                  LoadingButtonWidget(
-                    isLoading: state is StoreUpdatingState,
-                    onPressed: () {
-                      if (_formKey.currentState!.validate()) {
-                        context.read<StoreBloc>().add(
-                          UpdateStoreEvent(storeModel: storeModel),
-                        );
-                      }
-                    },
-                    child: Text("Salvar"),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           ),
         );
       },

@@ -41,6 +41,7 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   get_it: ^8.0.3
   flutter_native_splash: ^2.4.6
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -97,3 +98,8 @@ flutter_native_splash:
   web: false
   android_12:
     color: "#610BEF"
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/logo_purple_text.png"

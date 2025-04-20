@@ -32,7 +32,7 @@ class SplashScreenState extends State<SplashScreen>
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 
     _imageAnimation = Tween<Offset>(
-      begin: Offset(0, 1), // Sobe de fora da tela
+      begin: Offset(0, 3), // Sobe de fora da tela
       end: Offset(0, -0.5), // Fica um pouco acima do texto
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
 

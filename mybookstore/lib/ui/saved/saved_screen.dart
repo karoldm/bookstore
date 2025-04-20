@@ -7,19 +7,21 @@ class SavedScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 32,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          spacing: 24,
-          children: [
-            Image.asset('assets/logo_purple.png', width: 56, height: 42),
-            Text("Livros salvos", style: AppFonts.titleFont),
-            ListSavedBooksWidget(),
-          ],
-        ),
-      ],
+    return SingleChildScrollView(
+      child: Column(
+        spacing: 32,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: 24,
+            children: [
+              Image.asset('assets/logo_purple.png', width: 56, height: 42),
+              Text("Livros salvos", style: AppFonts.titleFont),
+              ListSavedBooksWidget(),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

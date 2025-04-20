@@ -19,8 +19,13 @@ import 'package:mybookstore/ui/books/book_form_screen.dart';
 
 class BookDetailScreen extends StatefulWidget {
   final BookModel book;
+  final bool? onlySavedBooks;
 
-  const BookDetailScreen({super.key, required this.book});
+  const BookDetailScreen({
+    super.key,
+    required this.book,
+    this.onlySavedBooks = false,
+  });
 
   @override
   State<BookDetailScreen> createState() => _BookDetailScreenState();
@@ -35,6 +40,17 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   void initState() {
     super.initState();
     currentBook = widget.book;
+  }
+
+  void onChangeBook(List<BookModel> books, bool isNext) {
+    if (widget.onlySavedBooks == true) {
+      books = books.where((book) => book.isSaved).toList();
+    }
+    if (isNext) {
+      onNext(books);
+    } else {
+      onPrevious(books);
+    }
   }
 
   void onNext(List<BookModel> books) {
@@ -63,6 +79,26 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
     return book?.cover != null
         ? Image.memory(base64Decode(book!.cover!), height: 240)
         : Image.asset("assets/book_default.png", height: 240);
+  }
+
+  void initStates(List<BookModel> books) {
+    List<BookModel> initialBooks = [];
+
+    if (widget.onlySavedBooks == true) {
+      initialBooks = List.from(books.where((book) => book.isSaved).toList());
+    } else {
+      initialBooks = List.from(books);
+    }
+
+    next = initialBooks.indexOf(currentBook) + 1;
+    if (next != null && next! >= initialBooks.length) {
+      next = null;
+    }
+
+    previous = initialBooks.indexOf(currentBook) - 1;
+    if (previous != null && previous! < 0) {
+      previous = null;
+    }
   }
 
   @override
@@ -97,15 +133,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
           },
 
           builder: (context, booksState) {
-            next = booksState.books.indexOf(currentBook) + 1;
-            if (next != null && next! >= booksState.books.length) {
-              next = null;
-            }
-
-            previous = booksState.books.indexOf(currentBook) - 1;
-            if (previous != null && previous! < 0) {
-              previous = null;
-            }
+            initStates(booksState.books);
 
             return Scaffold(
               appBar: appBarWidget(context: context),
@@ -124,7 +152,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             Positioned(
                               left: -120,
                               child: InkWell(
-                                onTap: () => onPrevious(booksState.books),
+                                onTap:
+                                    () => onChangeBook(booksState.books, false),
                                 child: getImageBook(
                                   booksState.books[previous!],
                                 ),
@@ -145,7 +174,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             Positioned(
                               right: -120,
                               child: InkWell(
-                                onTap: () => onNext(booksState.books),
+                                onTap:
+                                    () => onChangeBook(booksState.books, true),
                                 child: getImageBook(booksState.books[next!]),
                               ),
                             ),

@@ -48,7 +48,12 @@ class ListSavedBooksWidget extends StatelessWidget {
                   crossAxisSpacing: 32,
                   children:
                       savedBooks
-                          .map((book) => BookCardWidget(book: book))
+                          .map(
+                            (book) => BookCardWidget(
+                              book: book,
+                              onlySavedBooks: true,
+                            ),
+                          )
                           .toList(),
                 ),
               ],

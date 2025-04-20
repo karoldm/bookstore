@@ -7,8 +7,9 @@ import 'package:mybookstore/ui/books/book_detail_screen.dart';
 
 class BookCardWidget extends StatelessWidget {
   final BookModel book;
+  final bool? onlySavedBooks;
 
-  const BookCardWidget({required this.book, super.key});
+  const BookCardWidget({required this.book, super.key, this.onlySavedBooks});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,11 @@ class BookCardWidget extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => BookDetailScreen(book: book),
+              builder:
+                  (context) => BookDetailScreen(
+                    book: book,
+                    onlySavedBooks: onlySavedBooks,
+                  ),
             ),
           );
         },

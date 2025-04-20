@@ -89,7 +89,7 @@ class HomeScreen extends StatelessWidget {
                     ListSavedBooksWidget(),
                   ],
                   Text("Todos livros", style: AppFonts.subtitleFont),
-                  ListBooksWidget(storeId: state.store.id),
+                  ListBooksWidget(storeId: state.store.id, showFiltered: true),
                 ],
               ),
             )

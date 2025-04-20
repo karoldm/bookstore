@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
+import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/book_card_widget.dart';
 import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
 import 'package:mybookstore/ui/books/bloc/books_states.dart';
@@ -15,7 +16,9 @@ class ListSavedBooksWidget extends StatelessWidget {
         if (state is SavedBooksLoadingErrorState) {
           return Text(
             "Erro ao carregar livros salvos :c",
-            style: TextStyle(color: AppColors.labelColor),
+            style: AppFonts.bodySmallMediumFont.copyWith(
+              color: AppColors.labelColor,
+            ),
           );
         }
 
@@ -23,13 +26,13 @@ class ListSavedBooksWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final savedBooks = state.books.where((book) => book.isSaved);
+        final savedBooks = List.from(state.books.where((book) => book.isSaved));
 
         return savedBooks.isEmpty
-            ? Center(
-              child: Text(
-                "Sem livros por aqui...",
-                style: TextStyle(color: AppColors.labelColor),
+            ? Text(
+              "Sem livros por aqui...",
+              style: AppFonts.bodySmallMediumFont.copyWith(
+                color: AppColors.labelColor,
               ),
             )
             : Column(

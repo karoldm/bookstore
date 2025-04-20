@@ -11,6 +11,7 @@ class SavedScreen extends StatelessWidget {
       spacing: 32,
       children: [
         Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           spacing: 24,
           children: [
             Image.asset('assets/logo_purple.png', width: 56, height: 42),

@@ -7,8 +7,10 @@ import 'package:mybookstore/ui/books/bloc/books_states.dart';
 
 class BooksBloc extends Bloc<BooksEvents, BooksStates> {
   final List<BookModel> books = [];
+  final List<BookModel> filteredBooks = [];
   int offset = 0;
   bool hasMore = false;
+  Map<String, dynamic> filters = {};
   final int limit = 5;
 
   final BooksServiceInterface booksService = GetIt.I<BooksServiceInterface>();
@@ -26,33 +28,42 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
     Emitter<BooksStates> emit,
   ) async {
     try {
-      if (event.isLoadingMore == true) {
-        emit(BooksLoadingMoreState(books: this.books));
-      } else {
-        emit(BooksLoadingState(books: this.books));
-      }
+      event.isLoadingMore == true
+          ? emit(BooksLoadingMoreState(books: books))
+          : emit(BooksLoadingState(books: books));
 
       offset = event.offset ?? offset;
+      filters = event.filters ?? filters;
 
-      List<BookModel> books = await booksService.fetchBooks(
+      List<BookModel> fetchBooks = await booksService.fetchBooks(
         event.storeId,
         offset: offset,
         filters: event.filters,
         limit: limit,
       );
 
-      if (!(event.isLoadingMore == true)) {
-        this.books.clear();
+      if (event.filters != null) {
+        if (offset == 0) {
+          filteredBooks.clear();
+        }
+        filteredBooks.addAll(fetchBooks);
+      } else {
+        if (offset == 0) {
+          books.clear();
+        }
+        books.addAll(fetchBooks);
       }
-      this.books.addAll(books);
 
       offset += limit;
-      hasMore = books.length == limit;
+      hasMore = fetchBooks.length == limit;
     } catch (e) {
       emit(BooksLoadingErrorState(books: books, message: e.toString()));
     } finally {
-      emit(BooksLoadedState(books: books));
-      _onLoadSavedBooks(emit);
+      (event.filters != null)
+          ? emit(FilteredBooksState(books: books, filteredBooks: filteredBooks))
+          : emit(BooksLoadedState(books: books));
+
+      await _onLoadSavedBooks(emit);
       emit(SavedBooksLoadedState(books: books));
     }
   }
@@ -143,9 +154,6 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
   ) async {
     try {
       emit(SavedBooksLoadingState(books: books));
-
-      BookModel book = books.firstWhere((b) => b.id == event.bookId);
-      book.isSaved = !book.isSaved;
 
       await booksService.saveBooks(
         books.where((b) => b.isSaved).map((b) => b.id).toList(),

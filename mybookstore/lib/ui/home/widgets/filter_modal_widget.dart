@@ -5,7 +5,7 @@ import 'package:mybookstore/ui/_core/widgets/rating_bar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/text_field_widget.dart';
 
 class FilterModalWidget extends StatefulWidget {
-  final Function(Map<String, dynamic> filters) onFilter;
+  final Function(Map<String, dynamic>? filters) onFilter;
 
   const FilterModalWidget({super.key, required this.onFilter});
 
@@ -140,7 +140,7 @@ class _FilterModalWidgetState extends State<FilterModalWidget> {
 
             TextButton(
               onPressed: () {
-                widget.onFilter({});
+                widget.onFilter(null);
                 Navigator.pop(context);
               },
               child: Text("Limpar filtros"),

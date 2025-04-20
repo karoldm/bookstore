@@ -70,3 +70,9 @@ class SavedBooksLoadingErrorState extends BooksStates {
 class SavedBooksLoadedState extends BooksStates {
   SavedBooksLoadedState({required super.books});
 }
+
+class FilteredBooksState extends BooksStates {
+  final List<BookModel> filteredBooks;
+
+  FilteredBooksState({required super.books, required this.filteredBooks});
+}

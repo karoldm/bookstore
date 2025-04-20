@@ -18,7 +18,7 @@ class BooksScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Text("Livros", style: AppFonts.titleFont),
-                  ListBooksWidget(storeId: state.store.id),
+                  ListBooksWidget(storeId: state.store.id, showFiltered: false),
                 ],
               ),
             )

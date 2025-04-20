@@ -72,6 +72,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         return BlocConsumer<BooksBloc, BooksStates>(
           listener: (context, booksState) {
             if (booksState is BookUpdateSuccessState) {
+              setState(() {
+                currentBook = booksState.books.firstWhere(
+                  (book) => book.id == currentBook.id,
+                );
+              });
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Livro atualizado com sucesso!")),
               );

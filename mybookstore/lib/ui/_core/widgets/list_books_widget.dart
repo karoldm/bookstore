@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybookstore/data/models/book_model.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 import 'package:mybookstore/ui/_core/theme/app_fonts.dart';
 import 'package:mybookstore/ui/_core/widgets/book_card_widget.dart';
@@ -9,8 +10,13 @@ import 'package:mybookstore/ui/books/bloc/books_states.dart';
 
 class ListBooksWidget extends StatelessWidget {
   final int storeId;
+  final bool showFiltered;
 
-  const ListBooksWidget({super.key, required this.storeId});
+  const ListBooksWidget({
+    super.key,
+    required this.storeId,
+    required this.showFiltered,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +26,8 @@ class ListBooksWidget extends StatelessWidget {
               current is BooksLoadingState ||
               current is BooksLoadingMoreState ||
               current is BooksLoadingErrorState ||
-              current is BooksLoadedState,
+              current is BooksLoadedState ||
+              current is FilteredBooksState,
       builder: (context, state) {
         if (state is BooksLoadingErrorState) {
           return Text(
@@ -34,7 +41,15 @@ class ListBooksWidget extends StatelessWidget {
         if (state is BooksLoadingState) {
           return const Center(child: CircularProgressIndicator());
         }
-        return state.books.isEmpty
+
+        final List<BookModel> currentBooks = switch (state) {
+          FilteredBooksState() when showFiltered => List.from(
+            state.filteredBooks,
+          ),
+          _ => List.from(state.books),
+        };
+
+        return currentBooks.isEmpty
             ? Text(
               "Sem livros por aqui...",
               style: AppFonts.bodySmallMediumFont.copyWith(
@@ -46,14 +61,14 @@ class ListBooksWidget extends StatelessWidget {
               children: [
                 GridView.count(
                   shrinkWrap: true,
-                  semanticChildCount: state.books.length,
+                  semanticChildCount: currentBooks.length,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   childAspectRatio: 0.47,
                   mainAxisSpacing: 32,
                   crossAxisSpacing: 32,
                   children:
-                      state.books
+                      currentBooks
                           .map((book) => BookCardWidget(book: book))
                           .toList(),
                 ),
@@ -66,11 +81,10 @@ class ListBooksWidget extends StatelessWidget {
                     },
                     child:
                         state is BooksLoadingMoreState
-                            ? const CircularProgressIndicator(
-                              constraints: BoxConstraints(
-                                maxHeight: 16,
-                                maxWidth: 16,
-                              ),
+                            ? const SizedBox(
+                              height: 16,
+                              width: 16,
+                              child: CircularProgressIndicator(strokeWidth: 2),
                             )
                             : Text(
                               "Carregar mais",

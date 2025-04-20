@@ -7,6 +7,7 @@ class BookModel {
   final String synopsis;
   final bool available;
   final int rating;
+  bool isSaved = false;
 
   BookModel({
     required this.id,

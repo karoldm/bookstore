@@ -11,4 +11,6 @@ abstract class BooksServiceInterface {
   Future<BookModel> createBook(int storeId, RequestBookModel book);
   Future<BookModel> updateBook(int storeId, int bookId, RequestBookModel book);
   Future<void> deleteBook(int storeId, int bookId);
+  Future<List<int>> fetchSavedBooksId();
+  Future<void> saveBooks(List<int> bookIds);
 }

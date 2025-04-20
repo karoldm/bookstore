@@ -43,7 +43,10 @@ void setupDependencies() {
     EmployeesService(getIt<EmployeesRepositoryInterface>()),
   );
   getIt.registerSingleton<BooksServiceInterface>(
-    BooksService(getIt<BooksRepositoryInterface>()),
+    BooksService(
+      getIt<BooksRepositoryInterface>(),
+      getIt<LocalRepositoryInterface>(),
+    ),
   );
   getIt.registerSingleton<StoreServiceInterface>(
     StoreService(getIt<StoreRepositoryInterface>()),

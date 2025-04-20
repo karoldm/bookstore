@@ -56,3 +56,17 @@ class BookDeleteErrorState extends BooksStates {
 class BookDeleteSuccessState extends BooksStates {
   BookDeleteSuccessState({required super.books});
 }
+
+class SavedBooksLoadingState extends BooksStates {
+  SavedBooksLoadingState({required super.books});
+}
+
+class SavedBooksLoadingErrorState extends BooksStates {
+  final String message;
+
+  SavedBooksLoadingErrorState({required super.books, required this.message});
+}
+
+class SavedBooksLoadedState extends BooksStates {
+  SavedBooksLoadedState({required super.books});
+}

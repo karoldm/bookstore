@@ -43,3 +43,9 @@ class DeleteBookEvent extends BooksEvents {
 
   DeleteBookEvent({required this.storeId, required this.bookId});
 }
+
+class UpdateSavedBooksEvent extends BooksEvents {
+  final int bookId;
+
+  UpdateSavedBooksEvent({required this.bookId});
+}

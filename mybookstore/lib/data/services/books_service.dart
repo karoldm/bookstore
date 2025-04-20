@@ -1,13 +1,16 @@
 import 'package:flutter/widgets.dart';
+import 'package:mybookstore/config/constants.dart';
 import 'package:mybookstore/data/models/book_model.dart';
 import 'package:mybookstore/data/models/request_book_model.dart';
 import 'package:mybookstore/interfaces/repositories/books_repository_interface.dart';
+import 'package:mybookstore/interfaces/repositories/local_repository_interface.dart';
 import 'package:mybookstore/interfaces/services/books_service_interface.dart';
 
 class BooksService implements BooksServiceInterface {
   final BooksRepositoryInterface _booksRepository;
+  final LocalRepositoryInterface _localRepository;
 
-  BooksService(this._booksRepository);
+  BooksService(this._booksRepository, this._localRepository);
 
   @override
   Future<List<BookModel>> fetchBooks(
@@ -62,6 +65,32 @@ class BooksService implements BooksServiceInterface {
       return BookModel.fromMap(updatedbook);
     } catch (e) {
       debugPrint('Failed to update book on service: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<List<int>> fetchSavedBooksId() async {
+    try {
+      String? ids = await _localRepository.read(savedBooksKey);
+      if (ids == null) {
+        return [];
+      }
+
+      return ids.split(',').map((e) => int.parse(e)).toList();
+    } catch (e) {
+      debugPrint('Failed to fetch saved books on service: $e');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> saveBooks(List<int> bookIds) async {
+    try {
+      String ids = bookIds.join(',');
+      await _localRepository.write(key: savedBooksKey, value: ids);
+    } catch (e) {
+      debugPrint('Failed to save books on service: $e');
       rethrow;
     }
   }

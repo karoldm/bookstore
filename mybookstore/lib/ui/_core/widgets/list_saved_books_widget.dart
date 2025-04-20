@@ -3,37 +3,31 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 import 'package:mybookstore/ui/_core/widgets/book_card_widget.dart';
 import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
-import 'package:mybookstore/ui/books/bloc/books_events.dart';
 import 'package:mybookstore/ui/books/bloc/books_states.dart';
 
-class ListBooksWidget extends StatelessWidget {
-  final int storeId;
-
-  const ListBooksWidget({super.key, required this.storeId});
+class ListSavedBooksWidget extends StatelessWidget {
+  const ListSavedBooksWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<BooksBloc, BooksStates>(
-      buildWhen:
-          (previous, current) =>
-              current is BooksLoadingState ||
-              current is BooksLoadingMoreState ||
-              current is BooksLoadingErrorState ||
-              current is BooksLoadedState,
       builder: (context, state) {
-        if (state is BooksLoadingErrorState) {
+        if (state is SavedBooksLoadingErrorState) {
           return Text(
-            "Erro ao carregar livros :c",
+            "Erro ao carregar livros salvos :c",
             style: TextStyle(color: AppColors.labelColor),
           );
         }
 
-        if (state is BooksLoadingState) {
+        if (state is SavedBooksLoadingState) {
           return const Center(
             child: CircularProgressIndicator(color: AppColors.defaultColor),
           );
         }
-        return state.books.isEmpty
+
+        final savedBooks = state.books.where((book) => book.isSaved);
+
+        return savedBooks.isEmpty
             ? Center(
               child: Text(
                 "Sem livros por aqui...",
@@ -45,35 +39,17 @@ class ListBooksWidget extends StatelessWidget {
               children: [
                 GridView.count(
                   shrinkWrap: true,
-                  semanticChildCount: state.books.length,
+                  semanticChildCount: savedBooks.length,
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   childAspectRatio: 0.47,
                   mainAxisSpacing: 32,
                   crossAxisSpacing: 32,
                   children:
-                      state.books
+                      savedBooks
                           .map((book) => BookCardWidget(book: book))
                           .toList(),
                 ),
-                if (context.read<BooksBloc>().hasMore)
-                  TextButton(
-                    onPressed: () {
-                      context.read<BooksBloc>().add(
-                        FetchBooksEvent(storeId: storeId, isLoadingMore: true),
-                      );
-                    },
-                    child:
-                        state is BooksLoadingMoreState
-                            ? const CircularProgressIndicator(
-                              color: AppColors.defaultColor,
-                              constraints: BoxConstraints(
-                                maxHeight: 16,
-                                maxWidth: 16,
-                              ),
-                            )
-                            : const Text("Carregar mais"),
-                  ),
               ],
             );
       },

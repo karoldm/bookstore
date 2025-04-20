@@ -9,16 +9,32 @@ import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
 import 'package:mybookstore/ui/_core/widgets/app_bar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/confirm_modal_widget.dart';
+import 'package:mybookstore/ui/_core/widgets/loading_button_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/rating_bar_widget.dart';
 import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
 import 'package:mybookstore/ui/books/bloc/books_events.dart';
 import 'package:mybookstore/ui/books/bloc/books_states.dart';
 import 'package:mybookstore/ui/books/book_form_screen.dart';
 
-class BookDetailScreen extends StatelessWidget {
+class BookDetailScreen extends StatefulWidget {
   final BookModel book;
 
   const BookDetailScreen({super.key, required this.book});
+
+  @override
+  State<BookDetailScreen> createState() => _BookDetailScreenState();
+}
+
+class _BookDetailScreenState extends State<BookDetailScreen> {
+  late bool available;
+  late bool saved;
+
+  @override
+  void initState() {
+    super.initState();
+    available = widget.book.available;
+    saved = widget.book.isSaved;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +42,7 @@ class BookDetailScreen extends StatelessWidget {
       builder: (context, storeState) {
         return BlocConsumer<BooksBloc, BooksStates>(
           listener: (context, booksState) {
-            if (booksState is BookUpdateErrorState) {
+            if (booksState is BookUpdateSuccessState) {
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text("Livro atualizado com sucesso!")),
               );
@@ -60,29 +76,35 @@ class BookDetailScreen extends StatelessWidget {
                     spacing: 32,
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-                      book.cover != null
-                          ? Image.memory(base64Decode(book.cover!), height: 240)
+                      widget.book.cover != null
+                          ? Image.memory(
+                            base64Decode(widget.book.cover!),
+                            height: 240,
+                          )
                           : Image.asset("assets/book_default.png", height: 240),
                       Column(
                         spacing: 24,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            book.title,
+                            widget.book.title,
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Text(book.author, textAlign: TextAlign.center),
+                          Text(widget.book.author, textAlign: TextAlign.center),
                           Text("Sinópse"),
-                          Text(book.synopsis, textAlign: TextAlign.justify),
+                          Text(
+                            widget.book.synopsis,
+                            textAlign: TextAlign.justify,
+                          ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Publicado em"),
-                              Text(book.year.toString()),
+                              Text(widget.book.year.toString()),
                             ],
                           ),
                           if (storeState is StoreLoadedState)
@@ -91,9 +113,8 @@ class BookDetailScreen extends StatelessWidget {
                               children: [
                                 Text("Avaliação"),
                                 RatingBarWidget(
-                                  rating: book.rating,
-                                  disabled:
-                                      storeState.store.user.role == Role.admin,
+                                  rating: widget.book.rating,
+                                  disabled: true,
                                 ),
                               ],
                             ),
@@ -102,75 +123,101 @@ class BookDetailScreen extends StatelessWidget {
                               spacing: 16,
                               children: [
                                 Switch(
-                                  value: book.available,
+                                  value: available,
                                   onChanged: (value) {
                                     if (storeState.store.user.role !=
                                         Role.admin) {
+                                      setState(() {
+                                        available = value;
+                                      });
                                       RequestBookModel requestBook =
                                           RequestBookModel(
-                                            author: book.author,
-                                            year: book.year,
-                                            synopsis: book.synopsis,
-                                            rating: book.rating,
+                                            author: widget.book.author,
+                                            year: widget.book.year,
+                                            synopsis: widget.book.synopsis,
+                                            rating: widget.book.rating,
                                             available: value,
-                                            cover: book.cover,
+                                            cover: widget.book.cover,
 
-                                            title: book.title,
+                                            title: widget.book.title,
                                           );
                                       BlocProvider.of<BooksBloc>(context).add(
                                         UpdateBookEvent(
                                           storeId: storeState.store.id,
-                                          bookId: book.id,
+                                          bookId: widget.book.id,
                                           book: requestBook,
                                         ),
                                       );
                                     }
                                   },
                                 ),
-                                Text(
-                                  !book.available ? "Sem Estoque" : "Estoque",
-                                ),
+                                Text(!available ? "Sem Estoque" : "Estoque"),
                               ],
                             ),
                         ],
                       ),
                       if (storeState is StoreLoadedState) ...[
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder:
-                                    (context) => BookFormScreen(
-                                      storeId: storeState.store.id,
-                                      initialBook: book,
-                                    ),
-                              ),
-                            );
-                          },
-                          child: const Text("Editar"),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder:
-                                  (context) => ConfirmModalWidget(
-                                    label:
-                                        "Deseja realmente excluir o livro ${book.title}?",
-                                    onConfirm: () {
-                                      BlocProvider.of<BooksBloc>(context).add(
-                                        DeleteBookEvent(
+                        storeState.store.user.role == Role.admin
+                            ? ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => BookFormScreen(
                                           storeId: storeState.store.id,
-                                          bookId: book.id,
+                                          initialBook: widget.book,
                                         ),
-                                      );
-                                    },
                                   ),
-                            );
-                          },
-                          child: Text("Excluir"),
-                        ),
+                                );
+                              },
+                              child: const Text("Editar"),
+                            )
+                            : LoadingButtonWidget(
+                              onPressed: () {
+                                setState(() {
+                                  saved = !saved;
+                                });
+                                BlocProvider.of<BooksBloc>(context).add(
+                                  UpdateSavedBooksEvent(bookId: widget.book.id),
+                                );
+                              },
+                              isLoading: false,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 8,
+                                children: [
+                                  Icon(
+                                    saved
+                                        ? Icons.bookmark
+                                        : Icons.bookmark_border_outlined,
+                                  ),
+                                  Text("Salvar"),
+                                ],
+                              ),
+                            ),
+                        if (storeState.store.user.role == Role.admin)
+                          TextButton(
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder:
+                                    (context) => ConfirmModalWidget(
+                                      label:
+                                          "Deseja realmente excluir o livro ${widget.book.title}?",
+                                      onConfirm: () {
+                                        BlocProvider.of<BooksBloc>(context).add(
+                                          DeleteBookEvent(
+                                            storeId: storeState.store.id,
+                                            bookId: widget.book.id,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                              );
+                            },
+                            child: Text("Excluir"),
+                          ),
                       ],
                     ],
                   ),

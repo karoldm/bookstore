@@ -9,7 +9,7 @@ class StoreBloc extends Bloc<StoreEvents, StoreStates> {
   StoreModel? store;
   final StoreServiceInterface storeService = GetIt.I<StoreServiceInterface>();
 
-  StoreBloc() : super(StoreLoadingState()) {
+  StoreBloc() : super(StoreInitialState()) {
     on<LoadStoreEvent>(_onLoadStoreEvent);
     on<UpdateStoreEvent>(_onUpdateStoreEvent);
   }

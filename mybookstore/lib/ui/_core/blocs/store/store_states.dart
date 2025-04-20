@@ -2,6 +2,8 @@ import 'package:mybookstore/data/models/store_model.dart';
 
 abstract class StoreStates {}
 
+class StoreInitialState extends StoreStates {}
+
 class StoreLoadingState extends StoreStates {}
 
 class StoreUpdatingState extends StoreStates {}

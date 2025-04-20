@@ -7,7 +7,8 @@ import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
 import 'package:mybookstore/ui/books/bloc/books_states.dart';
 
 class ListSavedBooksWidget extends StatelessWidget {
-  const ListSavedBooksWidget({super.key});
+  final bool? rowLayout;
+  const ListSavedBooksWidget({super.key, this.rowLayout = false});
 
   @override
   Widget build(BuildContext context) {
@@ -35,10 +36,24 @@ class ListSavedBooksWidget extends StatelessWidget {
                 color: AppColors.labelColor,
               ),
             )
-            : Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                GridView.count(
+            : (rowLayout == true
+                ? SizedBox(
+                  height: 307,
+                  child: ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: savedBooks.length,
+                    scrollDirection: Axis.horizontal,
+                    separatorBuilder:
+                        (context, index) => const SizedBox(width: 16),
+                    itemBuilder: (context, index) {
+                      return BookCardWidget(
+                        book: savedBooks[index],
+                        onlySavedBooks: true,
+                      );
+                    },
+                  ),
+                )
+                : GridView.count(
                   shrinkWrap: true,
                   semanticChildCount: savedBooks.length,
                   physics: const NeverScrollableScrollPhysics(),
@@ -55,9 +70,7 @@ class ListSavedBooksWidget extends StatelessWidget {
                             ),
                           )
                           .toList(),
-                ),
-              ],
-            );
+                ));
       },
     );
   }

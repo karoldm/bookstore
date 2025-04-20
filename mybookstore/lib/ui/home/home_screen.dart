@@ -86,7 +86,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   if (state.store.user.role == Role.employee) ...[
                     Text("Livros salvos", style: AppFonts.subtitleFont),
-                    ListSavedBooksWidget(),
+                    ListSavedBooksWidget(rowLayout: true),
                   ],
                   Text("Todos livros", style: AppFonts.subtitleFont),
                   ListBooksWidget(storeId: state.store.id, showFiltered: true),

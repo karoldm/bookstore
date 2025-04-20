@@ -7,20 +7,30 @@ import 'package:mybookstore/ui/books/bloc/books_states.dart';
 
 class BooksBloc extends Bloc<BooksEvents, BooksStates> {
   final List<BookModel> books = [];
+  int offset = 0;
+  bool hasMore = false;
 
   final BooksServiceInterface booksService = GetIt.I<BooksServiceInterface>();
 
-  BooksBloc() : super(BooksLoadingState()) {
+  BooksBloc() : super(BooksInitialState()) {
     on<FetchBooksEvent>((event, emit) async {
       try {
-        emit(BooksLoadingState());
+        if (event.isLoadingMore == true) {
+          emit(BooksLoadingMoreState(books: this.books));
+        } else {
+          emit(BooksLoadingState(books: this.books));
+        }
 
-        List<BookModel> books = await booksService.fetchBooks(event.storeId);
+        List<BookModel> books = await booksService.fetchBooks(
+          event.storeId,
+          offset: offset,
+        );
 
-        this.books.clear();
         this.books.addAll(books);
+        offset += books.length;
+        hasMore = books.isNotEmpty;
       } catch (e) {
-        emit(BooksLoadingErrorState(message: e.toString()));
+        emit(BooksLoadingErrorState(books: books, message: e.toString()));
       } finally {
         emit(BooksLoadedState(books: books));
       }
@@ -28,7 +38,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
 
     on<UpdateBookEvent>((event, emit) async {
       try {
-        emit(BooksLoadingState());
+        emit(BooksLoadingState(books: books));
 
         BookModel updatedBook = await booksService.updateBook(
           event.storeId,
@@ -41,13 +51,13 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
         if (index != -1) {
           books[index] = updatedBook;
         } else {
-          emit(BookUpdateErrorState(message: 'Book not found'));
+          emit(BookUpdateErrorState(books: books, message: 'Book not found'));
           return;
         }
 
-        emit(BookUpdateSuccessState());
+        emit(BookUpdateSuccessState(books: books));
       } catch (e) {
-        emit(BookUpdateErrorState(message: e.toString()));
+        emit(BookUpdateErrorState(books: books, message: e.toString()));
       } finally {
         emit(BooksLoadedState(books: books));
       }
@@ -55,7 +65,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
 
     on<AddBookEvent>((event, emit) async {
       try {
-        emit(BooksLoadingState());
+        emit(BooksLoadingState(books: books));
 
         BookModel book = await booksService.createBook(
           event.storeId,
@@ -63,9 +73,9 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
         );
 
         books.add(book);
-        emit(BookCreateSuccessState());
+        emit(BookCreateSuccessState(books: books));
       } catch (e) {
-        emit(BookCreateErrorState(message: e.toString()));
+        emit(BookCreateErrorState(books: books, message: e.toString()));
       } finally {
         emit(BooksLoadedState(books: books));
       }
@@ -73,13 +83,13 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
 
     on<DeleteBookEvent>((event, emit) async {
       try {
-        emit(BooksLoadingState());
+        emit(BooksLoadingState(books: books));
 
         await booksService.deleteBook(event.storeId, event.bookId);
 
         books.removeWhere((book) => book.id == event.bookId);
       } catch (e) {
-        emit(BooksLoadingErrorState(message: e.toString()));
+        emit(BooksLoadingErrorState(books: books, message: e.toString()));
       } finally {
         emit(BooksLoadedState(books: books));
       }

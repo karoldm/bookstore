@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mybookstore/data/models/employee_model.dart';
 import 'package:mybookstore/data/models/request_employee_model.dart';
+import 'package:mybookstore/ui/_core/widgets/app_bar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/image_field_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/loading_button_widget.dart';
@@ -76,7 +77,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       },
       builder:
           (context, state) => Scaffold(
-            appBar: AppBar(title: const Text("Novo Funcionário")),
+            appBar: appBarWidget(title: "Novo Funcionário", context: context),
             body: SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(24),

@@ -4,7 +4,6 @@ import 'package:mybookstore/data/models/request_store_model.dart';
 import 'package:mybookstore/enums/role_enum.dart';
 import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 import 'package:mybookstore/ui/_core/widgets/circular_avatar_widget.dart';
-import 'package:mybookstore/ui/_core/widgets/list_books_widget.dart';
 import 'package:mybookstore/ui/auth/bloc/auth_bloc.dart';
 import 'package:mybookstore/ui/auth/bloc/auth_events.dart';
 import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
@@ -75,7 +74,7 @@ class ProfileScreen extends StatelessWidget {
                         child: Text("Sair"),
                       ),
                       if (state.store.user.role == Role.employee)
-                        ListBooksWidget(),
+                        Column(children: [Text("Livros salvos")]),
                     ],
                   )
                   : Center(child: CircularProgressIndicator()),

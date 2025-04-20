@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mybookstore/ui/_core/blocs/store/store_bloc.dart';
+import 'package:mybookstore/ui/_core/blocs/store/store_states.dart';
 import 'package:mybookstore/ui/_core/widgets/list_books_widget.dart';
 
 class BooksScreen extends StatelessWidget {
@@ -6,11 +9,20 @@ class BooksScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [Text("Livros"), ListBooksWidget()],
-      ),
+    return BlocBuilder<StoreBloc, StoreStates>(
+      builder: (context, state) {
+        return state is StoreLoadedState
+            ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Text("Livros"),
+                  ListBooksWidget(storeId: state.store.id),
+                ],
+              ),
+            )
+            : const Center(child: CircularProgressIndicator());
+      },
     );
   }
 }

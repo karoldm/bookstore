@@ -79,7 +79,8 @@ class HomeScreen extends StatelessWidget {
                 ),
               ],
               Text("Todos livros"),
-              ListBooksWidget(),
+              if (state is StoreLoadedState)
+                ListBooksWidget(storeId: state.store.id),
             ],
           ),
         );

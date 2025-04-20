@@ -10,7 +10,12 @@ class BooksService implements BooksServiceInterface {
   BooksService(this._booksRepository);
 
   @override
-  Future<List<BookModel>> fetchBooks(int storeId, {int? limit, int? offset}) {
+  Future<List<BookModel>> fetchBooks(
+    int storeId, {
+    int? limit,
+    int? offset,
+    String? filters,
+  }) {
     try {
       return _booksRepository.fetchBooks(storeId, limit: limit, offset: offset);
     } catch (e) {

@@ -6,8 +6,14 @@ class FetchBooksEvent extends BooksEvents {
   final int storeId;
   int? page;
   int? offset;
+  final bool? isLoadingMore;
 
-  FetchBooksEvent({required this.storeId, this.page, this.offset});
+  FetchBooksEvent({
+    required this.storeId,
+    this.isLoadingMore,
+    this.page,
+    this.offset,
+  });
 }
 
 class UpdateBookEvent extends BooksEvents {

@@ -18,7 +18,7 @@ class BooksRepository implements BooksRepositoryInterface {
     try {
       final response = await apiClient.api.get(
         '/v1/store/$storeId/book',
-        queryParameters: {'offset': offset ?? 0, 'limit': limit ?? 10},
+        queryParameters: {'offset': offset ?? 0, 'limit': limit ?? 5},
       );
       return (response.data as List)
           .map((book) => BookModel.fromMap(book))

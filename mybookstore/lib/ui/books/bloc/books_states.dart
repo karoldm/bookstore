@@ -46,3 +46,13 @@ class BookUpdateErrorState extends BooksStates {
 class BookUpdateSuccessState extends BooksStates {
   BookUpdateSuccessState({required super.books});
 }
+
+class BookDeleteErrorState extends BooksStates {
+  final String message;
+
+  BookDeleteErrorState({required super.books, required this.message});
+}
+
+class BookDeleteSuccessState extends BooksStates {
+  BookDeleteSuccessState({required super.books});
+}

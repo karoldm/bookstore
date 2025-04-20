@@ -97,8 +97,10 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
         await booksService.deleteBook(event.storeId, event.bookId);
 
         books.removeWhere((book) => book.id == event.bookId);
+
+        emit(BookDeleteSuccessState(books: books));
       } catch (e) {
-        emit(BooksLoadingErrorState(books: books, message: e.toString()));
+        emit(BookDeleteErrorState(books: books, message: e.toString()));
       } finally {
         emit(BooksLoadedState(books: books));
       }

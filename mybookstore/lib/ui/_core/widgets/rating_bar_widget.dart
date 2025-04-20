@@ -3,10 +3,13 @@ import 'package:flutter/material.dart';
 class RatingBarWidget extends StatefulWidget {
   final int rating;
   final Function(int)? onRatingChanged;
+  final bool? disabled;
+
   const RatingBarWidget({
     super.key,
     required this.rating,
     this.onRatingChanged,
+    this.disabled,
   });
 
   @override
@@ -29,6 +32,7 @@ class _RatingBarWidgetState extends State<RatingBarWidget> {
         for (int i = 1; i <= 5; i++)
           InkWell(
             onTap: () {
+              if (widget.disabled == true) return;
               setState(() {
                 _rating = i;
               });

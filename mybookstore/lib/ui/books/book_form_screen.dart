@@ -56,7 +56,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<BooksBloc, BooksStates>(
+    return BlocConsumer<BooksBloc, BooksStates>(
       listener: (context, state) {
         if (state is BookCreateErrorState) {
           ScaffoldMessenger.of(
@@ -80,181 +80,185 @@ class _BookFormScreenState extends State<BookFormScreen> {
           Navigator.pop(context);
         }
       },
-      child: Scaffold(
-        appBar: appBarWidget(context: context, title: "Cadastrar Livro"),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
+      builder: (context, state) {
+        return Scaffold(
+          appBar: appBarWidget(context: context, title: "Cadastrar Livro"),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(24.0),
 
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              spacing: 32,
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: SelectCardWidget(
-                        isSelected: _index == 0,
-                        title: 'Dados do livro',
-                        onTap: () {
-                          setState(() => _index = 0);
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: SelectCardWidget(
-                        isSelected: _index == 1,
-                        title: 'Design do livro',
-                        onTap: () {
-                          setState(() => _index = 1);
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                IndexedStack(
-                  index: _index,
-                  children: [
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        spacing: 16,
-                        children: [
-                          if (_index == 0) ...[
-                            TextFieldWidget(
-                              controller: _titleController,
-                              hint: "Título",
-                              onChanged: (value) {
-                                setState(() {
-                                  bookModel.title = value;
-                                });
-                              },
-                            ),
-                            TextFieldWidget(
-                              controller: _authorController,
-                              hint: "Autor",
-                              onChanged: (value) {
-                                setState(() {
-                                  bookModel.author = value;
-                                });
-                              },
-                            ),
-                            TextFieldWidget(
-                              controller: _synopsisController,
-                              hint: "Sinópse",
-                              maxLines: 3,
-                              onChanged: (value) {
-                                setState(() {
-                                  bookModel.synopsis = value;
-                                });
-                              },
-                            ),
-                            TextFieldWidget(
-                              controller: _yearController,
-                              digitsOnly: true,
-                              hint: "Ano de publicação",
-                              onChanged: (value) {
-                                setState(() {
-                                  bookModel.year = int.parse(value);
-                                });
-                              },
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Avaliação"),
-                                RatingBarWidget(
-                                  rating: bookModel.rating,
-                                  onRatingChanged: (value) {
-                                    _ratingController.text = value.toString();
-                                    setState(() {
-                                      bookModel.rating = value;
-                                    });
-                                  },
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Status"),
-                                Row(
-                                  spacing: 8,
-                                  children: [
-                                    Switch(
-                                      value: bookModel.available,
-                                      onChanged: (value) {
-                                        setState(() {
-                                          bookModel.available = value;
-                                        });
-                                      },
-                                    ),
-                                    Text(
-                                      bookModel.available
-                                          ? "Estoque"
-                                          : "Sem estoque",
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-
-                    Column(
-                      spacing: 6,
-                      children: [
-                        ImageFieldWidget(
-                          hint: "Capa do livro",
-                          onChanged: ({required String imageBase64}) {
-                            setState(() {
-                              bookModel.cover = imageBase64;
-                            });
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 32,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SelectCardWidget(
+                          isSelected: _index == 0,
+                          title: 'Dados do livro',
+                          onTap: () {
+                            setState(() => _index = 0);
                           },
                         ),
-                        Text(
-                          "Tamanho máximo:  124 X 176. Formato: PNG, JPEG",
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: AppColors.labelColor,
-                          ),
+                      ),
+                      Expanded(
+                        child: SelectCardWidget(
+                          isSelected: _index == 1,
+                          title: 'Design do livro',
+                          onTap: () {
+                            setState(() => _index = 1);
+                          },
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                LoadingButtonWidget(
-                  isLoading: false,
-                  child: Text("Salvar"),
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      if (widget.initialBook != null) {
-                        BlocProvider.of<BooksBloc>(context).add(
-                          UpdateBookEvent(
-                            storeId: widget.storeId,
-                            bookId: widget.initialBook!.id,
-                            book: bookModel,
+                      ),
+                    ],
+                  ),
+                  IndexedStack(
+                    index: _index,
+                    children: [
+                      Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          spacing: 16,
+                          children: [
+                            if (_index == 0) ...[
+                              TextFieldWidget(
+                                controller: _titleController,
+                                hint: "Título",
+                                onChanged: (value) {
+                                  setState(() {
+                                    bookModel.title = value;
+                                  });
+                                },
+                              ),
+                              TextFieldWidget(
+                                controller: _authorController,
+                                hint: "Autor",
+                                onChanged: (value) {
+                                  setState(() {
+                                    bookModel.author = value;
+                                  });
+                                },
+                              ),
+                              TextFieldWidget(
+                                controller: _synopsisController,
+                                hint: "Sinópse",
+                                maxLines: 3,
+                                onChanged: (value) {
+                                  setState(() {
+                                    bookModel.synopsis = value;
+                                  });
+                                },
+                              ),
+                              TextFieldWidget(
+                                controller: _yearController,
+                                digitsOnly: true,
+                                hint: "Ano de publicação",
+                                onChanged: (value) {
+                                  setState(() {
+                                    bookModel.year = int.parse(value);
+                                  });
+                                },
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Avaliação"),
+                                  RatingBarWidget(
+                                    rating: bookModel.rating,
+                                    onRatingChanged: (value) {
+                                      _ratingController.text = value.toString();
+                                      setState(() {
+                                        bookModel.rating = value;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text("Status"),
+                                  Row(
+                                    spacing: 8,
+                                    children: [
+                                      Switch(
+                                        value: bookModel.available,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            bookModel.available = value;
+                                          });
+                                        },
+                                      ),
+                                      Text(
+                                        bookModel.available
+                                            ? "Estoque"
+                                            : "Sem estoque",
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ],
+                        ),
+                      ),
+
+                      Column(
+                        spacing: 6,
+                        children: [
+                          ImageFieldWidget(
+                            hint: "Capa do livro",
+                            onChanged: ({required String imageBase64}) {
+                              setState(() {
+                                bookModel.cover = imageBase64;
+                              });
+                            },
                           ),
-                        );
-                      } else {
-                        BlocProvider.of<BooksBloc>(context).add(
-                          AddBookEvent(
-                            storeId: widget.storeId,
-                            book: bookModel,
+                          Text(
+                            "Tamanho máximo:  124 X 176. Formato: PNG, JPEG",
+                            style: TextStyle(
+                              fontSize: 12,
+                              color: AppColors.labelColor,
+                            ),
                           ),
-                        );
+                        ],
+                      ),
+                    ],
+                  ),
+                  LoadingButtonWidget(
+                    isLoading: state is BooksLoadingState,
+                    child: Text("Salvar"),
+                    onPressed: () {
+                      if (_formKey.currentState!.validate()) {
+                        if (widget.initialBook != null) {
+                          BlocProvider.of<BooksBloc>(context).add(
+                            UpdateBookEvent(
+                              storeId: widget.storeId,
+                              bookId: widget.initialBook!.id,
+                              book: bookModel,
+                            ),
+                          );
+                        } else {
+                          BlocProvider.of<BooksBloc>(context).add(
+                            AddBookEvent(
+                              storeId: widget.storeId,
+                              book: bookModel,
+                            ),
+                          );
+                        }
                       }
-                    }
-                  },
-                ),
-              ],
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 }

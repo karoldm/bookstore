@@ -36,7 +36,7 @@ class RequestBookModel {
       year: 0,
       synopsis: '',
       available: false,
-      rating: 0,
+      rating: 1,
       cover: null,
     );
   }

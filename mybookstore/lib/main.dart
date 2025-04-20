@@ -83,6 +83,7 @@ class MyApp extends StatelessWidget {
       ],
       child: AuthWrapperWidget(
         child: MaterialApp(
+          debugShowCheckedModeBanner: false,
           navigatorKey: navigatorKey,
           builder: (context, child) => SafeArea(child: child!),
           routes: {

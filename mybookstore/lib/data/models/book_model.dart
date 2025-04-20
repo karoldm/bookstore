@@ -1,12 +1,12 @@
 class BookModel {
   final int id;
-  final String? cover;
-  final String title;
-  final String author;
-  final int year;
-  final String synopsis;
-  final bool available;
-  final int rating;
+  String? cover;
+  String title;
+  String author;
+  int year;
+  String synopsis;
+  bool available;
+  int rating;
   bool isSaved = false;
 
   BookModel({

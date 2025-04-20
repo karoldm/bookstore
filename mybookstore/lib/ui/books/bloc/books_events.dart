@@ -7,12 +7,14 @@ class FetchBooksEvent extends BooksEvents {
   int? page;
   int? offset;
   final bool? isLoadingMore;
+  final Map<String, dynamic>? filters;
 
   FetchBooksEvent({
     required this.storeId,
     this.isLoadingMore,
     this.page,
     this.offset,
+    this.filters,
   });
 }
 

@@ -14,11 +14,16 @@ class BooksRepository implements BooksRepositoryInterface {
     int storeId, {
     int? offset,
     int? limit,
+    Map<String, dynamic>? filters,
   }) async {
     try {
       final response = await apiClient.api.get(
         '/v1/store/$storeId/book',
-        queryParameters: {'offset': offset ?? 0, 'limit': limit ?? 5},
+        queryParameters: {
+          'offset': offset ?? 0,
+          'limit': limit ?? 10,
+          ...?filters,
+        },
       );
       return (response.data as List)
           .map((book) => BookModel.fromMap(book))

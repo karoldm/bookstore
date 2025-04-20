@@ -6,7 +6,7 @@ abstract class BooksServiceInterface {
     int storeId, {
     int? offset,
     int? limit,
-    String? filters,
+    Map<String, dynamic>? filters,
   });
   Future<BookModel> createBook(int storeId, RequestBookModel book);
   Future<BookModel> updateBook(int storeId, int bookId, RequestBookModel book);

@@ -9,6 +9,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
   final List<BookModel> books = [];
   int offset = 0;
   bool hasMore = false;
+  final int limit = 5;
 
   final BooksServiceInterface booksService = GetIt.I<BooksServiceInterface>();
 
@@ -21,14 +22,22 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
           emit(BooksLoadingState(books: this.books));
         }
 
+        offset = event.offset ?? offset;
+
         List<BookModel> books = await booksService.fetchBooks(
           event.storeId,
           offset: offset,
+          filters: event.filters,
+          limit: limit,
         );
 
+        if (event.isLoadingMore == null || event.isLoadingMore == false) {
+          this.books.clear();
+        }
         this.books.addAll(books);
-        offset += books.length;
-        hasMore = books.isNotEmpty;
+
+        offset += limit;
+        hasMore = books.length == limit;
       } catch (e) {
         emit(BooksLoadingErrorState(books: books, message: e.toString()));
       } finally {

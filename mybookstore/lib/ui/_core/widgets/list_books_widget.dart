@@ -63,6 +63,10 @@ class ListBooksWidget extends StatelessWidget {
                         state is BooksLoadingMoreState
                             ? const CircularProgressIndicator(
                               color: AppColors.defaultColor,
+                              constraints: BoxConstraints(
+                                maxHeight: 16,
+                                maxWidth: 16,
+                              ),
                             )
                             : const Text("Carregar mais"),
                   ),

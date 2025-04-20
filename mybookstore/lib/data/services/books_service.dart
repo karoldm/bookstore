@@ -14,10 +14,15 @@ class BooksService implements BooksServiceInterface {
     int storeId, {
     int? limit,
     int? offset,
-    String? filters,
+    Map<String, dynamic>? filters,
   }) {
     try {
-      return _booksRepository.fetchBooks(storeId, limit: limit, offset: offset);
+      return _booksRepository.fetchBooks(
+        storeId,
+        limit: limit,
+        offset: offset,
+        filters: filters,
+      );
     } catch (e) {
       debugPrint('Failed to fetch books on books service: $e');
       rethrow;

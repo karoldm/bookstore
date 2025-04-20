@@ -8,15 +8,12 @@ import 'package:mybookstore/ui/_core/theme/app_colors.dart';
 import 'package:mybookstore/ui/_core/widgets/list_books_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/text_field_widget.dart';
 import 'package:mybookstore/ui/_core/widgets/book_card_widget.dart';
+import 'package:mybookstore/ui/books/bloc/books_bloc.dart';
+import 'package:mybookstore/ui/books/bloc/books_events.dart';
 import 'package:mybookstore/ui/home/widgets/filter_modal_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  void onFilter() {
-    // Implement filter logic here
-    // Provider.of<BooksBloc>(context, listen: false).filterBooks();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,24 +38,35 @@ class HomeScreen extends StatelessWidget {
                       suffixIcon: Icons.search,
                     ),
                   ),
-                  IconButton(
-                    onPressed: () {
-                      showModalBottomSheet(
-                        isScrollControlled: true,
-                        constraints: BoxConstraints(
-                          maxHeight: MediaQuery.of(context).size.height * 0.8,
-                        ),
-                        context: context,
-                        builder: (context) {
-                          return FilterModalWidget();
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.filter_alt_outlined,
-                      color: AppColors.headerColor,
+                  if (state is StoreLoadedState)
+                    IconButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          isScrollControlled: true,
+                          constraints: BoxConstraints(
+                            maxHeight: MediaQuery.of(context).size.height * 0.8,
+                          ),
+                          context: context,
+                          builder: (context) {
+                            return FilterModalWidget(
+                              onFilter: (filters) {
+                                BlocProvider.of<BooksBloc>(context).add(
+                                  FetchBooksEvent(
+                                    storeId: state.store.id,
+                                    offset: 0,
+                                    filters: filters,
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.filter_alt_outlined,
+                        color: AppColors.headerColor,
+                      ),
                     ),
-                  ),
                 ],
               ),
               if (state is StoreLoadedState &&

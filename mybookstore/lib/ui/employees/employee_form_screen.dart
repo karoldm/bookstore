@@ -77,7 +77,6 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
       },
       builder:
           (context, state) => Scaffold(
-            resizeToAvoidBottomInset: false,
             appBar: appBarWidget(title: "Novo Funcionário", context: context),
             body: LayoutBuilder(
               builder: (context, constraints) {
@@ -91,6 +90,7 @@ class _EmployeeFormScreenState extends State<EmployeeFormScreen> {
                       child: Form(
                         key: _formKey,
                         child: Column(
+                          spacing: 32,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: [

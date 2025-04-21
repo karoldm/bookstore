@@ -72,7 +72,6 @@ class _BookFormScreenState extends State<BookFormScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          resizeToAvoidBottomInset: false,
           appBar: appBarWidget(context: context, title: "Cadastrar Livro"),
           body: LayoutBuilder(
             builder: (context, constraints) {

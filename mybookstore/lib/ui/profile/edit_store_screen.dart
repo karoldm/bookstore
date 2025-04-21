@@ -57,7 +57,6 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
       },
       builder: (context, state) {
         return Scaffold(
-          resizeToAvoidBottomInset: false,
           appBar: appBarWidget(context: context, title: "Editar loja "),
           body: LayoutBuilder(
             builder: (context, constraints) {
@@ -69,6 +68,7 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
+                      spacing: 32,
                       children: [
                         Column(
                           spacing: 24,

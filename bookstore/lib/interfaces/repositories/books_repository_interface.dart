@@ -1,0 +1,16 @@
+import 'package:bookstore/data/models/book_model.dart';
+import 'package:bookstore/data/models/request_book_model.dart';
+
+abstract class BooksRepositoryInterface {
+  Future<List<BookModel>> fetchBooks(
+    int storeId, {
+    int? offset,
+    int? limit,
+    Map<String, dynamic>? filters,
+  });
+  Future<BookModel> createBook(int storeId, RequestBookModel book);
+  Future<BookModel> updateBook(int storeId, int bookId, RequestBookModel book);
+  Future<void> deleteBook(int storeId, int bookId);
+  Future<List<int>> fetchSavedBooksId();
+  Future<void> saveBooks(List<int> bookIds);
+}

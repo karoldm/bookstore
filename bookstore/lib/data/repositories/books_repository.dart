@@ -27,7 +27,7 @@ class BooksRepository implements BooksRepositoryInterface {
         filters: filters,
       );
     } catch (e) {
-      debugPrint('Failed to fetch books on books service: $e');
+      debugPrint('Failed to fetch books on books repository: $e');
       rethrow;
     }
   }
@@ -37,7 +37,7 @@ class BooksRepository implements BooksRepositoryInterface {
     try {
       return booksService.createBook(storeId, book);
     } catch (e) {
-      debugPrint('Failed to create book on service: $e');
+      debugPrint('Failed to create book on repository: $e');
       rethrow;
     }
   }
@@ -47,7 +47,7 @@ class BooksRepository implements BooksRepositoryInterface {
     try {
       return booksService.deleteBook(storeId, bookId);
     } catch (e) {
-      debugPrint('Failed to delete book on service: $e');
+      debugPrint('Failed to delete book on repository: $e');
       rethrow;
     }
   }
@@ -64,7 +64,7 @@ class BooksRepository implements BooksRepositoryInterface {
       updatedbook['id'] = bookId;
       return BookModel.fromMap(updatedbook);
     } catch (e) {
-      debugPrint('Failed to update book on service: $e');
+      debugPrint('Failed to update book on repository: $e');
       rethrow;
     }
   }
@@ -79,7 +79,7 @@ class BooksRepository implements BooksRepositoryInterface {
 
       return ids.split(',').map((e) => int.parse(e)).toList();
     } catch (e) {
-      debugPrint('Failed to fetch saved books on service: $e');
+      debugPrint('Failed to fetch saved books on repository: $e');
       rethrow;
     }
   }
@@ -90,7 +90,7 @@ class BooksRepository implements BooksRepositoryInterface {
       String ids = bookIds.join(',');
       await localService.write(key: savedBooksKey, value: ids);
     } catch (e) {
-      debugPrint('Failed to save books on service: $e');
+      debugPrint('Failed to save books on repository: $e');
       rethrow;
     }
   }

@@ -15,7 +15,7 @@ class StoreService implements StoreServiceInterface {
       final response = await apiClient.api.get('/v1/store/$storeId');
       return StoreModel.fromMap(response.data);
     } catch (e) {
-      debugPrint('Failed to load store info: $e');
+      debugPrint('Failed to load store info on service: $e');
       rethrow;
     }
   }
@@ -28,7 +28,7 @@ class StoreService implements StoreServiceInterface {
         data: jsonEncode(storeModel.toMap()),
       );
     } catch (e) {
-      debugPrint('Failed to update store info on repository: $e');
+      debugPrint('Failed to update store info on service: $e');
       rethrow;
     }
   }

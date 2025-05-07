@@ -15,7 +15,7 @@ class StoreRepository implements StoreRepositoryInterface {
       StoreModel store = await storeService.getStore(storeModel.id);
       return store;
     } catch (e) {
-      debugPrint('Failed to update store info on service: $e');
+      debugPrint('Failed to update store info on repository: $e');
       rethrow;
     }
   }

@@ -24,7 +24,7 @@ class AuthService implements AuthServiceInterface {
         ),
       );
     } catch (e) {
-      debugPrint("Error in AuthRepository: $e");
+      debugPrint("Error in AuthService: $e");
       rethrow;
     }
   }

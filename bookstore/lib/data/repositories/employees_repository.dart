@@ -14,7 +14,7 @@ class EmployeesRepository implements EmployeesRepositoryInterface {
     try {
       return employeeService.fetchEmployees(storeId);
     } catch (e) {
-      debugPrint('Failed to fetch employees on service: $e');
+      debugPrint('Failed to fetch employees on repository: $e');
       rethrow;
     }
   }
@@ -28,7 +28,7 @@ class EmployeesRepository implements EmployeesRepositoryInterface {
     try {
       await employeeService.updateEmployee(storeId, employeeId, employee);
     } catch (e) {
-      debugPrint('Failed to update employee on service: $e');
+      debugPrint('Failed to update employee on repository: $e');
       rethrow;
     }
   }
@@ -38,7 +38,7 @@ class EmployeesRepository implements EmployeesRepositoryInterface {
     try {
       await employeeService.addEmployee(storeId, employee);
     } catch (e) {
-      debugPrint('Failed to add employee on service: $e');
+      debugPrint('Failed to add employee on repository: $e');
       rethrow;
     }
   }
@@ -48,7 +48,7 @@ class EmployeesRepository implements EmployeesRepositoryInterface {
     try {
       return employeeService.deleteEmployee(storeId, employeeId);
     } catch (e) {
-      debugPrint('Failed to delete employee on service: $e');
+      debugPrint('Failed to delete employee on repository: $e');
       rethrow;
     }
   }

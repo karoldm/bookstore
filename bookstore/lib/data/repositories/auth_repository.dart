@@ -47,7 +47,7 @@ class AuthRepository implements AuthRepositoryInterface {
         return null;
       }
     } catch (e) {
-      debugPrint("Error in AuthService: $e");
+      debugPrint("Error in AuthRepository: $e");
       rethrow;
     }
   }
@@ -61,7 +61,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
       return store;
     } catch (e) {
-      debugPrint("Error in AuthService: $e");
+      debugPrint("Error in AuthRepository: $e");
       rethrow;
     }
   }
@@ -71,7 +71,7 @@ class AuthRepository implements AuthRepositoryInterface {
     try {
       await localService.clear();
     } catch (e) {
-      debugPrint("Error in AuthService: $e");
+      debugPrint("Error in AuthRepository: $e");
       rethrow;
     }
   }
@@ -85,7 +85,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
       return store;
     } catch (e) {
-      debugPrint("Error in AuthService: $e");
+      debugPrint("Error in AuthRepository: $e");
       rethrow;
     }
   }

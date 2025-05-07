@@ -29,7 +29,7 @@ class BooksService implements BooksServiceInterface {
           .map((book) => BookModel.fromMap(book))
           .toList();
     } catch (e) {
-      debugPrint('Failed to load books on repository: $e');
+      debugPrint('Failed to load books on service: $e');
       rethrow;
     }
   }
@@ -43,7 +43,7 @@ class BooksService implements BooksServiceInterface {
       );
       return BookModel.fromMap(response.data);
     } catch (e) {
-      debugPrint('Failed to create book on repository: $e');
+      debugPrint('Failed to create book on service: $e');
       rethrow;
     }
   }
@@ -53,7 +53,7 @@ class BooksService implements BooksServiceInterface {
     try {
       await apiClient.api.delete('/v1/store/$storeId/book/$bookId');
     } catch (e) {
-      debugPrint('Failed to delete book on repository: $e');
+      debugPrint('Failed to delete book on service: $e');
       rethrow;
     }
   }
@@ -70,7 +70,7 @@ class BooksService implements BooksServiceInterface {
         data: jsonEncode(book.toMap()),
       );
     } catch (e) {
-      debugPrint('Failed to update book on repository: $e');
+      debugPrint('Failed to update book on service: $e');
       rethrow;
     }
   }

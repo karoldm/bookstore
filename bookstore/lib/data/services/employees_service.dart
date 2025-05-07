@@ -16,7 +16,7 @@ class EmployeesService implements EmployeesServiceInterface {
       final List<dynamic> data = response.data;
       return data.map((e) => EmployeeModel.fromMap(e)).toList();
     } catch (e) {
-      debugPrint('Failed to fetch employees on repository: $e');
+      debugPrint('Failed to fetch employees on service: $e');
       rethrow;
     }
   }
@@ -33,7 +33,7 @@ class EmployeesService implements EmployeesServiceInterface {
         data: jsonEncode(employee.toMap()),
       );
     } catch (e) {
-      debugPrint('Failed to update employee on repository: $e');
+      debugPrint('Failed to update employee on service: $e');
       rethrow;
     }
   }
@@ -46,7 +46,7 @@ class EmployeesService implements EmployeesServiceInterface {
         data: jsonEncode(employee.toMap()),
       );
     } catch (e) {
-      debugPrint('Failed to add employee on repository: $e');
+      debugPrint('Failed to add employee on service: $e');
       rethrow;
     }
   }
@@ -56,7 +56,7 @@ class EmployeesService implements EmployeesServiceInterface {
     try {
       await clientApi.api.delete('/v1/store/$storeId/employee/$employeeId');
     } catch (e) {
-      debugPrint('Failed to delete employee on repository: $e');
+      debugPrint('Failed to delete employee on service: $e');
       rethrow;
     }
   }

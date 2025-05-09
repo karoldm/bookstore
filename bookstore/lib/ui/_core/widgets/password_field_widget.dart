@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class PasswordFielWidget extends StatefulWidget {
@@ -6,8 +5,12 @@ class PasswordFielWidget extends StatefulWidget {
   final Function(String)? onChanged;
   final String? hint;
 
-  const PasswordFielWidget({super.key, this.hint, required this.onChanged, this.validator});
-  
+  const PasswordFielWidget({
+    super.key,
+    this.hint,
+    required this.onChanged,
+    this.validator,
+  });
 
   @override
   State<PasswordFielWidget> createState() => _PasswordFielWidgetState();
@@ -19,37 +22,33 @@ class _PasswordFielWidgetState extends State<PasswordFielWidget> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: TextInputAction.next,
       onChanged: widget.onChanged,
-      decoration: InputDecoration(hintText: widget.hint ?? "Senha", suffixIcon: IconButton(
-        onPressed: () {
-          setState(() {
-            _obscureText = !_obscureText;
-          });
-        },
-        icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off), 
-      )), 
+      decoration: InputDecoration(
+        hintText: widget.hint ?? "Senha",
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              _obscureText = !_obscureText;
+            });
+          },
+          icon: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+        ),
+      ),
       obscureText: _obscureText,
       enableSuggestions: false,
       autocorrect: false,
       validator: (value) {
-        if(value == null) return null;
+        if (value == null) return null;
 
         if (widget.validator != null) {
           return widget.validator!(value);
         }
 
-        if (value.length < 6) {
-          return "A senha deve ter mais de 6 caracteres";
+        if (value.length < 8) {
+          return "A senha deve ter mais de 8 caracteres";
         }
-        if (value.length > 10) {
-          return "A senha deve ter no menos de 10 caracteres";
-        }
-        if (!RegExp(r'[A-Z]').hasMatch(value)) {
-          return "A senha deve conter pelo menos uma letra maiúscula";
-        }
-        if(!RegExp(r'[!@#$%^&*(),.?":{}|<>]').hasMatch(value)) {
-          return "A senha deve conter pelo menos um caractere especial";
-        }
+
         return null;
       },
     );

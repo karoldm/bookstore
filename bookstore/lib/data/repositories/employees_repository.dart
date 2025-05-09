@@ -1,7 +1,8 @@
+import 'package:bookstore/data/models/edit_employee_model.dart';
 import 'package:bookstore/interfaces/services/employees_service_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/employee_model.dart';
-import 'package:bookstore/data/models/request_employee_model.dart';
+import 'package:bookstore/data/models/create_employee_model.dart';
 import 'package:bookstore/interfaces/repositories/employees_repository_interface.dart';
 
 class EmployeesRepository implements EmployeesRepositoryInterface {
@@ -23,7 +24,7 @@ class EmployeesRepository implements EmployeesRepositoryInterface {
   Future<void> updateEmployee(
     int storeId,
     int employeeId,
-    RequestEmployeeModel employee,
+    EditEmployeeModel employee,
   ) async {
     try {
       await employeeService.updateEmployee(storeId, employeeId, employee);
@@ -34,7 +35,7 @@ class EmployeesRepository implements EmployeesRepositoryInterface {
   }
 
   @override
-  Future<void> addEmployee(int storeId, RequestEmployeeModel employee) async {
+  Future<void> addEmployee(int storeId, CreateEmployeeModel employee) async {
     try {
       await employeeService.addEmployee(storeId, employee);
     } catch (e) {

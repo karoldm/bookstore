@@ -1,9 +1,11 @@
 import 'dart:convert';
 
+import 'package:bookstore/data/exceptions/custom_exception.dart';
+import 'package:bookstore/data/models/edit_employee_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:bookstore/data/api/api.dart';
 import 'package:bookstore/data/models/employee_model.dart';
-import 'package:bookstore/data/models/request_employee_model.dart';
+import 'package:bookstore/data/models/create_employee_model.dart';
 import 'package:bookstore/interfaces/services/employees_service_interface.dart';
 
 class EmployeesService implements EmployeesServiceInterface {
@@ -16,8 +18,8 @@ class EmployeesService implements EmployeesServiceInterface {
       final List<dynamic> data = response.data;
       return data.map((e) => EmployeeModel.fromMap(e)).toList();
     } catch (e) {
-      debugPrint('Failed to fetch employees on service: $e');
-      rethrow;
+      debugPrint('Failed to fetch employees in service: $e');
+      throw CustomException(e.toString());
     }
   }
 
@@ -25,7 +27,7 @@ class EmployeesService implements EmployeesServiceInterface {
   Future<void> updateEmployee(
     int storeId,
     int employeeId,
-    RequestEmployeeModel employee,
+    EditEmployeeModel employee,
   ) async {
     try {
       await clientApi.api.put(
@@ -33,21 +35,21 @@ class EmployeesService implements EmployeesServiceInterface {
         data: jsonEncode(employee.toMap()),
       );
     } catch (e) {
-      debugPrint('Failed to update employee on service: $e');
-      rethrow;
+      debugPrint('Failed to update employee in service: $e');
+      throw CustomException(e.toString());
     }
   }
 
   @override
-  Future<void> addEmployee(int storeId, RequestEmployeeModel employee) async {
+  Future<void> addEmployee(int storeId, CreateEmployeeModel employee) async {
     try {
       await clientApi.api.post(
         '/v1/store/$storeId/employee',
         data: jsonEncode(employee.toMap()),
       );
     } catch (e) {
-      debugPrint('Failed to add employee on service: $e');
-      rethrow;
+      debugPrint('Failed to add employee in service: $e');
+      throw CustomException(e.toString());
     }
   }
 
@@ -56,8 +58,8 @@ class EmployeesService implements EmployeesServiceInterface {
     try {
       await clientApi.api.delete('/v1/store/$storeId/employee/$employeeId');
     } catch (e) {
-      debugPrint('Failed to delete employee on service: $e');
-      rethrow;
+      debugPrint('Failed to delete employee in service: $e');
+      throw CustomException(e.toString());
     }
   }
 }

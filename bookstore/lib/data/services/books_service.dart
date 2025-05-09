@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bookstore/data/exceptions/custom_exception.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/api/api.dart';
 import 'package:bookstore/data/models/book_model.dart';
@@ -29,8 +30,8 @@ class BooksService implements BooksServiceInterface {
           .map((book) => BookModel.fromMap(book))
           .toList();
     } catch (e) {
-      debugPrint('Failed to load books on service: $e');
-      rethrow;
+      debugPrint('Failed to load books in service: $e');
+      throw CustomException(e.toString());
     }
   }
 
@@ -43,8 +44,8 @@ class BooksService implements BooksServiceInterface {
       );
       return BookModel.fromMap(response.data);
     } catch (e) {
-      debugPrint('Failed to create book on service: $e');
-      rethrow;
+      debugPrint('Failed to create book in service: $e');
+      throw CustomException(e.toString());
     }
   }
 
@@ -53,25 +54,27 @@ class BooksService implements BooksServiceInterface {
     try {
       await apiClient.api.delete('/v1/store/$storeId/book/$bookId');
     } catch (e) {
-      debugPrint('Failed to delete book on service: $e');
-      rethrow;
+      debugPrint('Failed to delete book in service: $e');
+      throw CustomException(e.toString());
     }
   }
 
   @override
-  Future<void> updateBook(
+  Future<BookModel> updateBook(
     int storeId,
     int bookId,
     RequestBookModel book,
   ) async {
     try {
-      await apiClient.api.put(
+      final response = await apiClient.api.put(
         '/v1/store/$storeId/book/$bookId',
         data: jsonEncode(book.toMap()),
       );
+
+      return BookModel.fromMap(response.data);
     } catch (e) {
-      debugPrint('Failed to update book on service: $e');
-      rethrow;
+      debugPrint('Failed to update book in service: $e');
+      throw CustomException(e.toString());
     }
   }
 }

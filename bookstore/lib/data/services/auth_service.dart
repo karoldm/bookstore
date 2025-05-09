@@ -1,5 +1,5 @@
-import 'dart:convert';
-
+import 'package:bookstore/data/exceptions/custom_exception.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/store_model.dart';
 import 'package:bookstore/data/models/tokens_model.dart';
@@ -13,7 +13,7 @@ class AuthService implements AuthServiceInterface {
   @override
   Future<(StoreModel, TokensModel)> login(Map<String, dynamic> data) async {
     try {
-      final response = await apiClient.api.post('/v1/auth', data: data);
+      final response = await apiClient.api.post('/v1/auth/login', data: data);
       StoreModel store = StoreModel.fromMap(response.data['store']);
       store.user = UserModel.fromMap(response.data['user']);
       return (
@@ -24,8 +24,8 @@ class AuthService implements AuthServiceInterface {
         ),
       );
     } catch (e) {
-      debugPrint("Error in AuthService: $e");
-      rethrow;
+      debugPrint("Error to login in AuthService: $e");
+      throw CustomException(e.toString());
     }
   }
 
@@ -34,9 +34,30 @@ class AuthService implements AuthServiceInterface {
     Map<String, dynamic> storeModel,
   ) async {
     try {
+      final formData = FormData.fromMap({
+        'name': storeModel['name'],
+        'slogan': storeModel['slogan'],
+        'username': storeModel['username'],
+        'adminName': storeModel['adminName'],
+        'password': storeModel['password'],
+      });
+
+      if (storeModel["banner"] != null) {
+        formData.files.add(
+          MapEntry(
+            "banner",
+            await MultipartFile.fromFile(
+              storeModel['banner'].path,
+              filename: 'banner_${DateTime.now().millisecondsSinceEpoch}.jpg',
+            ),
+          ),
+        );
+      }
+
       final response = await apiClient.api.post(
-        '/v1/store',
-        data: jsonEncode(storeModel),
+        '/v1/auth/register',
+        data: formData,
+        options: Options(contentType: 'multipart/form-data'),
       );
       final store = StoreModel.fromMap(response.data['store']);
       store.user = UserModel.fromMap(response.data['user']);
@@ -49,8 +70,8 @@ class AuthService implements AuthServiceInterface {
         ),
       );
     } catch (e) {
-      debugPrint('Failed to create store: $e');
-      rethrow;
+      debugPrint('Failed to create store in auth service: $e');
+      throw CustomException(e.toString());
     }
   }
 }

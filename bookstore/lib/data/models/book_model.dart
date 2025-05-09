@@ -1,27 +1,24 @@
-import 'package:bookstore/ui/_core/theme/app_colors.dart';
-import 'package:flutter/material.dart';
-
 class BookModel {
   final int id;
   String? cover;
   String title;
   String author;
-  int year;
-  String synopsis;
+  String releasedAt;
+  String createdAt;
+  String summary;
   bool available;
   int rating;
   bool isSaved = false;
-  Color color;
 
   BookModel({
     required this.id,
     required this.title,
     required this.author,
-    required this.year,
-    required this.synopsis,
+    required this.releasedAt,
+    required this.createdAt,
+    required this.summary,
     required this.available,
     required this.rating,
-    this.color = AppColors.defaultColor,
     this.cover,
   });
 
@@ -31,8 +28,9 @@ class BookModel {
       title: json['title'],
       author: json['author'],
       cover: json['cover'],
-      year: json['year'],
-      synopsis: json['synopsis'],
+      releasedAt: json['releasedAt'],
+      createdAt: json['createdAt'],
+      summary: json['summary'],
       available: json['available'],
       rating: json['rating'],
     );
@@ -40,6 +38,6 @@ class BookModel {
 
   @override
   String toString() {
-    return 'BookModel(id: $id, title: $title, author: $author, cover: $cover, year: $year, synopsis: $synopsis, available: $available, rating: $rating)';
+    return 'BookModel(id: $id, title: $title, author: $author, cover: $cover, releasedAt: $releasedAt, summary: $summary, available: $available, rating: $rating)';
   }
 }

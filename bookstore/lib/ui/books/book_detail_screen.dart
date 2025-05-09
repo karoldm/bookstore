@@ -77,7 +77,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
   }
 
   Widget getImageBook(BookModel? book) {
-    return book?.cover != null
+    return book?.cover != null && book?.cover != ""
         ? Image.memory(base64Decode(book!.cover!), height: 240)
         : Image.asset("assets/book_default.png", height: 240);
   }
@@ -154,7 +154,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                               ),
                             ),
 
-                          currentBook.cover != null
+                          (currentBook.cover != null && currentBook.cover != "")
                               ? Image.memory(
                                 base64Decode(currentBook.cover!),
                                 height: 240,
@@ -190,14 +190,14 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           Text(currentBook.author, textAlign: TextAlign.center),
                           Text("Sinópse", style: AppFonts.labelFont),
                           Text(
-                            currentBook.synopsis,
+                            currentBook.summary,
                             textAlign: TextAlign.justify,
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Text("Publicado em", style: AppFonts.labelFont),
-                              Text(currentBook.year.toString()),
+                              Text(currentBook.releasedAt),
                             ],
                           ),
                           if (storeState is StoreLoadedState)
@@ -231,11 +231,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       RequestBookModel requestBook =
                                           RequestBookModel(
                                             author: currentBook.author,
-                                            year: currentBook.year,
-                                            synopsis: currentBook.synopsis,
+                                            releasedAt: currentBook.releasedAt,
+                                            summary: currentBook.summary,
                                             rating: currentBook.rating,
                                             available: value,
-                                            cover: currentBook.cover,
                                             title: currentBook.title,
                                           );
                                       BlocProvider.of<BooksBloc>(context).add(

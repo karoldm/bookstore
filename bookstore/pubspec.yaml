@@ -43,6 +43,8 @@ dependencies:
   flutter_native_splash: ^2.4.6
   flutter_launcher_icons: ^0.14.3
   flutter_colorpicker: ^1.1.0
+  mask_text_input_formatter: ^2.9.0
+  cached_network_image: ^3.4.1
 
 dev_dependencies:
   flutter_test:
@@ -67,6 +69,11 @@ flutter:
 
   assets:
     - assets/
+    - assets/icons/
+  fonts:
+    - family: BookStoreIcons
+      fonts:
+        - asset: assets/icons/BookStoreIcons.ttf
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

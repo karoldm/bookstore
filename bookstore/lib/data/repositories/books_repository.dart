@@ -1,3 +1,4 @@
+import 'package:bookstore/utils/format_date.dart';
 import 'package:flutter/widgets.dart';
 import 'package:bookstore/config/constants.dart';
 import 'package:bookstore/data/models/book_model.dart';
@@ -35,6 +36,8 @@ class BooksRepository implements BooksRepositoryInterface {
   @override
   Future<BookModel> createBook(int storeId, RequestBookModel book) {
     try {
+      book.releasedAt = formatDateToAPI(book.releasedAt);
+
       return booksService.createBook(storeId, book);
     } catch (e) {
       debugPrint('Failed to create book on repository: $e');
@@ -59,6 +62,8 @@ class BooksRepository implements BooksRepositoryInterface {
     RequestBookModel book,
   ) async {
     try {
+      book.releasedAt = formatDateToAPI(book.releasedAt);
+
       final updatedBook = await booksService.updateBook(storeId, bookId, book);
       return updatedBook;
     } catch (e) {

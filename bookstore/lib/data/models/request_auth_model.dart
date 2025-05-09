@@ -1,14 +1,14 @@
 class RequestAuthModel {
-  String user;
+  String username;
   String password;
 
-  RequestAuthModel({required this.user, required this.password});
+  RequestAuthModel({required this.username, required this.password});
 
   factory RequestAuthModel.empty() {
-    return RequestAuthModel(user: '', password: '');
+    return RequestAuthModel(username: '', password: '');
   }
 
   Map<String, dynamic> toMap() {
-    return {'user': user, 'password': password};
+    return {'username': username, 'password': password};
   }
 }

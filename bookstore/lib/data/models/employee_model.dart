@@ -1,14 +1,16 @@
+import 'package:bookstore/enums/role_enum.dart';
+
 class EmployeeModel {
   final int id;
   final String name;
   final String username;
-  final String? photo;
+  final Role role;
 
   EmployeeModel({
     required this.id,
     required this.name,
     required this.username,
-    this.photo,
+    this.role = Role.employee,
   });
 
   factory EmployeeModel.fromMap(Map<String, dynamic> json) {
@@ -16,7 +18,7 @@ class EmployeeModel {
       id: json['id'],
       name: json['name'],
       username: json['username'],
-      photo: json['photo'],
+      role: Role.fromString(json['role']),
     );
   }
 }

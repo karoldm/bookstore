@@ -51,7 +51,7 @@ class AuthScreen extends StatelessWidget {
                           TextFieldWidget(
                             hint: "user",
                             onChanged: (value) {
-                              authModel.user = value;
+                              authModel.username = value;
                             },
                           ),
                           PasswordFielWidget(

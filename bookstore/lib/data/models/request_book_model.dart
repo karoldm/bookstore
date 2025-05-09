@@ -1,24 +1,21 @@
-import 'package:bookstore/ui/_core/theme/app_colors.dart';
-import 'package:flutter/widgets.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RequestBookModel {
-  String? cover;
+  XFile? cover;
   String title;
   String author;
-  int year;
-  String synopsis;
+  String releasedAt;
+  String summary;
   bool available;
   int rating;
-  Color color;
 
   RequestBookModel({
     required this.title,
     required this.author,
-    required this.year,
-    required this.synopsis,
+    required this.releasedAt,
+    required this.summary,
     required this.available,
     required this.rating,
-    this.color = AppColors.defaultColor,
     this.cover,
   });
 
@@ -27,8 +24,8 @@ class RequestBookModel {
       'title': title,
       'author': author,
       'cover': cover,
-      'year': year,
-      'synopsis': synopsis,
+      'releasedAt': releasedAt,
+      'summary': summary,
       'available': available,
       'rating': rating,
     };
@@ -38,8 +35,8 @@ class RequestBookModel {
     return RequestBookModel(
       title: '',
       author: '',
-      year: 0,
-      synopsis: '',
+      releasedAt: '',
+      summary: '',
       available: false,
       rating: 1,
       cover: null,
@@ -48,6 +45,6 @@ class RequestBookModel {
 
   @override
   String toString() {
-    return 'RegisterBookModel(title: $title, author: $author, cover: $cover, year: $year, synopsis: $synopsis, available: $available, rating: $rating)';
+    return 'RegisterBookModel(title: $title, author: $author, cover: $cover, releasedAt: $releasedAt, summary: $summary, available: $available, rating: $rating)';
   }
 }

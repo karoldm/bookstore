@@ -1,22 +1,22 @@
-import 'dart:convert';
 import 'dart:io';
-
+import 'package:bookstore/ui/_core/theme/app_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bookstore/ui/_core/theme/app_colors.dart';
 
-/// A widget that allows the user to select an image from the gallery and
-/// converts it to a base64 string.
 class ImageFieldWidget extends StatefulWidget {
-  final Function({required String imageBase64}) onChanged;
+  final Function({required XFile? imageData}) onChanged;
   final String hint;
-  final String? initialValue;
+  final String? initialImageUrl;
+  final bool? canDelete;
 
   const ImageFieldWidget({
     required this.hint,
     required this.onChanged,
-    this.initialValue,
     super.key,
+    this.initialImageUrl,
+    this.canDelete = true,
   });
 
   @override
@@ -28,6 +28,8 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
   XFile? image;
   File? preview;
 
+  bool _error = false;
+
   @override
   void initState() {
     super.initState();
@@ -35,68 +37,98 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
       spacing: 8,
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Expanded(
-          child: TextFormField(
-            validator: (value) => null,
-            readOnly: true,
-            decoration: InputDecoration(
-              fillColor: AppColors.backgroundColor,
-              hintStyle: const TextStyle(color: AppColors.defaultColor),
-              prefixIcon: IconButton(
-                onPressed: () async {
-                  final XFile? pickedImage = await picker.pickImage(
-                    source: ImageSource.gallery,
-                  );
+        Row(
+          spacing: 8,
+          children: [
+            Expanded(
+              child: TextFormField(
+                validator: (value) => null,
+                readOnly: true,
+                decoration: InputDecoration(
+                  fillColor: AppColors.backgroundColor,
+                  hintStyle: const TextStyle(color: AppColors.defaultColor),
+                  prefixIcon: IconButton(
+                    onPressed: () async {
+                      final XFile? pickedImage = await picker.pickImage(
+                        source: ImageSource.gallery,
+                      );
 
-                  if (pickedImage != null) {
-                    setState(() {
-                      image = pickedImage;
+                      if (pickedImage != null) {
+                        int size = await pickedImage.length();
+                        if (size > 10 * 1024 * 1024) {
+                          setState(() {
+                            _error = true;
+                          });
+                          return;
+                        } else {
+                          setState(() {
+                            _error = false;
+                            image = pickedImage;
+                            preview = File(pickedImage.path);
+                          });
+                        }
+                      }
 
-                      preview = File(pickedImage.path);
-                    });
-                  }
-
-                  if (image != null) {
-                    final bytes = await image!.readAsBytes();
-                    String imageBase64 = base64Encode(bytes);
-                    widget.onChanged(imageBase64: imageBase64);
-                  }
-                },
-                icon: Icon(
-                  Icons.upload_outlined,
-                  color: AppColors.defaultColor,
+                      if (image != null) {
+                        widget.onChanged(imageData: image);
+                      }
+                    },
+                    icon: Icon(
+                      Icons.upload_outlined,
+                      color: AppColors.defaultColor,
+                    ),
+                  ),
+                  border: border,
+                  enabledBorder: border,
+                  focusedBorder: border,
+                  hintText:
+                      image != null
+                          ? image!.name
+                          : (widget.initialImageUrl ?? widget.hint),
                 ),
               ),
-              border: border,
-              enabledBorder: border,
-              focusedBorder: border,
-              hintText: image != null ? image!.name : widget.hint,
             ),
+            Center(
+              child:
+                  preview != null
+                      ? Image(
+                        fit: BoxFit.cover,
+                        image: FileImage(preview!) as ImageProvider,
+                        width: 54,
+                        height: 54,
+                      )
+                      : (widget.initialImageUrl != null
+                          ? CachedNetworkImage(
+                            imageUrl: widget.initialImageUrl!,
+                            fit: BoxFit.cover,
+                            width: 54,
+                            height: 54,
+                          )
+                          : SizedBox.shrink()),
+            ),
+            if (widget.canDelete == true)
+              InkWell(
+                onTap: () {
+                  setState(() {
+                    image = null;
+                    preview = null;
+                  });
+                  widget.onChanged(imageData: null);
+                },
+                child: Icon(Icons.delete),
+              ),
+          ],
+        ),
+        Text(
+          "Tamanho máximo: 10MB",
+          style: AppFonts.bodySmallFont.copyWith(
+            color: _error ? AppColors.errorColor : AppColors.defaultColor,
           ),
-        ),
-        Center(
-          child:
-              preview != null
-                  ? Image(
-                    fit: BoxFit.cover,
-                    image: FileImage(preview!) as ImageProvider,
-                    width: 54,
-                    height: 54,
-                  )
-                  : SizedBox.shrink(),
-        ),
-        InkWell(
-          onTap: () {
-            setState(() {
-              image = null;
-              preview = null;
-            });
-            widget.onChanged(imageBase64: "");
-          },
-          child: Icon(Icons.delete),
         ),
       ],
     );

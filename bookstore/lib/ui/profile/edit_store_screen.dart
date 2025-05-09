@@ -1,26 +1,21 @@
+import 'package:bookstore/data/models/store_model.dart';
 import 'package:bookstore/utils/show_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/data/models/request_store_model.dart';
-import 'package:bookstore/data/models/user_model.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_events.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_states.dart';
 import 'package:bookstore/ui/_core/widgets/app_bar_widget.dart';
-import 'package:bookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:bookstore/ui/_core/widgets/image_field_widget.dart';
 import 'package:bookstore/ui/_core/widgets/loading_button_widget.dart';
 import 'package:bookstore/ui/_core/widgets/text_field_widget.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditStoreScreen extends StatefulWidget {
-  final RequestStoreModel initialStoreModel;
-  final UserModel user;
+  final StoreModel initialStoreModel;
 
-  const EditStoreScreen({
-    required this.initialStoreModel,
-    super.key,
-    required this.user,
-  });
+  const EditStoreScreen({required this.initialStoreModel, super.key});
 
   @override
   State<EditStoreScreen> createState() => _EditStoreScreenState();
@@ -34,7 +29,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
   @override
   void initState() {
     super.initState();
-    storeModel = widget.initialStoreModel;
+    storeModel = RequestStoreModel.fromEmpty();
+    storeModel.name = widget.initialStoreModel.name;
+    storeModel.slogan = widget.initialStoreModel.slogan;
+    storeModel.id = widget.initialStoreModel.id;
   }
 
   @override
@@ -70,9 +68,10 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                         Column(
                           spacing: 24,
                           children: [
-                            CircleAvatarWidget(
-                              image: widget.user.photo,
-                              name: widget.user.name,
+                            Image.asset(
+                              "assets/logo_text.png",
+                              width: 179,
+                              height: 134,
                             ),
                             Form(
                               key: _formKey,
@@ -94,10 +93,12 @@ class _EditStoreScreenState extends State<EditStoreScreen> {
                                     },
                                   ),
                                   ImageFieldWidget(
+                                    canDelete: false,
+                                    initialImageUrl:
+                                        widget.initialStoreModel.banner,
                                     hint: "Banner",
-                                    initialValue: storeModel.banner,
-                                    onChanged: ({required String imageBase64}) {
-                                      storeModel.banner = imageBase64;
+                                    onChanged: ({required XFile? imageData}) {
+                                      storeModel.banner = imageData;
                                     },
                                   ),
                                 ],

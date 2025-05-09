@@ -1,12 +1,11 @@
+import 'package:bookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:bookstore/ui/books/bloc/books_bloc.dart';
 import 'package:bookstore/ui/books/bloc/books_states.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:bookstore/data/models/request_store_model.dart';
 import 'package:bookstore/enums/role_enum.dart';
 import 'package:bookstore/ui/_core/theme/app_colors.dart';
 import 'package:bookstore/ui/_core/theme/app_fonts.dart';
-import 'package:bookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:bookstore/ui/_core/widgets/list_saved_books_widget.dart';
 import 'package:bookstore/ui/auth/bloc/auth_bloc.dart';
 import 'package:bookstore/ui/auth/bloc/auth_events.dart';
@@ -30,10 +29,7 @@ class ProfileScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        CircleAvatarWidget(
-                          image: state.store.user.photo,
-                          name: state.store.user.name,
-                        ),
+                        CircleAvatarWidget(name: state.store.user.name),
                         Column(
                           spacing: 8,
                           children: [
@@ -69,13 +65,7 @@ class ProfileScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                   builder:
                                       (context) => EditStoreScreen(
-                                        initialStoreModel: RequestStoreModel(
-                                          id: state.store.id,
-                                          name: state.store.name,
-                                          slogan: state.store.slogan,
-                                          banner: state.store.banner,
-                                        ),
-                                        user: state.store.user,
+                                        initialStoreModel: state.store,
                                       ),
                                 ),
                               );

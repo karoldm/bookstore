@@ -1,15 +1,15 @@
+import 'package:bookstore/ui/_core/widgets/circular_avatar_widget.dart';
+import 'package:bookstore/ui/employees/employee_edit_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/data/models/employee_model.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_states.dart';
 import 'package:bookstore/ui/_core/theme/app_fonts.dart';
-import 'package:bookstore/ui/_core/widgets/circular_avatar_widget.dart';
 import 'package:bookstore/ui/_core/widgets/confirm_modal_widget.dart';
 import 'package:bookstore/ui/employees/bloc/employees_bloc.dart';
 import 'package:bookstore/ui/employees/bloc/employees_events.dart';
 import 'package:bookstore/ui/employees/bloc/employees_states.dart';
-import 'package:bookstore/ui/employees/employee_form_screen.dart';
 
 class EmployeesScreen extends StatelessWidget {
   const EmployeesScreen({super.key});
@@ -51,7 +51,7 @@ class EmployeesScreen extends StatelessWidget {
                                           context,
                                           MaterialPageRoute(
                                             builder:
-                                                (context) => EmployeeFormScreen(
+                                                (context) => EmployeeEditScreen(
                                                   initialEmployee: employee,
                                                   storeId: storeState.store.id,
                                                 ),
@@ -88,8 +88,7 @@ class EmployeesScreen extends StatelessWidget {
                                   ],
                                 ),
                                 leading: CircleAvatarWidget(
-                                  radius: 32,
-                                  image: employee.photo,
+                                  iconSize: 32,
                                   name: employee.name,
                                 ),
                                 onTap: () {},

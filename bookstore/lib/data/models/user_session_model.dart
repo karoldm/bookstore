@@ -9,22 +9,22 @@ class SessionModel extends UserModel {
   SessionModel({
     required super.id,
     required super.name,
-    required super.photo,
     required super.role,
+    required super.username,
     required this.storeId,
     required this.tokens,
   });
 
   @override
   String toString() {
-    return 'UserSessionModel{id: $id, name: $name, photo: $photo, role: $role, storeId: $storeId}';
+    return 'UserSessionModel{id: $id, name: $name, username: $username, role: $role, storeId: $storeId}';
   }
 
   Map<String, dynamic> toMap() {
     return {
       'id': id,
       'name': name,
-      'photo': photo,
+      'username': username,
       'role': role.toString(),
       'storeId': storeId,
       'tokens': tokens.toMap(),
@@ -35,7 +35,7 @@ class SessionModel extends UserModel {
     return SessionModel(
       id: json['id'],
       name: json['name'],
-      photo: json['photo'],
+      username: json['username'],
       role: Role.fromString(json['role']),
       storeId: json['storeId'],
       tokens: TokensModel.fromMap(json['tokens']),

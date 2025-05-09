@@ -9,6 +9,6 @@ abstract class BooksServiceInterface {
     Map<String, dynamic>? filters,
   });
   Future<BookModel> createBook(int storeId, RequestBookModel book);
-  Future<void> updateBook(int storeId, int bookId, RequestBookModel book);
+  Future<BookModel> updateBook(int storeId, int bookId, RequestBookModel book);
   Future<void> deleteBook(int storeId, int bookId);
 }

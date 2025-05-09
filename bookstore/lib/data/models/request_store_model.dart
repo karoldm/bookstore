@@ -1,8 +1,10 @@
+import 'package:image_picker/image_picker.dart';
+
 class RequestStoreModel {
-  final int id;
+  int id;
   String name;
   String slogan;
-  String? banner;
+  XFile? banner;
 
   RequestStoreModel({
     required this.id,
@@ -10,6 +12,10 @@ class RequestStoreModel {
     required this.slogan,
     this.banner,
   });
+
+  factory RequestStoreModel.fromEmpty() {
+    return RequestStoreModel(id: 0, name: '', slogan: '', banner: null);
+  }
 
   Map<String, dynamic> toMap() {
     return {'name': name, 'slogan': slogan, 'banner': banner};

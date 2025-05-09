@@ -35,8 +35,8 @@ class AuthRepository implements AuthRepositoryInterface {
         final user = UserModel(
           id: userSession.id,
           name: userSession.name,
-          photo: userSession.photo,
           role: userSession.role,
+          username: userSession.username,
         );
 
         store.user = user;
@@ -47,7 +47,7 @@ class AuthRepository implements AuthRepositoryInterface {
         return null;
       }
     } catch (e) {
-      debugPrint("Error in AuthRepository: $e");
+      debugPrint("Filed to init session in auth repository: $e");
       rethrow;
     }
   }
@@ -61,7 +61,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
       return store;
     } catch (e) {
-      debugPrint("Error in AuthRepository: $e");
+      debugPrint("Filed to login in auth repository: $e");
       rethrow;
     }
   }
@@ -71,7 +71,7 @@ class AuthRepository implements AuthRepositoryInterface {
     try {
       await localService.clear();
     } catch (e) {
-      debugPrint("Error in AuthRepository: $e");
+      debugPrint("Filed to logout in auth repository: $e");
       rethrow;
     }
   }
@@ -85,7 +85,7 @@ class AuthRepository implements AuthRepositoryInterface {
 
       return store;
     } catch (e) {
-      debugPrint("Error in AuthRepository: $e");
+      debugPrint("Filed to register in auth repository: $e");
       rethrow;
     }
   }
@@ -95,7 +95,7 @@ class AuthRepository implements AuthRepositoryInterface {
       tokens: tokens,
       id: store.user.id,
       name: store.user.name,
-      photo: store.user.photo,
+      username: store.user.username,
       role: store.user.role,
       storeId: store.id,
     );

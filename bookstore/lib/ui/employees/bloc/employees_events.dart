@@ -1,4 +1,5 @@
-import 'package:bookstore/data/models/request_employee_model.dart';
+import 'package:bookstore/data/models/create_employee_model.dart';
+import 'package:bookstore/data/models/edit_employee_model.dart';
 
 abstract class EmployeesEvents {}
 
@@ -10,7 +11,7 @@ class FetchEmployeesEvent extends EmployeesEvents {
 
 class AddEmployeeEvent extends EmployeesEvents {
   final int storeId;
-  final RequestEmployeeModel employee;
+  final CreateEmployeeModel employee;
 
   AddEmployeeEvent({required this.storeId, required this.employee});
 }
@@ -18,7 +19,7 @@ class AddEmployeeEvent extends EmployeesEvents {
 class UpdateEmployeeEvent extends EmployeesEvents {
   final int storeId;
   final int employeeId;
-  final RequestEmployeeModel employee;
+  final EditEmployeeModel employee;
 
   UpdateEmployeeEvent({
     required this.storeId,

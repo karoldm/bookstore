@@ -59,10 +59,8 @@ class BooksRepository implements BooksRepositoryInterface {
     RequestBookModel book,
   ) async {
     try {
-      await booksService.updateBook(storeId, bookId, book);
-      Map<String, dynamic> updatedbook = book.toMap();
-      updatedbook['id'] = bookId;
-      return BookModel.fromMap(updatedbook);
+      final updatedBook = await booksService.updateBook(storeId, bookId, book);
+      return updatedBook;
     } catch (e) {
       debugPrint('Failed to update book on repository: $e');
       rethrow;

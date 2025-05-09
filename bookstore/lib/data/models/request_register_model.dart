@@ -1,15 +1,19 @@
-import 'package:bookstore/data/models/request_user_model.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RequestRegisterModel {
   String name;
   String slogan;
-  String? banner;
-  RequestUserModel admin;
+  XFile? banner;
+  String username;
+  String adminName;
+  String password;
 
   RequestRegisterModel({
     required this.name,
     required this.slogan,
-    required this.admin,
+    required this.username,
+    required this.adminName,
+    required this.password,
     this.banner,
   });
 
@@ -18,7 +22,9 @@ class RequestRegisterModel {
       name: "",
       slogan: "",
       banner: null,
-      admin: RequestUserModel.empty(),
+      username: "",
+      adminName: "",
+      password: "",
     );
   }
 
@@ -27,12 +33,14 @@ class RequestRegisterModel {
       'name': name,
       'slogan': slogan,
       'banner': banner,
-      'admin': admin.toMap(),
+      'adminName': adminName,
+      'username': username,
+      'password': password,
     };
   }
 
   @override
   String toString() {
-    return 'RegisteStoreModel(name: $name, slogan: $slogan, banner: $banner, user: $admin)';
+    return 'RegisterUserModel(name: $name, slogan: $slogan, banner: $banner, adminName: $adminName, user: $username, password: $password)';
   }
 }

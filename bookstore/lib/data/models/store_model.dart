@@ -21,7 +21,7 @@ class StoreModel {
           json['user'] != null
               ? UserModel.fromMap(json['user'])
               : UserModel.empty(),
-      id: json['idStore'] ?? json['id'],
+      id: json['id'],
       name: json['name'],
       slogan: json['slogan'],
       banner: json['banner'],

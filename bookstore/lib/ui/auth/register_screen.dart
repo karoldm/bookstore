@@ -10,6 +10,7 @@ import 'package:bookstore/ui/_core/widgets/text_field_widget.dart';
 import 'package:bookstore/ui/auth/bloc/auth_bloc.dart';
 import 'package:bookstore/ui/auth/bloc/auth_events.dart';
 import 'package:bookstore/ui/auth/bloc/auth_states.dart';
+import 'package:image_picker/image_picker.dart';
 
 class RegisterScreen extends StatelessWidget {
   RegisterScreen({super.key});
@@ -25,7 +26,7 @@ class RegisterScreen extends StatelessWidget {
         if (state is AuthenticatedState) {
           Navigator.pushReplacementNamed(context, "/home");
         } else if (state is RegisterErrorState) {
-          showCustomDialog(context, "Cadastro falhou");
+          showCustomDialog(context, "Cadastro falhou: ${state.message}");
         }
       },
       builder: (context, state) {
@@ -66,37 +67,31 @@ class RegisterScreen extends StatelessWidget {
                           ),
                           ImageFieldWidget(
                             hint: "Banner da loja",
-                            onChanged: ({required String imageBase64}) {
-                              storeModel.banner = imageBase64;
+                            onChanged: ({required XFile? imageData}) {
+                              storeModel.banner = imageData;
                             },
                           ),
                           TextFieldWidget(
                             hint: "Nome do administrador",
                             onChanged: (value) {
-                              storeModel.admin.name = value;
+                              storeModel.adminName = value;
                             },
                           ),
                           TextFieldWidget(
                             hint: "User do administrador",
                             onChanged: (value) {
-                              storeModel.admin.username = value;
-                            },
-                          ),
-                          ImageFieldWidget(
-                            hint: "Foto do administrador",
-                            onChanged: ({required String imageBase64}) {
-                              storeModel.admin.photo = imageBase64;
+                              storeModel.username = value;
                             },
                           ),
                           PasswordFielWidget(
                             onChanged: (value) {
-                              storeModel.admin.password = value;
+                              storeModel.password = value;
                             },
                           ),
                           PasswordFielWidget(
                             hint: "Repetir senha",
                             validator: (value) {
-                              if (value != storeModel.admin.password) {
+                              if (value != storeModel.password) {
                                 return "As senhas não conferem";
                               }
                               return null;

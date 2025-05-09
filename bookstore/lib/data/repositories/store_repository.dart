@@ -11,11 +11,11 @@ class StoreRepository implements StoreRepositoryInterface {
   @override
   Future<StoreModel> updateStore(RequestStoreModel storeModel) async {
     try {
-      await storeService.updateStore(storeModel);
+      await storeService.updateStore(storeModel.id, storeModel.toMap());
       StoreModel store = await storeService.getStore(storeModel.id);
       return store;
     } catch (e) {
-      debugPrint('Failed to update store info on repository: $e');
+      debugPrint('Failed to update store info in repository: $e');
       rethrow;
     }
   }

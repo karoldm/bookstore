@@ -66,7 +66,10 @@ class Api {
 
             GetIt.I<AuthBloc>().add(LogoutEvent());
           }
-          return handler.next(error);
+          final customError = error.copyWith(
+            message: error.response?.data['detail'] ?? 'An error occurred',
+          );
+          return handler.next(customError);
         },
       ),
     );

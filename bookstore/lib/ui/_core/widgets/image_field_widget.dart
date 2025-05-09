@@ -93,7 +93,8 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
                 ),
               ),
             ),
-            Center(
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
               child:
                   preview != null
                       ? Image(

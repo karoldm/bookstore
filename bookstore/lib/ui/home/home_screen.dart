@@ -1,5 +1,5 @@
+import 'package:bookstore/ui/_core/widgets/store_banner.dart';
 import 'package:bookstore/ui/books/bloc/books_states.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/enums/role_enum.dart';
@@ -33,19 +33,11 @@ class HomeScreen extends StatelessWidget {
                     spacing: 24,
                     children: [
                       if (state.store.banner != null)
-                        SizedBox(
-                          height: 124,
-                          width: double.infinity,
-                          child: CachedNetworkImage(
-                            imageUrl: state.store.banner!,
-                            fit: BoxFit.cover,
-                          ),
-                        ),
+                        StoreBanner(imageUrl: state.store.banner!),
                       Text(
-                        'Olá, ${state.store.user.name} 👋',
+                        'Bem-vindo a ${state.store.name}',
                         style: AppFonts.titleFont,
                       ),
-                      SizedBox(height: 8),
                       Row(
                         children: [
                           Expanded(

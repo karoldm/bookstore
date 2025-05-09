@@ -4,6 +4,10 @@ import 'package:bookstore/ui/_core/theme/app_fonts.dart';
 
 abstract class AppTheme {
   static ThemeData theme = ThemeData.light().copyWith(
+    dialogTheme: DialogTheme(
+      backgroundColor: AppColors.backgroundColor,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+    ),
     scaffoldBackgroundColor: AppColors.backgroundColor,
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       type: BottomNavigationBarType.fixed,

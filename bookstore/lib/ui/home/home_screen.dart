@@ -1,4 +1,5 @@
 import 'package:bookstore/ui/books/bloc/books_states.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/enums/role_enum.dart';
@@ -31,7 +32,15 @@ class HomeScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     spacing: 24,
                     children: [
-                      Image.asset('assets/logo.png', width: 56, height: 42),
+                      if (state.store.banner != null)
+                        SizedBox(
+                          height: 124,
+                          width: double.infinity,
+                          child: CachedNetworkImage(
+                            imageUrl: state.store.banner!,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       Text(
                         'Olá, ${state.store.user.name} 👋',
                         style: AppFonts.titleFont,

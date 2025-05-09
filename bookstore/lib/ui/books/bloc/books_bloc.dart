@@ -8,10 +8,10 @@ import 'package:bookstore/ui/books/bloc/books_states.dart';
 class BooksBloc extends Bloc<BooksEvents, BooksStates> {
   final List<BookModel> books = [];
   final List<BookModel> filteredBooks = [];
-  int offset = 0;
+  int page = 0;
   bool hasMore = false;
   Map<String, dynamic> filters = {};
-  final int limit = 5;
+  final int size = 5;
 
   final BooksRepositoryInterface booksService =
       GetIt.I<BooksRepositoryInterface>();
@@ -33,31 +33,31 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
           ? emit(BooksLoadingMoreState(books: books))
           : emit(BooksLoadingState(books: books));
 
-      offset = event.offset ?? offset;
+      page = event.page ?? page;
       filters = event.filters ?? filters;
 
       List<BookModel> fetchBooks = await booksService.fetchBooks(
         event.storeId,
-        offset: offset,
+        page: page,
         filters: filters,
-        limit: limit,
+        size: size,
       );
 
-      if (offset == 0) {
+      if (page == 0) {
         filteredBooks.clear();
       }
 
       if (event.filters != null && event.filters!.isNotEmpty) {
         filteredBooks.addAll(fetchBooks);
       } else {
-        if (offset == 0) {
+        if (page == 0) {
           books.clear();
         }
         books.addAll(fetchBooks);
       }
 
-      offset += limit;
-      hasMore = fetchBooks.length == limit;
+      page++;
+      hasMore = fetchBooks.length == size;
     } catch (e) {
       emit(BooksLoadingErrorState(books: books, message: e.toString()));
     } finally {
@@ -103,7 +103,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
       emit(BooksLoadingState(books: books));
 
       await booksService.createBook(event.storeId, event.book);
-      final newBooks = await booksService.fetchBooks(event.storeId, offset: 0);
+      final newBooks = await booksService.fetchBooks(event.storeId, page: 0);
       books.clear();
       books.addAll(newBooks);
       emit(BookCreateSuccessState(books: books));

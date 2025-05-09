@@ -12,18 +12,14 @@ class BooksService implements BooksServiceInterface {
   @override
   Future<List<BookModel>> fetchBooks(
     int storeId, {
-    int? offset,
-    int? limit,
+    int? page,
+    int? size,
     Map<String, dynamic>? filters,
   }) async {
     try {
       final response = await apiClient.api.get(
         '/v1/store/$storeId/book',
-        queryParameters: {
-          'offset': offset ?? 0,
-          'limit': limit ?? 10,
-          ...?filters,
-        },
+        queryParameters: {'page': page ?? 0, 'size': size ?? 10, ...?filters},
       );
       return (response.data as List)
           .map((book) => BookModel.fromMap(book))

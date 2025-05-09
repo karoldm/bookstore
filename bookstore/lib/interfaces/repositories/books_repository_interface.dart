@@ -4,8 +4,8 @@ import 'package:bookstore/data/models/request_book_model.dart';
 abstract class BooksRepositoryInterface {
   Future<List<BookModel>> fetchBooks(
     int storeId, {
-    int? offset,
-    int? limit,
+    int? page,
+    int? size,
     Map<String, dynamic>? filters,
   });
   Future<BookModel> createBook(int storeId, RequestBookModel book);

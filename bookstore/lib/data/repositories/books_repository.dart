@@ -16,15 +16,15 @@ class BooksRepository implements BooksRepositoryInterface {
   @override
   Future<List<BookModel>> fetchBooks(
     int storeId, {
-    int? limit,
-    int? offset,
+    int? size,
+    int? page,
     Map<String, dynamic>? filters,
   }) {
     try {
       return booksService.fetchBooks(
         storeId,
-        limit: limit,
-        offset: offset,
+        size: size,
+        page: page,
         filters: filters,
       );
     } catch (e) {

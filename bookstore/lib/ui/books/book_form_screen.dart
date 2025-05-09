@@ -74,7 +74,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
       final day = pickedDate.day;
       setState(() {
         _releasedAtController.text =
-            "${pickedDate.year}-${month < 10 ? '0$month' : month}-${day < 10 ? '0$day' : day}";
+            "${day < 10 ? '0$day' : day}/${month < 10 ? '0$month' : month}/${pickedDate.year}";
       });
     }
   }
@@ -343,8 +343,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                                 ),
                                                 child: Image.asset(
                                                   'assets/book_default.png',
-                                                  width: 200,
-                                                  height: 300,
+                                                  width: 1200,
                                                 ),
                                               ),
                                               if (_coverImage != null)

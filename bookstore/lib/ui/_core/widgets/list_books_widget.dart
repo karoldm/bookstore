@@ -58,7 +58,7 @@ class ListBooksWidget extends StatelessWidget {
                   physics: const NeverScrollableScrollPhysics(),
                   crossAxisCount: 2,
                   childAspectRatio: 0.47,
-                  mainAxisSpacing: 32,
+                  mainAxisSpacing: 16,
                   crossAxisSpacing: 32,
                   children:
                       books.map((book) => BookCardWidget(book: book)).toList(),

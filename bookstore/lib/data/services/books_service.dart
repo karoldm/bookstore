@@ -99,11 +99,13 @@ class BooksService implements BooksServiceInterface {
       });
 
       if (book.cover != null) {
+        final fileData = await book.cover!.readAsBytes();
+
         formData.files.add(
           MapEntry(
             "cover",
-            await MultipartFile.fromFile(
-              book.cover!.path,
+            MultipartFile.fromBytes(
+              fileData,
               filename: 'cover_${DateTime.now().millisecondsSinceEpoch}.jpg',
             ),
           ),

@@ -5,13 +5,13 @@ class TokensModel {
   TokensModel({required this.accessToken, required this.refreshToken});
 
   Map<String, dynamic> toMap() {
-    return {'access_token': accessToken, 'refresh_token': refreshToken};
+    return {'token': accessToken, 'refreshToken': refreshToken};
   }
 
   factory TokensModel.fromMap(Map<String, dynamic> json) {
     return TokensModel(
-      accessToken: json['access_token'],
-      refreshToken: json['refresh_token'],
+      accessToken: json['token'],
+      refreshToken: json['refreshToken'],
     );
   }
 }

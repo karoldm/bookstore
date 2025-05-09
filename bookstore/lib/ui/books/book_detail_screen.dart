@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:bookstore/utils/show_dialog.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/data/models/book_model.dart';
@@ -78,7 +77,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
   Widget getImageBook(BookModel? book) {
     return book?.cover != null && book?.cover != ""
-        ? Image.memory(base64Decode(book!.cover!), height: 240)
+        ? CachedNetworkImage(imageUrl: book!.cover!, height: 240)
         : Image.asset("assets/book_default.png", height: 240);
   }
 
@@ -119,9 +118,15 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               showCustomDialog(context, "Livro excluído com sucesso!");
               Navigator.pop(context);
             } else if (booksState is BookUpdateErrorState) {
-              showCustomDialog(context, "Erro ao atualizar livro");
+              showCustomDialog(
+                context,
+                "Erro ao atualizar livro: ${booksState.message}",
+              );
             } else if (booksState is BookDeleteErrorState) {
-              showCustomDialog(context, "Erro ao excluir livro");
+              showCustomDialog(
+                context,
+                "Erro ao excluir livro: ${booksState.message}",
+              );
             }
           },
 
@@ -136,18 +141,18 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               appBar: appBarWidget(context: context),
               body: SingleChildScrollView(
                 child: Column(
-                  spacing: 32,
+                  spacing: 24,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     SizedBox(
-                      height: 240,
+                      height: 300,
                       child: Stack(
                         clipBehavior: Clip.antiAlias,
                         alignment: Alignment.center,
                         children: [
                           if (previous != null)
                             Positioned(
-                              left: -120,
+                              left: -180,
                               child: InkWell(
                                 onTap: () => onChangeBook(currentBooks, false),
                                 child: getImageBook(currentBooks[previous!]),
@@ -155,18 +160,19 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             ),
 
                           (currentBook.cover != null && currentBook.cover != "")
-                              ? Image.memory(
-                                base64Decode(currentBook.cover!),
-                                height: 240,
+                              ? CachedNetworkImage(
+                                imageUrl: currentBook.cover!,
+                                fit: BoxFit.cover,
                               )
                               : Image.asset(
                                 "assets/book_default.png",
-                                height: 240,
+
+                                fit: BoxFit.cover,
                               ),
 
                           if (next != null)
                             Positioned(
-                              right: -120,
+                              right: -180,
                               child: InkWell(
                                 onTap: () => onChangeBook(currentBooks, true),
                                 child: getImageBook(currentBooks[next!]),
@@ -177,17 +183,27 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                     ),
 
                     Padding(
-                      padding: const EdgeInsets.all(24.0),
+                      padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 24.0),
                       child: Column(
                         spacing: 24,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          Text(
-                            currentBook.title,
-                            textAlign: TextAlign.center,
-                            style: AppFonts.subtitleFontBold,
+                          Column(
+                            spacing: 4,
+                            children: [
+                              Text(
+                                currentBook.title,
+                                textAlign: TextAlign.center,
+                                style: AppFonts.subtitleFontBold.copyWith(
+                                  fontSize: 20,
+                                ),
+                              ),
+                              Text(
+                                currentBook.author,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
                           ),
-                          Text(currentBook.author, textAlign: TextAlign.center),
                           Text("Sinópse", style: AppFonts.labelFont),
                           Text(
                             currentBook.summary,

@@ -73,10 +73,20 @@ abstract class AppTheme {
         textStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
       ),
     ),
+    outlinedButtonTheme: OutlinedButtonThemeData(
+      style: OutlinedButton.styleFrom(
+        side: BorderSide(color: AppColors.defaultColor),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
+        backgroundColor: AppColors.backgroundColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        foregroundColor: AppColors.defaultColor,
+        disabledBackgroundColor: AppColors.lineColor,
+      ),
+    ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         textStyle: AppFonts.labelFont,
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 32),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
         backgroundColor: AppColors.defaultColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         foregroundColor: AppColors.backgroundColor,

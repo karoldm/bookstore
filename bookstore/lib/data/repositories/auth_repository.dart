@@ -55,7 +55,7 @@ class AuthRepository implements AuthRepositoryInterface {
   @override
   Future<StoreModel> login(RequestAuthModel requestAuthModel) async {
     try {
-      final (store, tokens) = await authService.login(requestAuthModel.toMap());
+      final (store, tokens) = await authService.login(requestAuthModel);
 
       _saveUserSession(store, tokens);
 
@@ -79,7 +79,7 @@ class AuthRepository implements AuthRepositoryInterface {
   @override
   Future<StoreModel> register(RequestRegisterModel registerModel) async {
     try {
-      final (store, tokens) = await authService.register(registerModel.toMap());
+      final (store, tokens) = await authService.register(registerModel);
 
       _saveUserSession(store, tokens);
 

@@ -1,4 +1,5 @@
 import 'package:bookstore/data/exceptions/custom_exception.dart';
+import 'package:bookstore/data/models/request_store_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/store_model.dart';
@@ -20,19 +21,19 @@ class StoreService implements StoreServiceInterface {
   }
 
   @override
-  Future<void> updateStore(int id, Map<String, dynamic> storeModel) async {
+  Future<void> updateStore(int id, RequestStoreModel storeModel) async {
     try {
       final formData = FormData.fromMap({
-        'name': storeModel['name'],
-        'slogan': storeModel['slogan'],
+        'name': storeModel.name,
+        'slogan': storeModel.slogan,
       });
 
-      if (storeModel["banner"] != null) {
+      if (storeModel.banner != null) {
         formData.files.add(
           MapEntry(
             "banner",
             await MultipartFile.fromFile(
-              storeModel['banner'].path,
+              storeModel.banner!.path,
               filename: 'banner_${DateTime.now().millisecondsSinceEpoch}.jpg',
             ),
           ),

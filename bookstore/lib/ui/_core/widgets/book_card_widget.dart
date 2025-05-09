@@ -1,5 +1,4 @@
-import 'dart:convert';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/book_model.dart';
 import 'package:bookstore/ui/_core/theme/app_fonts.dart';
@@ -31,47 +30,40 @@ class BookCardWidget extends StatelessWidget {
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          spacing: 16,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             book.cover != null && book.cover!.isNotEmpty
-                ? Image.memory(
-                  base64Decode(book.cover!),
-                  width: 150,
-                  height: 215,
+                ? CachedNetworkImage(
+                  imageUrl: book.cover!,
+                  fit: BoxFit.cover,
+                  height: 228,
                 )
                 : Image.asset(
                   "assets/book_default.png",
-                  width: 150,
-                  height: 215,
+                  height: 228,
+                  fit: BoxFit.cover,
                 ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 8,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      book.title,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppFonts.labelFont,
-                    ),
-                    Text(
-                      book.author,
-                      overflow: TextOverflow.ellipsis,
-                      style: AppFonts.bodySmallMediumFont,
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Icon(Icons.star_outline),
-                    Text(book.rating.toStringAsFixed(1).replaceAll('.', ',')),
-                  ],
-                ),
-              ],
+
+            Text(
+              book.title,
+              overflow: TextOverflow.ellipsis,
+              style: AppFonts.labelFont,
+            ),
+            Text(
+              book.author,
+              overflow: TextOverflow.ellipsis,
+              style: AppFonts.bodySmallMediumFont,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Row(
+                spacing: 4,
+                children: [
+                  Icon(Icons.star_outline),
+                  Text(book.rating.toStringAsFixed(1).replaceAll('.', ',')),
+                ],
+              ),
             ),
           ],
         ),

@@ -1,6 +1,5 @@
-import 'dart:convert';
-
 import 'package:bookstore/data/exceptions/custom_exception.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/api/api.dart';
 import 'package:bookstore/data/models/book_model.dart';
@@ -38,9 +37,33 @@ class BooksService implements BooksServiceInterface {
   @override
   Future<BookModel> createBook(int storeId, RequestBookModel book) async {
     try {
+      final formData = FormData.fromMap({
+        'title': book.title,
+        'author': book.author,
+        'releasedAt': book.releasedAt,
+        'summary': book.summary,
+        'available': book.available,
+        'rating': book.rating,
+      });
+
+      if (book.cover != null) {
+        final fileData = await book.cover!.readAsBytes();
+
+        formData.files.add(
+          MapEntry(
+            "cover",
+            MultipartFile.fromBytes(
+              fileData,
+              filename: 'cover_${DateTime.now().millisecondsSinceEpoch}.jpg',
+            ),
+          ),
+        );
+      }
+
       final response = await apiClient.api.post(
         '/v1/store/$storeId/book',
-        data: jsonEncode(book.toMap()),
+        options: Options(contentType: 'multipart/form-data'),
+        data: formData,
       );
       return BookModel.fromMap(response.data);
     } catch (e) {
@@ -66,9 +89,31 @@ class BooksService implements BooksServiceInterface {
     RequestBookModel book,
   ) async {
     try {
+      final formData = FormData.fromMap({
+        'title': book.title,
+        'author': book.author,
+        'releasedAt': book.releasedAt,
+        'summary': book.summary,
+        'available': book.available,
+        'rating': book.rating,
+      });
+
+      if (book.cover != null) {
+        formData.files.add(
+          MapEntry(
+            "cover",
+            await MultipartFile.fromFile(
+              book.cover!.path,
+              filename: 'cover_${DateTime.now().millisecondsSinceEpoch}.jpg',
+            ),
+          ),
+        );
+      }
+
       final response = await apiClient.api.put(
         '/v1/store/$storeId/book/$bookId',
-        data: jsonEncode(book.toMap()),
+        options: Options(contentType: 'multipart/form-data'),
+        data: formData,
       );
 
       return BookModel.fromMap(response.data);

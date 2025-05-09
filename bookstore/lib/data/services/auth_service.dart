@@ -1,4 +1,6 @@
 import 'package:bookstore/data/exceptions/custom_exception.dart';
+import 'package:bookstore/data/models/request_auth_model.dart';
+import 'package:bookstore/data/models/request_register_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/store_model.dart';
@@ -11,9 +13,12 @@ class AuthService implements AuthServiceInterface {
   final Api apiClient = Api();
 
   @override
-  Future<(StoreModel, TokensModel)> login(Map<String, dynamic> data) async {
+  Future<(StoreModel, TokensModel)> login(RequestAuthModel data) async {
     try {
-      final response = await apiClient.api.post('/v1/auth/login', data: data);
+      final response = await apiClient.api.post(
+        '/v1/auth/login',
+        data: data.toMap(),
+      );
       StoreModel store = StoreModel.fromMap(response.data['store']);
       store.user = UserModel.fromMap(response.data['user']);
       return (
@@ -31,23 +36,23 @@ class AuthService implements AuthServiceInterface {
 
   @override
   Future<(StoreModel, TokensModel)> register(
-    Map<String, dynamic> storeModel,
+    RequestRegisterModel storeModel,
   ) async {
     try {
       final formData = FormData.fromMap({
-        'name': storeModel['name'],
-        'slogan': storeModel['slogan'],
-        'username': storeModel['username'],
-        'adminName': storeModel['adminName'],
-        'password': storeModel['password'],
+        'name': storeModel.name,
+        'password': storeModel.password,
+        'username': storeModel.username,
+        'slogan': storeModel.slogan,
+        'adminName': storeModel.adminName,
       });
 
-      if (storeModel["banner"] != null) {
+      if (storeModel.banner != null) {
         formData.files.add(
           MapEntry(
             "banner",
             await MultipartFile.fromFile(
-              storeModel['banner'].path,
+              storeModel.banner!.path,
               filename: 'banner_${DateTime.now().millisecondsSinceEpoch}.jpg',
             ),
           ),

@@ -20,7 +20,6 @@ import 'package:bookstore/ui/books/bloc/books_events.dart';
 import 'package:bookstore/ui/books/bloc/books_states.dart';
 import 'package:bookstore/ui/books/widgets/select_card_widget.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class BookFormScreen extends StatefulWidget {
   final int storeId;
@@ -61,6 +60,25 @@ class _BookFormScreenState extends State<BookFormScreen> {
     }
   }
 
+  Future<void> _selectDate() async {
+    DateTime now = DateTime.now();
+    final DateTime? pickedDate = await showDatePicker(
+      firstDate: DateTime(0),
+      context: context,
+      initialDate: now,
+      lastDate: now,
+    );
+
+    if (pickedDate != null) {
+      final month = pickedDate.month;
+      final day = pickedDate.day;
+      setState(() {
+        _releasedAtController.text =
+            "${pickedDate.year}-${month < 10 ? '0$month' : month}-${day < 10 ? '0$day' : day}";
+      });
+    }
+  }
+
   Future<XFile?> _captureCoverImage() async {
     try {
       await WidgetsBinding.instance.endOfFrame;
@@ -71,10 +89,10 @@ class _BookFormScreenState extends State<BookFormScreen> {
 
       if (boundary == null) return null;
 
-      final desiredWidth = 1800;
-      final pixelRatio = desiredWidth / boundary.size.width;
-
-      final image = await boundary.toImage(pixelRatio: pixelRatio);
+      final image = await boundary.toImage(
+        pixelRatio:
+            MediaQuery.of(_boundaryKey.currentContext!).devicePixelRatio,
+      );
 
       final byteData = await image.toByteData(format: ImageByteFormat.png);
 
@@ -108,6 +126,10 @@ class _BookFormScreenState extends State<BookFormScreen> {
   }
 
   void _onSubmit() async {
+    if (_releasedAtController.text.isEmpty) {
+      showCustomDialog(context, "Insira uma data de publicação válida.");
+      return;
+    }
     final RequestBookModel bookModel = RequestBookModel.empty();
 
     bookModel.title = _titleController.text;
@@ -119,9 +141,8 @@ class _BookFormScreenState extends State<BookFormScreen> {
 
     bookModel.cover =
         (widget.initialBook != null
-                ? (_editCover ? imageBytes : widget.initialBook!.cover)
-                : imageBytes)
-            as XFile?;
+            ? (_editCover ? imageBytes : null)
+            : imageBytes);
 
     if (widget.initialBook != null) {
       _onUpdate(bookModel);
@@ -135,7 +156,10 @@ class _BookFormScreenState extends State<BookFormScreen> {
     return BlocConsumer<BooksBloc, BooksStates>(
       listener: (context, state) {
         if (state is BookCreateErrorState) {
-          showCustomDialog(context, "Erro ao cadastrar livro");
+          showCustomDialog(
+            context,
+            "Erro ao cadastrar livro: ${state.message}",
+          );
         } else if (state is BookCreateSuccessState) {
           showCustomDialog(context, "Livro cadastrado com sucesso!");
 
@@ -163,8 +187,8 @@ class _BookFormScreenState extends State<BookFormScreen> {
                               child: SelectCardWidget(
                                 isSelected: _index == 0,
                                 title: 'Dados do livro',
-                                onTap: () async {
-                                  await _captureCoverImage().then((value) {
+                                onTap: () {
+                                  _captureCoverImage().then((value) {
                                     imageBytes = value;
                                   });
                                   setState(() => _index = 0);
@@ -207,15 +231,15 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                       hint: "Sinópse",
                                       maxLines: 3,
                                     ),
-                                    TextFieldWidget(
-                                      controller: _releasedAtController,
-                                      digitsOnly: true,
-                                      maskFormatter: MaskTextInputFormatter(
-                                        mask: '##/##/####',
-                                        filter: {"#": RegExp(r'[0-9]')},
-                                        type: MaskAutoCompletionType.lazy,
+                                    OutlinedButton(
+                                      onPressed: () async {
+                                        await _selectDate();
+                                      },
+                                      child: Text(
+                                        _releasedAtController.text.isEmpty
+                                            ? "Data de publicação"
+                                            : _releasedAtController.text,
                                       ),
-                                      hint: "Data de publicação",
                                     ),
                                     Row(
                                       mainAxisAlignment:
@@ -297,7 +321,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                               "assets/book_default.png",
                                               fit: BoxFit.cover,
                                             ),
-                                        ElevatedButton(
+                                        OutlinedButton(
                                           onPressed: () {
                                             setState(() {
                                               _editCover = true;
@@ -363,7 +387,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                           ],
                                         ),
                                         if (widget.initialBook != null)
-                                          ElevatedButton(
+                                          OutlinedButton(
                                             onPressed: () {
                                               setState(() {
                                                 _editCover = false;

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:bookstore/ui/_core/theme/app_colors.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class TextFieldWidget extends StatelessWidget {
   final String hint;
@@ -12,7 +11,6 @@ class TextFieldWidget extends StatelessWidget {
   final int? maxLines;
   final TextEditingController? controller;
   final Function(String)? validator;
-  final MaskTextInputFormatter? maskFormatter;
 
   const TextFieldWidget({
     super.key,
@@ -24,7 +22,6 @@ class TextFieldWidget extends StatelessWidget {
     this.maxLines,
     this.controller,
     this.validator,
-    this.maskFormatter,
   });
 
   @override
@@ -34,7 +31,6 @@ class TextFieldWidget extends StatelessWidget {
       enableSuggestions: true,
       autocorrect: true,
       maxLines: maxLines,
-      inputFormatters: [if (maskFormatter != null) maskFormatter!],
       keyboardType:
           digitsOnly == true ? TextInputType.number : TextInputType.text,
       textInputAction: TextInputAction.next,

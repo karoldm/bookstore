@@ -1,0 +1,28 @@
+name: Build flutter web app
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Checkout the repo
+      - uses: actions/checkout@v4
+
+      # 2. Set up Flutter in the bookstore subdirectory
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "stable"
+          working-directory: bookstore
+
+      # 3. Install dependencies and build
+      - name: Build Flutter web
+        run: flutter build web --release
+        working-directory: bookstore
+
+      # 4. Move built files to root deploy folder
+      - name: Prepare deployment
+        run: |
+          mkdir -p deploy
+          cp -r bookstore/build/web/* deploy/

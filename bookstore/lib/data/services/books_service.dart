@@ -120,4 +120,23 @@ class BooksService implements BooksServiceInterface {
       throw CustomException(e.toString());
     }
   }
+
+  @override
+  Future<BookModel> updateBookavailable(
+    int storeId,
+    int bookId,
+    bool available,
+  ) async {
+    try {
+      final response = await apiClient.api.put(
+        '/v1/store/$storeId/book/$bookId/available',
+        data: {'available': available},
+      );
+
+      return BookModel.fromMap(response.data);
+    } catch (e) {
+      debugPrint('Failed to update book in service: $e');
+      throw CustomException(e.toString());
+    }
+  }
 }

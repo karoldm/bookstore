@@ -13,4 +13,9 @@ abstract class BooksRepositoryInterface {
   Future<void> deleteBook(int storeId, int bookId);
   Future<List<int>> fetchSavedBooksId();
   Future<void> saveBooks(List<int> bookIds);
+  Future<BookModel> updateBookavailable(
+    int storeId,
+    int bookId,
+    bool available,
+  );
 }

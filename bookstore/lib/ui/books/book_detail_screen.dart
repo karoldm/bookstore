@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/data/models/book_model.dart';
-import 'package:bookstore/data/models/request_book_model.dart';
 import 'package:bookstore/enums/role_enum.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_bloc.dart';
 import 'package:bookstore/ui/_core/blocs/store/store_states.dart';
@@ -244,20 +243,11 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                                       setState(() {
                                         currentBook.available = value;
                                       });
-                                      RequestBookModel requestBook =
-                                          RequestBookModel(
-                                            author: currentBook.author,
-                                            releasedAt: currentBook.releasedAt,
-                                            summary: currentBook.summary,
-                                            rating: currentBook.rating,
-                                            available: value,
-                                            title: currentBook.title,
-                                          );
                                       BlocProvider.of<BooksBloc>(context).add(
-                                        UpdateBookEvent(
+                                        UpdateBookAvailableEvent(
                                           storeId: storeState.store.id,
                                           bookId: currentBook.id,
-                                          book: requestBook,
+                                          available: value,
                                         ),
                                       );
                                     }

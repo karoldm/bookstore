@@ -49,3 +49,15 @@ class UpdateSavedBooksEvent extends BooksEvents {
 
   UpdateSavedBooksEvent({required this.bookId});
 }
+
+class UpdateBookAvailableEvent extends BooksEvents {
+  final int storeId;
+  final int bookId;
+  final bool available;
+
+  UpdateBookAvailableEvent({
+    required this.storeId,
+    required this.bookId,
+    required this.available,
+  });
+}

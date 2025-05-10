@@ -13,7 +13,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
   Map<String, dynamic> filters = {};
   final int size = 5;
 
-  final BooksRepositoryInterface booksService =
+  final BooksRepositoryInterface bookRepository =
       GetIt.I<BooksRepositoryInterface>();
 
   BooksBloc() : super(BooksInitialState()) {
@@ -22,6 +22,37 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
     on<AddBookEvent>(_onAddBook);
     on<DeleteBookEvent>(_onDeleteBook);
     on<UpdateSavedBooksEvent>(_onUpdateSavedBooks);
+    on<UpdateBookAvailableEvent>(_onUpdateBookAvailable);
+  }
+
+  Future<void> _onUpdateBookAvailable(
+    UpdateBookAvailableEvent event,
+    Emitter<BooksStates> emit,
+  ) async {
+    try {
+      emit(BooksLoadingState(books: books));
+
+      BookModel updatedBook = await bookRepository.updateBookavailable(
+        event.storeId,
+        event.bookId,
+        event.available,
+      );
+
+      int index = books.indexWhere((book) => book.id == event.bookId);
+
+      if (index != -1) {
+        books[index] = updatedBook;
+      } else {
+        emit(BookUpdateErrorState(books: books, message: 'Book not found'));
+        return;
+      }
+
+      emit(BookUpdateSuccessState(books: books));
+    } catch (e) {
+      emit(BookUpdateErrorState(books: books, message: e.toString()));
+    } finally {
+      emit(BooksLoadedState(books: books));
+    }
   }
 
   Future<void> _onFetchBooks(
@@ -36,7 +67,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
       page = event.page ?? page;
       filters = event.filters ?? filters;
 
-      List<BookModel> fetchBooks = await booksService.fetchBooks(
+      List<BookModel> fetchBooks = await bookRepository.fetchBooks(
         event.storeId,
         page: page,
         filters: filters,
@@ -75,7 +106,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
     try {
       emit(BooksLoadingState(books: books));
 
-      BookModel updatedBook = await booksService.updateBook(
+      BookModel updatedBook = await bookRepository.updateBook(
         event.storeId,
         event.bookId,
         event.book,
@@ -102,8 +133,8 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
     try {
       emit(BooksLoadingState(books: books));
 
-      await booksService.createBook(event.storeId, event.book);
-      final newBooks = await booksService.fetchBooks(event.storeId, page: 0);
+      await bookRepository.createBook(event.storeId, event.book);
+      final newBooks = await bookRepository.fetchBooks(event.storeId, page: 0);
       books.clear();
       books.addAll(newBooks);
       emit(BookCreateSuccessState(books: books));
@@ -121,7 +152,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
     try {
       emit(BooksLoadingState(books: books));
 
-      await booksService.deleteBook(event.storeId, event.bookId);
+      await bookRepository.deleteBook(event.storeId, event.bookId);
 
       books.removeWhere((book) => book.id == event.bookId);
 
@@ -135,7 +166,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
 
   Future<void> _onLoadSavedBooks(Emitter<BooksStates> emit) async {
     try {
-      List<int> savedBooksId = await booksService.fetchSavedBooksId();
+      List<int> savedBooksId = await bookRepository.fetchSavedBooksId();
 
       for (var book in books) {
         if (savedBooksId.contains(book.id)) {
@@ -154,7 +185,7 @@ class BooksBloc extends Bloc<BooksEvents, BooksStates> {
     try {
       emit(SavedBooksLoadingState(books: books));
 
-      await booksService.saveBooks(
+      await bookRepository.saveBooks(
         books.where((b) => b.isSaved).map((b) => b.id).toList(),
       );
     } catch (e) {

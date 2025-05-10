@@ -97,4 +97,23 @@ class BooksRepository implements BooksRepositoryInterface {
       rethrow;
     }
   }
+
+  @override
+  Future<BookModel> updateBookavailable(
+    int storeId,
+    int bookId,
+    bool available,
+  ) async {
+    try {
+      final updatedBook = await booksService.updateBookavailable(
+        storeId,
+        bookId,
+        available,
+      );
+      return updatedBook;
+    } catch (e) {
+      debugPrint('Failed to update book on repository: $e');
+      rethrow;
+    }
+  }
 }

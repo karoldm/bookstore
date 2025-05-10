@@ -1,3 +1,3 @@
 const String userSessionKey = "USER_SESSION";
-const String apiUrl = 'http://192.168.100.97:9000';
+const String apiUrl = String.fromEnvironment('BASE_URL');
 const String savedBooksKey = "SAVED_BOOKS";

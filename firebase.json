@@ -1,0 +1,37 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "bookstore-636f3",
+          "appId": "1:650750771532:android:8141c7eed724f8f44c4fe9",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "bookstore-636f3",
+          "configurations": {
+            "android": "1:650750771532:android:8141c7eed724f8f44c4fe9",
+            "ios": "1:650750771532:ios:b72d77e68164e4e74c4fe9",
+            "web": "1:650750771532:web:cdc45e831a7b5f174c4fe9"
+          }
+        }
+      }
+    }
+  },
+  "hosting": {
+    "public": "/build/web",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "**",
+        "destination": "/index.html"
+      }
+    ]
+  }
+}

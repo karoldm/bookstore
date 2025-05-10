@@ -23,6 +23,14 @@ jobs:
           mkdir -p deploy
           cp -r build/web/* deploy/
 
-      # Optional verification
       - name: Verify files
         run: ls -R deploy/
+
+      - name: Deploy to Render via API
+        run: |
+          curl -X POST "${{secretc.RENDER_API_URL}}" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          -H "Accept: application/json"
+        env:
+          RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
+          RENDER_API_URL: ${{ secrets.RENDER_API_URL }}

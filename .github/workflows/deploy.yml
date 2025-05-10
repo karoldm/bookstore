@@ -28,7 +28,6 @@ jobs:
 
       - name: Trigger Render Deployment
         run: |
-          echo "API URL: $RENDER_API_URL"
           curl -v -X POST "$RENDER_API_URL" \
           -H "Authorization: Bearer $RENDER_API_KEY" \
           -H "Content-Type: application/json" \

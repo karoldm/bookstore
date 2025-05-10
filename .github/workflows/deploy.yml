@@ -28,7 +28,7 @@ jobs:
 
       - name: Deploy to Render via API
         run: |
-          curl -X POST "${{secretc.RENDER_API_URL}}" \
+          curl -X POST "${{secrets.RENDER_API_URL}}" \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
           -H "Accept: application/json"
         env:

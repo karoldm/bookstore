@@ -73,7 +73,7 @@ class ProfileScreen extends StatelessWidget {
                             label: Text("Editar loja"),
                             icon: Icon(Icons.edit_outlined),
                           ),
-                        TextButton(
+                        OutlinedButton(
                           onPressed: () {
                             context.read<AuthBloc>().add(LogoutEvent());
                           },

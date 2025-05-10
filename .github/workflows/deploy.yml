@@ -6,18 +6,18 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Step 1: Setup Flutter (
+      # Step 1: Setup Flutter
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.29.2"
 
-      # Step 2: Navigate to subdir and build
+      # Step 2: build
       - name: Build Flutter web
         run: |
           flutter pub get
           flutter build web --release
 
-      # Step 3: Copy files to deploy dir (from root perspective)
+      # Step 3: Copy files to deploy dir
       - name: Prepare Deploy
         run: |
           mkdir -p deploy
@@ -26,11 +26,12 @@ jobs:
       - name: Verify files
         run: ls -R deploy/
 
-      - name: Deploy to Render via API
+      - name: Trigger Render Deployment
         run: |
-          curl -X POST "${{secrets.RENDER_API_URL}}" \
+          curl -X POST "${{ secrets.RENDER_API_URL }}" \
           -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
-          -H "Accept: application/json"
+          -H "Content-Type: application/json" \
+          -d '{}'
         env:
           RENDER_API_KEY: ${{ secrets.RENDER_API_KEY }}
           RENDER_API_URL: ${{ secrets.RENDER_API_URL }}

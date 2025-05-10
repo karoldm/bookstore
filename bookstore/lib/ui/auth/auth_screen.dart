@@ -23,7 +23,7 @@ class AuthScreen extends StatelessWidget {
         if (state is AuthenticatedState) {
           Navigator.pushReplacementNamed(context, "/home");
         } else if (state is AuthenticateErrorState) {
-          showCustomDialog(context, "Login falhou");
+          showCustomDialog(context, "Login falhou: ${state.message}");
         }
       },
       builder: (context, state) {

@@ -1,3 +1,4 @@
+import 'package:bookstore/enums/role_enum.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/main.dart';
@@ -29,11 +30,16 @@ class AuthWrapperWidget extends StatelessWidget {
 
           StoreBloc storeBloc = BlocProvider.of<StoreBloc>(context);
           BooksBloc booksBloc = BlocProvider.of<BooksBloc>(context);
-          EmployeesBloc employeesBloc = BlocProvider.of<EmployeesBloc>(context);
 
           storeBloc.add(LoadStoreEvent(store: store));
           booksBloc.add(FetchBooksEvent(storeId: store.id));
-          employeesBloc.add(FetchEmployeesEvent(storeId: store.id));
+
+          if (store.user.role == Role.admin) {
+            EmployeesBloc employeesBloc = BlocProvider.of<EmployeesBloc>(
+              context,
+            );
+            employeesBloc.add(FetchEmployeesEvent(storeId: store.id));
+          }
 
           navigatorKey.currentState?.pushNamedAndRemoveUntil(
             '/home',

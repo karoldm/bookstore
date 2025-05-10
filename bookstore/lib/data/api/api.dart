@@ -37,17 +37,11 @@ class Api {
           return handler.next(options);
         },
         onError: (error, handler) async {
-          if (error.response?.statusCode == 403 &&
-              !(error.requestOptions.method == 'POST' &&
-                  [
-                    "/v1/auth/login",
-                    "/v1/auth/register",
-                  ].contains(error.requestOptions.path))) {
-            if (error.requestOptions.path == "/v1/auth/refresh") {
-              GetIt.I<AuthBloc>().add(LogoutEvent());
-              return;
-            }
-
+          if (error.response?.statusCode == 401 &&
+              error.response?.data['message']?.toLowerCase().contains(
+                    "token expired",
+                  ) ==
+                  true) {
             final userSession = await storage.readMap(userSessionKey);
 
             if (userSession != null) {
@@ -74,6 +68,7 @@ class Api {
 
             GetIt.I<AuthBloc>().add(LogoutEvent());
           }
+
           final customError = error.copyWith(
             message: error.response?.data['detail'] ?? 'An error occurred',
           );
@@ -87,7 +82,7 @@ class Api {
     try {
       final response = await _dio.post(
         '/v1/auth/refresh',
-        data: {'refreshToken': refreshToken},
+        data: {'refresh_token': refreshToken},
       );
 
       return TokensModel.fromMap(response.data);

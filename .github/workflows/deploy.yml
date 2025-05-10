@@ -6,15 +6,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # Step 1: Setup Flutter (no working-directory here!)
+      # Step 1: Setup Flutter (
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: "stable" # Explicit version recommended
+          flutter-version: "3.29.2"
 
       # Step 2: Navigate to subdir and build
       - name: Build Flutter web
         run: |
-          cd bookstore
           flutter pub get
           flutter build web --release
 
@@ -22,7 +21,7 @@ jobs:
       - name: Prepare Deploy
         run: |
           mkdir -p deploy
-          cp -r bookstore/build/web/* deploy/
+          cp -r build/web/* deploy/
 
       # Optional verification
       - name: Verify files

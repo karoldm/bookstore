@@ -1,23 +1,23 @@
 name: Deploy Flutter Web
-on: push
+on:
+  push:
+    branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      # Step 1: Setup Flutter
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: "3.29.2"
 
-      # Step 2: build
       - name: Build Flutter web
         run: |
           flutter pub get
           flutter build web --release
 
-      # Step 3: Copy files to deploy dir
       - name: Prepare Deploy
         run: |
           mkdir -p deploy
@@ -28,8 +28,9 @@ jobs:
 
       - name: Trigger Render Deployment
         run: |
-          curl -X POST "${{ secrets.RENDER_API_URL }}" \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}" \
+          echo "API URL: $RENDER_API_URL"
+          curl -v -X POST "$RENDER_API_URL" \
+          -H "Authorization: Bearer $RENDER_API_KEY" \
           -H "Content-Type: application/json" \
           -d '{}'
         env:

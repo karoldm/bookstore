@@ -1,9 +1,10 @@
 import 'dart:typed_data';
 import 'dart:ui';
 
+import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
+import 'package:bookstore/ui/_core/widgets/error_image_placeholder.dart';
 import 'package:bookstore/ui/books/widgets/color_picker_widget.dart';
 import 'package:bookstore/utils/show_dialog.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -312,10 +313,10 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                       ? ([
                                         (widget.initialBook!.cover != null &&
                                                 widget.initialBook!.cover != "")
-                                            ? CachedNetworkImage(
+                                            ? CustomCachedNetworkImage(
                                               imageUrl:
                                                   widget.initialBook!.cover!,
-                                              fit: BoxFit.cover,
+                                              height: 228,
                                             )
                                             : Image.asset(
                                               "assets/book_default.png",
@@ -333,31 +334,47 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                       : ([
                                         RepaintBoundary(
                                           key: _boundaryKey,
-                                          child: Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              ColorFiltered(
-                                                colorFilter: ColorFilter.mode(
-                                                  _coverColor,
-                                                  BlendMode.srcIn,
-                                                ),
-                                                child: Image.asset(
-                                                  'assets/book_default.png',
-                                                  width: 1200,
-                                                ),
-                                              ),
-                                              if (_coverImage != null)
-                                                Positioned(
-                                                  top: 20,
-                                                  left: 88,
-                                                  child: Image.memory(
-                                                    _coverImage!,
+                                          child: SizedBox(
+                                            height: 350,
+                                            width: 250,
+                                            child: Stack(
+                                              alignment: Alignment.topCenter,
+                                              children: [
+                                                ColorFiltered(
+                                                  colorFilter: ColorFilter.mode(
+                                                    _coverColor,
+                                                    BlendMode.srcIn,
+                                                  ),
+                                                  child: Image.asset(
+                                                    'assets/book_default.png',
                                                     fit: BoxFit.cover,
-                                                    height: 200,
-                                                    width: 168,
+                                                    height: 360,
+                                                    width: 320,
                                                   ),
                                                 ),
-                                            ],
+                                                if (_coverImage != null)
+                                                  Column(
+                                                    children: [
+                                                      const SizedBox(
+                                                        height: 20,
+                                                      ),
+                                                      Image.memory(
+                                                        _coverImage!,
+                                                        fit: BoxFit.cover,
+                                                        height: 240,
+                                                        width: 200,
+                                                        errorBuilder:
+                                                            (
+                                                              context,
+                                                              error,
+                                                              stack,
+                                                            ) =>
+                                                                const ErrorImagePlaceholder(),
+                                                      ),
+                                                    ],
+                                                  ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                         ColorPickerWidget(

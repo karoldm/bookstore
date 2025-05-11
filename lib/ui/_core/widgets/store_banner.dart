@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
 import 'package:flutter/material.dart';
 
 class StoreBanner extends StatelessWidget {
@@ -13,7 +13,7 @@ class StoreBanner extends StatelessWidget {
       child: SizedBox(
         height: 124,
         width: double.infinity,
-        child: CachedNetworkImage(imageUrl: imageUrl, fit: BoxFit.cover),
+        child: CustomCachedNetworkImage(imageUrl: imageUrl),
       ),
     );
   }

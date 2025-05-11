@@ -1,4 +1,4 @@
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/book_model.dart';
 import 'package:bookstore/ui/_core/theme/app_fonts.dart';
@@ -34,11 +34,7 @@ class BookCardWidget extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             book.cover != null && book.cover!.isNotEmpty
-                ? CachedNetworkImage(
-                  imageUrl: book.cover!,
-                  fit: BoxFit.cover,
-                  height: 228,
-                )
+                ? CustomCachedNetworkImage(imageUrl: book.cover!, height: 228)
                 : Image.asset(
                   "assets/book_default.png",
                   height: 228,

@@ -1,5 +1,5 @@
+import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
 import 'package:bookstore/utils/show_dialog.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/data/models/book_model.dart';
@@ -76,7 +76,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
   Widget getImageBook(BookModel? book) {
     return book?.cover != null && book?.cover != ""
-        ? CachedNetworkImage(imageUrl: book!.cover!, height: 240)
+        ? CustomCachedNetworkImage(imageUrl: book!.cover!, height: 240)
         : Image.asset("assets/book_default.png", height: 240);
   }
 
@@ -159,9 +159,10 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                             ),
 
                           (currentBook.cover != null && currentBook.cover != "")
-                              ? CachedNetworkImage(
+                              ? CustomCachedNetworkImage(
                                 imageUrl: currentBook.cover!,
-                                fit: BoxFit.cover,
+
+                                height: 228,
                               )
                               : Image.asset(
                                 "assets/book_default.png",

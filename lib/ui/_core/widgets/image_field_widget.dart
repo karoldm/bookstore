@@ -1,6 +1,7 @@
-import 'dart:io';
+import 'dart:typed_data';
 import 'package:bookstore/ui/_core/theme/app_fonts.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
+import 'package:bookstore/ui/_core/widgets/loading_image_placeholder.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:bookstore/ui/_core/theme/app_colors.dart';
@@ -26,7 +27,7 @@ class ImageFieldWidget extends StatefulWidget {
 class _ImageFieldWidgetState extends State<ImageFieldWidget> {
   final ImagePicker picker = ImagePicker();
   XFile? image;
-  File? preview;
+  XFile? preview;
 
   bool _error = false;
 
@@ -69,7 +70,7 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
                           setState(() {
                             _error = false;
                             image = pickedImage;
-                            preview = File(pickedImage.path);
+                            preview = XFile(pickedImage.path);
                           });
                         }
                       }
@@ -97,20 +98,28 @@ class _ImageFieldWidgetState extends State<ImageFieldWidget> {
               borderRadius: BorderRadius.circular(8),
               child:
                   preview != null
-                      ? Image(
-                        fit: BoxFit.cover,
-                        image: FileImage(preview!) as ImageProvider,
-                        width: 54,
-                        height: 54,
+                      ? FutureBuilder<Uint8List>(
+                        future: preview!.readAsBytes(),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            return Image.memory(
+                              snapshot.data!,
+                              fit: BoxFit.cover,
+                              width: 54,
+                              height: 54,
+                            );
+                          }
+
+                          return LoadingImagePlaceholder();
+                        },
                       )
                       : (widget.initialImageUrl != null
-                          ? CachedNetworkImage(
+                          ? CustomCachedNetworkImage(
                             imageUrl: widget.initialImageUrl!,
-                            fit: BoxFit.cover,
                             width: 54,
                             height: 54,
                           )
-                          : SizedBox.shrink()),
+                          : const SizedBox.shrink()),
             ),
             if (widget.canDelete == true)
               InkWell(

@@ -66,9 +66,9 @@ API de Gerenciamento de livrarias! Esta API foi desenvolvida utilizando Spring B
    
 2. **Verificar instalação do flutter**:
 
-```bash
-   flutter doctor
-   ```
+  ```bash
+     flutter doctor
+     ```
 
 3. **Instale as dependências**:
 
@@ -77,10 +77,12 @@ API de Gerenciamento de livrarias! Esta API foi desenvolvida utilizando Spring B
    ```
 
 4. **Inicie o projeto**:
+   
    ```bash
    flutter run
    ```
    - O frontend estará disponível em http://localhost:3000 (se estiver rodando na web)
+
 
 ## Deploy
 

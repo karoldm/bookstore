@@ -18,7 +18,7 @@ jobs:
 
       - run: |
           flutter pub get
-          flutter build web --dart-define=API_URL=https://bookstore-api-0pfv.onrender.com
+          flutter build web
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

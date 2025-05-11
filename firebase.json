@@ -29,10 +29,6 @@
     ],
     "rewrites": [
       {
-        "source": "/v1/**",
-        "destination": "https://bookstore-api-0pfv.onrender.com/v1/**"
-      },
-      {
         "source": "**",
         "destination": "/index.html"
       }

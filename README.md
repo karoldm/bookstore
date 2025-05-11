@@ -1,8 +1,8 @@
-# [Bookstore](https://console.firebase.google.com/u/0/project/bookstore-636f3/hosting/sites/bookstore-636f3)
+# [Bookstore](https://bookstore-636f3.web.app/)
 
 API de Gerenciamento de livrarias! Esta API foi desenvolvida utilizando Spring Boot e oferece funcionalidades para gerenciar os livros da loja e adicionar funcionários que podem fazer login na loja para ajudar no controle de estoque.
 
-- Apesar do projeto ser mobile, você consegue acessar a versão web pela url [bookstore web](https://console.firebase.google.com/u/0/project/bookstore-636f3/hosting/sites/bookstore-636f3)
+- Apesar do projeto ser mobile, você consegue acessar a versão web pela url [bookstore web](https://bookstore-636f3.web.app/)
 
 ## Funcionalidades
 

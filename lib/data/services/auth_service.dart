@@ -48,11 +48,14 @@ class AuthService implements AuthServiceInterface {
       });
 
       if (storeModel.banner != null) {
+        final file = storeModel.banner!;
+        final bytes = await file.readAsBytes();
+
         formData.files.add(
           MapEntry(
             "banner",
-            await MultipartFile.fromFile(
-              storeModel.banner!.path,
+            MultipartFile.fromBytes(
+              bytes,
               filename: 'banner_${DateTime.now().millisecondsSinceEpoch}.jpg',
             ),
           ),

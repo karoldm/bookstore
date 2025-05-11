@@ -89,7 +89,9 @@ abstract class AppTheme {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        textStyle: AppFonts.labelFont,
+        textStyle: AppFonts.labelFont.copyWith(
+          color: AppColors.backgroundColor,
+        ),
         padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 32),
         backgroundColor: AppColors.defaultColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),

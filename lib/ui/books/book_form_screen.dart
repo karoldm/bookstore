@@ -321,8 +321,6 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                             : Image.asset(
                                               "assets/book_default.png",
                                               fit: BoxFit.cover,
-                                              height: 240,
-                                              width: 200,
                                             ),
                                         OutlinedButton(
                                           onPressed: () {

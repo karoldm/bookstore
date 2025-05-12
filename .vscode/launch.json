@@ -14,7 +14,6 @@
                 "chrome",
                 "--web-port",
                 "3000",
-                "--dart-define=BASE_URL=http://localhost:9000"
             ],
             "flutterMode": "debug"
         }

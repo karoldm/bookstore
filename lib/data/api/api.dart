@@ -25,45 +25,50 @@ class Api {
     _dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          final userSession = await storage.readMap(userSessionKey);
-
-          if (userSession != null) {
-            final user = SessionModel.fromMap(userSession);
-
-            options.headers['Authorization'] =
-                'Bearer ${user.tokens.accessToken}';
+          if (options.path != '/v1/auth/refresh') {
+            final userSession = await storage.readMap(userSessionKey);
+            if (userSession != null) {
+              final user = SessionModel.fromMap(userSession);
+              options.headers['Authorization'] =
+                  'Bearer ${user.tokens.accessToken}';
+            }
           }
-
           return handler.next(options);
         },
         onError: (error, handler) async {
+          if (error.requestOptions.path == '/v1/auth/refresh') {
+            return handler.next(error);
+          }
+
           if (error.response?.statusCode == 401 &&
-              error.response?.data['message']?.toLowerCase().contains(
-                    "token expired",
+              error.response?.data?.toString().toLowerCase().contains(
+                    'the token has expired',
                   ) ==
                   true) {
-            final userSession = await storage.readMap(userSessionKey);
+            final retryCount = error.requestOptions.extra['retryCount'] ?? 0;
+            if (retryCount >= 1) {
+              GetIt.I<AuthBloc>().add(LogoutEvent());
+              return handler.next(error);
+            }
 
+            final userSession = await storage.readMap(userSessionKey);
             if (userSession != null) {
               final user = SessionModel.fromMap(userSession);
-
               final tokens = await _refreshToken(user.tokens.refreshToken);
 
               if (tokens != null) {
                 user.tokens = tokens;
-
-                await storage.writeMap(key: userSessionKey, value: userSession);
+                await storage.writeMap(
+                  key: userSessionKey,
+                  value: user.toMap(),
+                );
 
                 error.requestOptions.headers['Authorization'] =
                     'Bearer ${tokens.accessToken}';
+                error.requestOptions.extra['retryCount'] = retryCount + 1;
+
                 return handler.resolve(await _dio.fetch(error.requestOptions));
               }
-
-              GetIt.I<AuthBloc>().add(LogoutEvent());
-              final customError = error.copyWith(
-                message: error.response?.data['detail'] ?? 'An error occurred',
-              );
-              return handler.next(customError);
             }
 
             GetIt.I<AuthBloc>().add(LogoutEvent());
@@ -82,7 +87,7 @@ class Api {
     try {
       final response = await _dio.post(
         '/v1/auth/refresh',
-        data: {'refresh_token': refreshToken},
+        data: {'refreshToken': refreshToken},
       );
 
       return TokensModel.fromMap(response.data);

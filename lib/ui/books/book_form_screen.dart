@@ -228,6 +228,7 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                       hint: "Autor",
                                     ),
                                     TextFieldWidget(
+                                      maxLength: 255,
                                       controller: _summaryController,
                                       hint: "Sinópse",
                                       maxLines: 3,
@@ -316,11 +317,12 @@ class _BookFormScreenState extends State<BookFormScreen> {
                                             ? CustomCachedNetworkImage(
                                               imageUrl:
                                                   widget.initialBook!.cover!,
-                                              height: 228,
                                             )
                                             : Image.asset(
                                               "assets/book_default.png",
                                               fit: BoxFit.cover,
+                                              height: 240,
+                                              width: 200,
                                             ),
                                         OutlinedButton(
                                           onPressed: () {

@@ -151,7 +151,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                         children: [
                           if (previous != null)
                             Positioned(
-                              left: -180,
+                              left: -130,
                               child: InkWell(
                                 onTap: () => onChangeBook(currentBooks, false),
                                 child: getImageBook(currentBooks[previous!]),
@@ -161,8 +161,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
                           (currentBook.cover != null && currentBook.cover != "")
                               ? CustomCachedNetworkImage(
                                 imageUrl: currentBook.cover!,
-
-                                height: 228,
+                                height: 300,
                               )
                               : Image.asset(
                                 "assets/book_default.png",
@@ -172,7 +171,7 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
 
                           if (next != null)
                             Positioned(
-                              right: -180,
+                              right: -130,
                               child: InkWell(
                                 onTap: () => onChangeBook(currentBooks, true),
                                 child: getImageBook(currentBooks[next!]),

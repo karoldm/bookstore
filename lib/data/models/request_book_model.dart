@@ -1,3 +1,4 @@
+import 'package:bookstore/data/models/book_model.dart';
 import 'package:image_picker/image_picker.dart';
 
 class RequestBookModel {
@@ -40,6 +41,17 @@ class RequestBookModel {
       available: false,
       rating: 1,
       cover: null,
+    );
+  }
+
+  factory RequestBookModel.fromBook(BookModel book) {
+    return RequestBookModel(
+      title: book.title,
+      author: book.author,
+      releasedAt: book.releasedAt,
+      summary: book.summary,
+      available: book.available,
+      rating: book.rating,
     );
   }
 

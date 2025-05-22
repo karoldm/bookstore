@@ -1,4 +1,5 @@
 import 'package:bookstore/data/models/book_model.dart';
+import 'package:bookstore/ui/books/book_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/ui/_core/theme/app_colors.dart';
@@ -34,8 +35,9 @@ class ListSavedBooksWidget extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final savedBooks =
-            List.from(books.where((book) => book.isSaved)).toList();
+        final List<BookModel> savedBooks =
+            List.from(books.where((book) => book.isSaved)).toList()
+                as List<BookModel>;
 
         return savedBooks.isEmpty
             ? Text(
@@ -56,7 +58,18 @@ class ListSavedBooksWidget extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return BookCardWidget(
                         book: savedBooks[index],
-                        onlySavedBooks: true,
+                        onTap: (book) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => BookDetailScreen(
+                                    booksList: savedBooks,
+                                    initialIndex: savedBooks.indexOf(book),
+                                  ),
+                            ),
+                          );
+                        },
                       );
                     },
                   ),
@@ -74,7 +87,20 @@ class ListSavedBooksWidget extends StatelessWidget {
                           .map(
                             (book) => BookCardWidget(
                               book: book,
-                              onlySavedBooks: true,
+                              onTap: (book) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => BookDetailScreen(
+                                          booksList: savedBooks,
+                                          initialIndex: savedBooks.indexOf(
+                                            book,
+                                          ),
+                                        ),
+                                  ),
+                                );
+                              },
                             ),
                           )
                           .toList(),

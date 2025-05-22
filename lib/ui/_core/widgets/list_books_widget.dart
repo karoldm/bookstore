@@ -1,3 +1,4 @@
+import 'package:bookstore/ui/books/book_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:bookstore/data/models/book_model.dart';
@@ -61,7 +62,32 @@ class ListBooksWidget extends StatelessWidget {
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 32,
                   children:
-                      books.map((book) => BookCardWidget(book: book)).toList(),
+                      books
+                          .map(
+                            (book) => BookCardWidget(
+                              book: book,
+                              onTap: (book) {
+                                List<BookModel> currentBooks =
+                                    state is FilteredBooksState
+                                        ? state.filteredBooks
+                                        : state.books;
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder:
+                                        (context) => BookDetailScreen(
+                                          booksList: currentBooks,
+                                          initialIndex: currentBooks.indexOf(
+                                            book,
+                                          ),
+                                        ),
+                                  ),
+                                );
+                              },
+                            ),
+                          )
+                          .toList(),
                 ),
                 if (context.read<BooksBloc>().hasMore)
                   TextButton(

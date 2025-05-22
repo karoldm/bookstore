@@ -1,3 +1,4 @@
+import 'package:bookstore/data/models/request_book_model.dart';
 import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
 import 'package:bookstore/utils/show_dialog.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,13 @@ import 'package:bookstore/ui/books/bloc/books_states.dart';
 import 'package:bookstore/ui/books/book_form_screen.dart';
 
 class BookDetailScreen extends StatefulWidget {
-  final BookModel book;
-  final bool? onlySavedBooks;
+  final List<BookModel> booksList;
+  final int initialIndex;
 
   const BookDetailScreen({
     super.key,
-    required this.book,
-    this.onlySavedBooks = false,
+    required this.booksList,
+    required this.initialIndex,
   });
 
   @override
@@ -31,73 +32,23 @@ class BookDetailScreen extends StatefulWidget {
 }
 
 class _BookDetailScreenState extends State<BookDetailScreen> {
-  late BookModel currentBook;
-  int? next;
-  int? previous;
+  late int _currentIndex;
+  late PageController _pageController;
 
   @override
   void initState() {
     super.initState();
-    currentBook = widget.book;
+    _currentIndex = widget.initialIndex;
+    _pageController = PageController(
+      initialPage: widget.initialIndex,
+      viewportFraction: 0.6,
+    );
   }
 
-  void onChangeBook(List<BookModel> books, bool isNext) {
-    if (widget.onlySavedBooks == true) {
-      books = books.where((book) => book.isSaved).toList();
-    }
-    if (isNext) {
-      onNext(books);
-    } else {
-      onPrevious(books);
-    }
-  }
-
-  void onNext(List<BookModel> books) {
-    next = books.indexOf(currentBook) + 1;
-    if (next != null && next! < books.length) {
-      setState(() {
-        currentBook = books[next!];
-      });
-    } else {
-      next = null;
-    }
-  }
-
-  void onPrevious(List<BookModel> books) {
-    previous = books.indexOf(currentBook) - 1;
-    if (previous != null && previous! >= 0) {
-      setState(() {
-        currentBook = books[previous!];
-      });
-    } else {
-      previous = null;
-    }
-  }
-
-  Widget getImageBook(BookModel? book) {
-    return book?.cover != null && book?.cover != ""
-        ? CustomCachedNetworkImage(imageUrl: book!.cover!, height: 240)
-        : Image.asset("assets/book_default.png", height: 240);
-  }
-
-  void initStates(List<BookModel> books) {
-    List<BookModel> initialBooks = [];
-
-    if (widget.onlySavedBooks == true) {
-      initialBooks = List.from(books.where((book) => book.isSaved).toList());
-    } else {
-      initialBooks = List.from(books);
-    }
-
-    next = initialBooks.indexOf(currentBook) + 1;
-    if (next != null && next! >= initialBooks.length) {
-      next = null;
-    }
-
-    previous = initialBooks.indexOf(currentBook) - 1;
-    if (previous != null && previous! < 0) {
-      previous = null;
-    }
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -107,12 +58,8 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
         return BlocConsumer<BooksBloc, BooksStates>(
           listener: (context, booksState) {
             if (booksState is BookUpdateSuccessState) {
-              setState(() {
-                currentBook = booksState.books.firstWhere(
-                  (book) => book.id == currentBook.id,
-                );
-              });
               showCustomDialog(context, "Livro atualizado com sucesso!");
+              Navigator.pop(context);
             } else if (booksState is BookDeleteSuccessState) {
               showCustomDialog(context, "Livro excluído com sucesso!");
               Navigator.pop(context);
@@ -128,214 +75,241 @@ class _BookDetailScreenState extends State<BookDetailScreen> {
               );
             }
           },
-
           builder: (context, booksState) {
-            final currentBooks =
-                booksState is FilteredBooksState
-                    ? booksState.filteredBooks
-                    : booksState.books;
-            initStates(currentBooks);
-
             return Scaffold(
               appBar: appBarWidget(context: context),
-              body: SingleChildScrollView(
-                child: Column(
-                  spacing: 24,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    SizedBox(
-                      height: 300,
-                      child: Stack(
-                        clipBehavior: Clip.antiAlias,
-                        alignment: Alignment.center,
-                        children: [
-                          if (previous != null)
-                            Positioned(
-                              left: -130,
-                              child: InkWell(
-                                onTap: () => onChangeBook(currentBooks, false),
-                                child: getImageBook(currentBooks[previous!]),
-                              ),
+              body: Column(
+                children: [
+                  SizedBox(
+                    height: 300,
+                    child: PageView.builder(
+                      controller: _pageController,
+                      itemCount: widget.booksList.length,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _currentIndex = index;
+                        });
+                      },
+                      itemBuilder: (context, index) {
+                        final book = widget.booksList[index];
+                        return AnimatedScale(
+                          duration: const Duration(milliseconds: 300),
+                          scale: index == _currentIndex ? 1.0 : 0.9,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8.0,
                             ),
-
-                          (currentBook.cover != null && currentBook.cover != "")
-                              ? CustomCachedNetworkImage(
-                                imageUrl: currentBook.cover!,
-                                height: 300,
-                              )
-                              : Image.asset(
-                                "assets/book_default.png",
-
-                                fit: BoxFit.cover,
-                              ),
-
-                          if (next != null)
-                            Positioned(
-                              right: -130,
-                              child: InkWell(
-                                onTap: () => onChangeBook(currentBooks, true),
-                                child: getImageBook(currentBooks[next!]),
-                              ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child:
+                                  book.cover != null && book.cover != ""
+                                      ? CustomCachedNetworkImage(
+                                        imageUrl: book.cover!,
+                                      )
+                                      : Image.asset(
+                                        "assets/book_default.png",
+                                        fit: BoxFit.cover,
+                                      ),
                             ),
-                        ],
-                      ),
+                          ),
+                        );
+                      },
                     ),
+                  ),
 
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 24.0),
-                      child: Column(
-                        spacing: 24,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Column(
-                            spacing: 4,
-                            children: [
-                              Text(
-                                currentBook.title,
-                                textAlign: TextAlign.center,
-                                style: AppFonts.subtitleFontBold.copyWith(
-                                  fontSize: 20,
-                                ),
-                              ),
-                              Text(
-                                currentBook.author,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                          Text("Sinópse", style: AppFonts.labelFont),
-                          Text(
-                            currentBook.summary,
-                            textAlign: TextAlign.justify,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text("Publicado em", style: AppFonts.labelFont),
-                              Text(currentBook.releasedAt),
-                            ],
-                          ),
-                          if (storeState is StoreLoadedState)
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Avaliação", style: AppFonts.labelFont),
-                                RatingBarWidget(
-                                  rating: currentBook.rating,
-                                  disabled: true,
-                                  onRatingChanged: (i) {
-                                    setState(() {
-                                      currentBook.rating = i;
-                                    });
-                                  },
-                                ),
-                              ],
+                  Expanded(
+                    child: _BookInfoContent(
+                      book: widget.booksList[_currentIndex],
+                      onEditStock: () {
+                        if (storeState is StoreLoadedState) {
+                          final book = widget.booksList[_currentIndex];
+                          final RequestBookModel requestBookModel =
+                              RequestBookModel.fromBook(book);
+                          requestBookModel.available =
+                              !requestBookModel.available;
+                          BlocProvider.of<BooksBloc>(context).add(
+                            UpdateBookEvent(
+                              storeId: storeState.store.id,
+                              bookId: book.id,
+                              book: requestBookModel,
                             ),
-                          if (storeState is StoreLoadedState)
-                            Row(
-                              spacing: 16,
-                              children: [
-                                Switch(
-                                  value: currentBook.available,
-                                  onChanged: (value) {
-                                    if (storeState.store.user.role !=
-                                        Role.admin) {
-                                      setState(() {
-                                        currentBook.available = value;
-                                      });
-                                      BlocProvider.of<BooksBloc>(context).add(
-                                        UpdateBookAvailableEvent(
-                                          storeId: storeState.store.id,
-                                          bookId: currentBook.id,
-                                          available: value,
-                                        ),
-                                      );
-                                    }
-                                  },
-                                ),
-                                Text(
-                                  !currentBook.available
-                                      ? "Sem Estoque"
-                                      : "Estoque",
-                                ),
-                              ],
-                            ),
-                          if (storeState is StoreLoadedState) ...[
-                            storeState.store.user.role == Role.admin
-                                ? ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder:
-                                            (context) => BookFormScreen(
-                                              storeId: storeState.store.id,
-                                              initialBook: currentBook,
-                                            ),
-                                      ),
-                                    );
-                                  },
-                                  child: const Text("Editar"),
-                                )
-                                : LoadingButtonWidget(
-                                  onPressed: () {
-                                    setState(() {
-                                      currentBook.isSaved =
-                                          !currentBook.isSaved;
-                                    });
-                                    BlocProvider.of<BooksBloc>(context).add(
-                                      UpdateSavedBooksEvent(
-                                        bookId: currentBook.id,
-                                      ),
-                                    );
-                                  },
-                                  isLoading: false,
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    spacing: 8,
-                                    children: [
-                                      Icon(
-                                        currentBook.isSaved
-                                            ? Icons.bookmark
-                                            : Icons.bookmark_border_outlined,
-                                      ),
-                                      Text("Salvar"),
-                                    ],
+                          );
+                        }
+                      },
+                      onEdit: () {
+                        if (storeState is StoreLoadedState) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder:
+                                  (context) => BookFormScreen(
+                                    storeId: storeState.store.id,
+                                    initialBook:
+                                        widget.booksList[_currentIndex],
                                   ),
+                            ),
+                          );
+                        }
+                      },
+                      onDelete: () {
+                        if (storeState is StoreLoadedState) {
+                          BookModel book = widget.booksList[_currentIndex];
+
+                          showDialog(
+                            context: context,
+                            builder:
+                                (context) => ConfirmModalWidget(
+                                  label:
+                                      "Deseja realmente excluir o livro ${book.title}?",
+                                  onConfirm: () {
+                                    BlocProvider.of<BooksBloc>(context).add(
+                                      DeleteBookEvent(
+                                        storeId: storeState.store.id,
+                                        bookId: book.id,
+                                      ),
+                                    );
+                                  },
                                 ),
-                            if (storeState.store.user.role == Role.admin)
-                              TextButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder:
-                                        (context) => ConfirmModalWidget(
-                                          label:
-                                              "Deseja realmente excluir o livro ${currentBook.title}?",
-                                          onConfirm: () {
-                                            BlocProvider.of<BooksBloc>(
-                                              context,
-                                            ).add(
-                                              DeleteBookEvent(
-                                                storeId: storeState.store.id,
-                                                bookId: currentBook.id,
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                  );
-                                },
-                                child: Text("Excluir"),
-                              ),
-                          ],
-                        ],
-                      ),
+                          );
+                        }
+                      },
+                      onSave: () {
+                        BookModel book = widget.booksList[_currentIndex];
+                        setState(() {
+                          book.isSaved = !book.isSaved;
+                        });
+                        BlocProvider.of<BooksBloc>(
+                          context,
+                        ).add(UpdateSavedBooksEvent(bookId: book.id));
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           },
+        );
+      },
+    );
+  }
+}
+
+class _BookInfoContent extends StatelessWidget {
+  final BookModel book;
+  final VoidCallback onSave;
+  final VoidCallback onDelete;
+  final VoidCallback onEdit;
+  final VoidCallback onEditStock;
+
+  const _BookInfoContent({
+    required this.book,
+    required this.onSave,
+    required this.onDelete,
+    required this.onEdit,
+    required this.onEditStock,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<StoreBloc, StoreStates>(
+      builder: (context, storeState) {
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24.0, 0, 24.0, 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Column(
+                      children: [
+                        Text(
+                          book.title,
+                          textAlign: TextAlign.center,
+                          style: AppFonts.subtitleFontBold.copyWith(
+                            fontSize: 20,
+                          ),
+                        ),
+                        Text(book.author, textAlign: TextAlign.center),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Text("Sinópse", style: AppFonts.labelFont),
+                    const SizedBox(height: 8),
+                    Text(book.summary, textAlign: TextAlign.justify),
+                    const SizedBox(height: 24),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("Publicado em", style: AppFonts.labelFont),
+                        Text(book.releasedAt),
+                      ],
+                    ),
+                    if (storeState is StoreLoadedState) ...[
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Avaliação", style: AppFonts.labelFont),
+                          RatingBarWidget(
+                            rating: book.rating,
+                            disabled: true,
+                            onRatingChanged: null,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Switch(
+                            value: book.available,
+                            onChanged:
+                                (storeState.store.user.role != Role.admin)
+                                    ? (value) {
+                                      onEditStock();
+                                    }
+                                    : null,
+                          ),
+                          const SizedBox(width: 16),
+                          Text(book.available ? "Estoque" : "Sem Estoque"),
+                        ],
+                      ),
+                      const SizedBox(height: 24),
+                      ...[
+                        storeState.store.user.role == Role.admin
+                            ? ElevatedButton(
+                              onPressed: onEdit,
+                              child: const Text("Editar"),
+                            )
+                            : LoadingButtonWidget(
+                              onPressed: onSave,
+                              isLoading: false,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                spacing: 8,
+                                children: [
+                                  Icon(
+                                    book.isSaved
+                                        ? Icons.bookmark
+                                        : Icons.bookmark_border_outlined,
+                                  ),
+                                  Text("Salvar"),
+                                ],
+                              ),
+                            ),
+                        if (storeState.store.user.role == Role.admin)
+                          TextButton(
+                            onPressed: onDelete,
+                            child: Text("Excluir"),
+                          ),
+                      ],
+                    ],
+                  ],
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

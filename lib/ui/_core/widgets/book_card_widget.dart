@@ -2,13 +2,12 @@ import 'package:bookstore/ui/_core/widgets/custom_cached_image_network.dart';
 import 'package:flutter/material.dart';
 import 'package:bookstore/data/models/book_model.dart';
 import 'package:bookstore/ui/_core/theme/app_fonts.dart';
-import 'package:bookstore/ui/books/book_detail_screen.dart';
 
 class BookCardWidget extends StatelessWidget {
   final BookModel book;
-  final bool? onlySavedBooks;
+  final Function(BookModel book) onTap;
 
-  const BookCardWidget({required this.book, super.key, this.onlySavedBooks});
+  const BookCardWidget({required this.book, super.key, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -17,16 +16,7 @@ class BookCardWidget extends StatelessWidget {
       height: 215,
       child: InkWell(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder:
-                  (context) => BookDetailScreen(
-                    book: book,
-                    onlySavedBooks: onlySavedBooks,
-                  ),
-            ),
-          );
+          onTap(book);
         },
         child: Column(
           mainAxisSize: MainAxisSize.min,

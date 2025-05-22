@@ -27,12 +27,17 @@ API de Gerenciamento de livrarias! Esta API foi desenvolvida utilizando Spring B
 - Todas as operações são são seguras e exigem autenticação do usuário, validação da role atribuída ao usuário, bem como se ele possui relação com a loja que está operando.
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
-  <img src="/assets/image1.png" alt="login" width="45%">
-  <img src="/assets/image2.png" alt="home" width="45%">
-  <img src="/assets/image3.png" alt="enter project" width="45%">
-  <img src="/assets/image4.png" alt="tasks" width="45%">
-  <img src="/assets/image5.png" alt="new task" width="45%">
-  <img src="/assets/image6.png" alt="project info" width="45%">
+  <img src="/assets/image-1.png" width="25%">
+  <img src="/assets/image-2.png" width="25%">
+  <img src="/assets/image-3.png" width="25%">
+  <img src="/assets/image-4.png" width="25%">
+  <img src="/assets/image-5.png" width="25%">
+  <img src="/assets/image-6.png" width="25%">
+  <img src="/assets/image-7.png" width="25%">
+  <img src="/assets/image-8.png" width="25%">
+  <img src="/assets/image-9.png" width="25%">
+  <img src="/assets/image-10.png" width="25%">
+  <img src="/assets/image-11.png" width="25%">
 </div>
 
 ## Tecnologias e Ferramentas Utilizadas
